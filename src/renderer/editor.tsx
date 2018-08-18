@@ -1,7 +1,7 @@
 import fs from 'fs-extra'
 import { last, map, upperCase } from 'lodash'
 import path from 'path'
-import React, { ChangeEvent, Component } from 'react'
+import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
@@ -20,6 +20,8 @@ interface IProps extends DispatchProp {
 }
 
 class Editor extends Component<IProps, {}> {
+  public list = createRef<HTMLTableSectionElement>()
+
   public handleFocus = (id: string) => () => {
     this.props.dispatch({ type: 'mapCell/change', payload: id })
   }
@@ -31,6 +33,20 @@ class Editor extends Component<IProps, {}> {
     })
   }
 
+  public handleKeyDown = (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.keyCode === 13) {
+      e.preventDefault()
+      if (this.list.current) {
+        const next: HTMLInputElement | null = this.list.current.querySelector(
+          `input[itemid="${index + 1}"]`,
+        )
+        if (next) {
+          next.focus()
+        }
+      }
+    }
+  }
+
   public render() {
     const { notations } = this.props
     return (
@@ -40,16 +56,18 @@ class Editor extends Component<IProps, {}> {
             <th>Point</th>
             <th>Reading</th>
           </thead>
-          <tbody>
-            {map(info.spots, s => (
+          <tbody ref={this.list}>
+            {map(info.spots, (s, index: number) => (
               <tr key={s.no}>
                 <td>{s.no}</td>
                 <td>
                   <input
+                    itemID={String(index)}
                     type="text"
                     value={notations[s.no] || ''}
                     onFocus={this.handleFocus(s.no)}
                     onChange={this.handleChange(s.no)}
+                    onKeyDown={this.handleKeyDown(index)}
                   />
                 </td>
               </tr>

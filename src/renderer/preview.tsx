@@ -49,6 +49,7 @@ class Preview extends Component<IProps, {}> {
           />
           {map(entries(notations), ([no, note]) => (
             <Text
+              key={no}
               text={note}
               style={textStyle}
               x={get(spots, [no, 'x']) + 20}
