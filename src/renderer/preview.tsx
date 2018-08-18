@@ -1,7 +1,5 @@
-import { Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
-import fs from 'fs-extra'
-import { entries, get, keyBy, map, padStart } from 'lodash'
-import path from 'path'
+import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
+import { entries, get, map } from 'lodash'
 import { TextStyle, Texture } from 'pixi.js'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
@@ -17,7 +15,7 @@ const Wrapper = styled.div`
 
 const textStyle = new TextStyle({
   fill: 'white',
-  fontFamily: 'Arial, Helvetica, sans-serif',
+  fontFamily: '"Lucida Console", Monaco, monospace',
   fontSize: 30,
   fontWeight: 'bold',
   strokeThickness: 8,
@@ -70,26 +68,30 @@ class Preview extends Component<IProps, IState> {
     return (
       <Wrapper>
         <Stage width={1200} height={720}>
-          {map(frames, ({ x, y }) => (
-            <Sprite key={`${x}${y}`} x={-x} y={-y} texture={Texture.fromImage(imageLink)} />
-          ))}
-          <Graphics
-            draw={g => {
-              g.clear()
-                .beginFill(0x00ff00)
-                .drawStar(get(spots, [mapCell, 'x']), get(spots, [mapCell, 'y']), 6, 20, 10)
-                .endFill()
-            }}
-          />
-          {map(entries(notations), ([no, note]) => (
-            <Text
-              key={no}
-              text={note}
-              style={textStyle}
-              x={get(spots, [no, 'x']) + 20}
-              y={get(spots, [no, 'y']) - 20}
+          <Container>
+            {map(frames, ({ x, y }) => (
+              <Sprite key={`${x}${y}`} x={-x} y={-y} texture={Texture.fromImage(imageLink)} />
+            ))}
+          </Container>
+          <Container>
+            <Graphics
+              draw={g => {
+                g.clear()
+                  .beginFill(0x00ff00)
+                  .drawStar(get(spots, [mapCell, 'x']), get(spots, [mapCell, 'y']), 6, 20, 10)
+                  .endFill()
+              }}
             />
-          ))}
+            {map(entries(notations), ([no, note]) => (
+              <Text
+                key={no}
+                text={note}
+                style={textStyle}
+                x={get(spots, [no, 'x']) + 20}
+                y={get(spots, [no, 'y']) - 20}
+              />
+            ))}
+          </Container>
         </Stage>
       </Wrapper>
     )

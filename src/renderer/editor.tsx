@@ -1,10 +1,9 @@
-import fs from 'fs-extra'
-import { last, map, upperCase } from 'lodash'
-import path from 'path'
+import { last, map, sortBy, upperCase } from 'lodash'
 import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
+import mapLoader from './map-loader'
 import { INotation } from './models'
 import { RootState } from './store'
 
@@ -13,14 +12,31 @@ const Wrapper = styled.div`
   padding-left: 1em;
 `
 
-const info = fs.readJSONSync(path.resolve(__dirname, '../../maps/001/01_info.json'))
-
 interface IProps extends DispatchProp {
   notations: INotation
+  mapId: string
 }
 
-class Editor extends Component<IProps, {}> {
+interface IState {
+  spots: object
+}
+
+class Editor extends Component<IProps, IState> {
+  public state: IState = {
+    spots: {},
+  }
+
   public list = createRef<HTMLTableSectionElement>()
+
+  public componentDidMount() {
+    this.updateData()
+  }
+
+  public componentDidUpdate(prevProps) {
+    if (this.props.mapId !== prevProps.mapId) {
+      this.updateData()
+    }
+  }
 
   public handleFocus = (id: string) => () => {
     this.props.dispatch({ type: 'mapCell/change', payload: id })
@@ -47,7 +63,17 @@ class Editor extends Component<IProps, {}> {
     }
   }
 
+  public updateData = async () => {
+    const { mapId } = this.props
+    const data = await mapLoader.load(mapId)
+
+    this.setState({
+      spots: data.spots,
+    })
+  }
+
   public render() {
+    const { spots } = this.state
     const { notations } = this.props
     return (
       <Wrapper>
@@ -57,7 +83,7 @@ class Editor extends Component<IProps, {}> {
             <th>Reading</th>
           </thead>
           <tbody ref={this.list}>
-            {map(info.spots, (s, index: number) => (
+            {map(sortBy(spots, 'no'), (s, index: number) => (
               <tr key={s.no}>
                 <td>{s.no}</td>
                 <td>
@@ -80,5 +106,6 @@ class Editor extends Component<IProps, {}> {
 }
 
 export default connect((state: RootState) => ({
+  mapId: state.mapId,
   notations: state.notations,
 }))(Editor)
