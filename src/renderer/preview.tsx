@@ -1,34 +1,44 @@
-import { Graphics, Sprite, Stage } from '@inlet/react-pixi'
+import { Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import fs from 'fs-extra'
-import { get, keyBy } from 'lodash'
+import { entries, get, keyBy, map } from 'lodash'
 import path from 'path'
-import PIXI, { Graphics as PixiGraphics, Texture } from 'pixi.js'
-import React, { Component, createRef } from 'react'
+import { TextStyle, Texture } from 'pixi.js'
+import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
+import { INotation } from './models'
 import { RootState } from './store'
 
 const Wrapper = styled.div`
   grid-area: preview;
 `
 
-const map = `file://${path.resolve(__dirname, '../../maps/001/01_image.png')}`
+const mapImage = `file://${path.resolve(__dirname, '../../maps/001/01_image.png')}`
 const info = fs.readJSONSync(path.resolve(__dirname, '../../maps/001/01_info.json'))
 const spots = keyBy(info.spots, 'no')
 
+const textStyle = new PIXI.TextStyle({
+  fill: 'white',
+  fontFamily: 'Arial, Helvetica, sans-serif',
+  fontSize: 30,
+  fontWeight: 'bold',
+  strokeThickness: 8,
+})
+
 interface IProps extends DispatchProp {
   mapCell: string
+  notations: INotation
 }
 
 class Preview extends Component<IProps, {}> {
   public render() {
-    const { mapCell } = this.props
+    const { mapCell, notations } = this.props
     return (
       <Wrapper>
         <Stage width={1200} height={720}>
-          <Sprite texture={Texture.fromImage(map)} />
-          <Sprite x={-1205} y={0} texture={Texture.fromImage(map)} />
+          <Sprite texture={Texture.fromImage(mapImage)} />
+          <Sprite x={-1205} y={0} texture={Texture.fromImage(mapImage)} />
           <Graphics
             draw={g => {
               g.clear()
@@ -37,6 +47,14 @@ class Preview extends Component<IProps, {}> {
                 .endFill()
             }}
           />
+          {map(entries(notations), ([no, note]) => (
+            <Text
+              text={note}
+              style={textStyle}
+              x={get(spots, [no, 'x']) + 20}
+              y={get(spots, [no, 'y']) - 20}
+            />
+          ))}
         </Stage>
       </Wrapper>
     )
@@ -45,4 +63,5 @@ class Preview extends Component<IProps, {}> {
 
 export default connect((state: RootState) => ({
   mapCell: state.mapCell,
+  notations: state.notations,
 }))(Preview)

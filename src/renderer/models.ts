@@ -20,10 +20,14 @@ export const mapCell: ModelConfig<string> = {
   state: '',
 }
 
+export interface INotation {
+  [key: string]: string
+}
+
 /**
  * notations is the relationship of map cell and alphabetic name
  */
-export const notations: ModelConfig<object> = {
+export const notations: ModelConfig<INotation> = {
   reducers: {
     update: (state, payload: object) => ({ ...state, ...payload }),
   },
