@@ -6,6 +6,7 @@ import { TextStyle, Texture } from 'pixi.js'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
+import mapLoader from './map-loader'
 
 import { INotation } from './models'
 import { RootState } from './store'
@@ -58,25 +59,9 @@ class Preview extends Component<IProps, IState> {
   public loadMapData = async () => {
     const { mapId } = this.props
 
-    const world = padStart(String(Math.floor(+mapId / 10)), 3, '0')
-    const area = padStart(String(+mapId % 10), 2, '0')
+    const data = await mapLoader.load(mapId)
 
-    const imageLink = `file://${path.resolve(__dirname, `../../maps/${world}/${area}_image.png`)}`
-    const info = fs.readJSONSync(path.resolve(__dirname, `../../maps/${world}/${area}_info.json`))
-    const imageInfo = fs.readJSONSync(
-      path.resolve(__dirname, `../../maps/${world}/${area}_image.json`),
-    )
-    const spots = keyBy(info.spots, 'no')
-    const frames = map(info.bg, name =>
-      get(imageInfo.frames, [`map${world}${area}_${name}`, 'frame']),
-    )
-
-    console.log(frames)
-    this.setState({
-      frames,
-      imageLink,
-      spots,
-    })
+    this.setState(data)
   }
 
   public render() {

@@ -7,7 +7,7 @@ export const mapId: ModelConfig<string> = {
   reducers: {
     change: (state, payload: string) => payload,
   },
-  state: '',
+  state: '11',
 }
 
 /**
