@@ -1,0 +1,114 @@
+{
+  "frames": {
+    "map00101_map1-1": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "sourceSize": {
+        "w": 1200,
+        "h": 720
+      }
+    },
+    "map00101_map1-1_point": {
+      "frame": {
+        "x": 1205,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "sourceSize": {
+        "w": 1200,
+        "h": 720
+      }
+    },
+    "map00101_route_1": {
+      "frame": {
+        "x": 398,
+        "y": 725,
+        "w": 265,
+        "h": 70
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 265,
+        "h": 70
+      },
+      "sourceSize": {
+        "w": 265,
+        "h": 70
+      }
+    },
+    "map00101_route_2": {
+      "frame": {
+        "x": 205,
+        "y": 725,
+        "w": 188,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 188,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 188,
+        "h": 102
+      }
+    },
+    "map00101_route_3": {
+      "frame": {
+        "x": 0,
+        "y": 725,
+        "w": 200,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 200,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 200,
+        "h": 127
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "01_image.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2405,
+      "h": 852
+    },
+    "scale": 1
+  }
+}

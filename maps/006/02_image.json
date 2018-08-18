@@ -1,0 +1,434 @@
+{
+  "frames": {
+    "map00602_enemy_mini_558s": {
+      "frame": {
+        "x": 0,
+        "y": 1067,
+        "w": 114,
+        "h": 114
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 114,
+        "h": 114
+      },
+      "sourceSize": {
+        "w": 114,
+        "h": 114
+      }
+    },
+    "map00602_map6-2": {
+      "frame": {
+        "x": 1205,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "sourceSize": {
+        "w": 1200,
+        "h": 720
+      }
+    },
+    "map00602_map6-2_point": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 1200,
+        "h": 720
+      },
+      "sourceSize": {
+        "w": 1200,
+        "h": 720
+      }
+    },
+    "map00602_sail_arrow_001": {
+      "frame": {
+        "x": 362,
+        "y": 914,
+        "w": 99,
+        "h": 76
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 99,
+        "h": 76
+      },
+      "sourceSize": {
+        "w": 99,
+        "h": 76
+      }
+    },
+    "map00602_sail_arrow_002": {
+      "frame": {
+        "x": 182,
+        "y": 1067,
+        "w": 54,
+        "h": 97
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 54,
+        "h": 97
+      },
+      "sourceSize": {
+        "w": 54,
+        "h": 97
+      }
+    },
+    "map00602_sail_arrow_003": {
+      "frame": {
+        "x": 119,
+        "y": 1067,
+        "w": 58,
+        "h": 102
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 58,
+        "h": 102
+      },
+      "sourceSize": {
+        "w": 58,
+        "h": 102
+      }
+    },
+    "map00602_sail_arrow_004": {
+      "frame": {
+        "x": 852,
+        "y": 725,
+        "w": 162,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 162,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 162,
+        "h": 40
+      }
+    },
+    "map00602_sail_arrow_005": {
+      "frame": {
+        "x": 0,
+        "y": 725,
+        "w": 156,
+        "h": 184
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 156,
+        "h": 184
+      },
+      "sourceSize": {
+        "w": 156,
+        "h": 184
+      }
+    },
+    "map00602_sail_arrow_006": {
+      "frame": {
+        "x": 0,
+        "y": 1186,
+        "w": 67,
+        "h": 171
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 67,
+        "h": 171
+      },
+      "sourceSize": {
+        "w": 67,
+        "h": 171
+      }
+    },
+    "map00602_sail_line_001": {
+      "frame": {
+        "x": 332,
+        "y": 823,
+        "w": 120,
+        "h": 66
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 120,
+        "h": 66
+      },
+      "sourceSize": {
+        "w": 120,
+        "h": 66
+      }
+    },
+    "map00602_sail_line_002": {
+      "frame": {
+        "x": 684,
+        "y": 725,
+        "w": 163,
+        "h": 51
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 163,
+        "h": 51
+      },
+      "sourceSize": {
+        "w": 163,
+        "h": 51
+      }
+    },
+    "map00602_sail_line_003": {
+      "frame": {
+        "x": 72,
+        "y": 1186,
+        "w": 52,
+        "h": 126
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 52,
+        "h": 126
+      },
+      "sourceSize": {
+        "w": 52,
+        "h": 126
+      }
+    },
+    "map00602_sail_line_004": {
+      "frame": {
+        "x": 454,
+        "y": 725,
+        "w": 225,
+        "h": 73
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 225,
+        "h": 73
+      },
+      "sourceSize": {
+        "w": 225,
+        "h": 73
+      }
+    },
+    "map00602_sail_line_005": {
+      "frame": {
+        "x": 0,
+        "y": 914,
+        "w": 171,
+        "h": 148
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 171,
+        "h": 148
+      },
+      "sourceSize": {
+        "w": 171,
+        "h": 148
+      }
+    },
+    "map00602_sail_line_006": {
+      "frame": {
+        "x": 176,
+        "y": 914,
+        "w": 181,
+        "h": 105
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 181,
+        "h": 105
+      },
+      "sourceSize": {
+        "w": 181,
+        "h": 105
+      }
+    },
+    "map00602_sail_line_007": {
+      "frame": {
+        "x": 241,
+        "y": 1067,
+        "w": 19,
+        "h": 96
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 19,
+        "h": 96
+      },
+      "sourceSize": {
+        "w": 19,
+        "h": 96
+      }
+    },
+    "map00602_sail_line_008": {
+      "frame": {
+        "x": 129,
+        "y": 1186,
+        "w": 19,
+        "h": 99
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 19,
+        "h": 99
+      },
+      "sourceSize": {
+        "w": 19,
+        "h": 99
+      }
+    },
+    "map00602_sail_line_009": {
+      "frame": {
+        "x": 1019,
+        "y": 725,
+        "w": 133,
+        "h": 40
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 133,
+        "h": 40
+      },
+      "sourceSize": {
+        "w": 133,
+        "h": 40
+      }
+    },
+    "map00602_sail_line_010": {
+      "frame": {
+        "x": 457,
+        "y": 823,
+        "w": 147,
+        "h": 52
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 147,
+        "h": 52
+      },
+      "sourceSize": {
+        "w": 147,
+        "h": 52
+      }
+    },
+    "map00602_sail_line_011": {
+      "frame": {
+        "x": 161,
+        "y": 823,
+        "w": 166,
+        "h": 79
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 166,
+        "h": 79
+      },
+      "sourceSize": {
+        "w": 166,
+        "h": 79
+      }
+    },
+    "map00602_sail_line_012": {
+      "frame": {
+        "x": 161,
+        "y": 725,
+        "w": 288,
+        "h": 93
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 288,
+        "h": 93
+      },
+      "sourceSize": {
+        "w": 288,
+        "h": 93
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "02_image.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 2405,
+      "h": 1357
+    },
+    "scale": 1
+  }
+}
