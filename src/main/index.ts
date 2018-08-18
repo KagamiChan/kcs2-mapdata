@@ -9,7 +9,7 @@ const createMainWindow = () => {
   const window = new BrowserWindow({
     webPreferences: {
       webSecurity: false,
-    }
+    },
   })
 
   if (isDevelopment) {

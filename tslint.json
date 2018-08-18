@@ -8,5 +8,6 @@
   "rules": {
     "prettier": true,
     "no-console": [true, "log"],
+    "jsx-no-lambda": false
   }
 }

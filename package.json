@@ -26,6 +26,7 @@
     "@types/progress": "^2.0.1",
     "@types/react": "^16.4.11",
     "@types/react-dom": "^16.0.7",
+    "@types/react-redux": "^6.0.6",
     "@types/tesseract.js": "^0.0.2",
     "electron-builder": "^20.28.1",
     "electron-webpack": "^2.1.2",
@@ -50,6 +51,8 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.3.0",
+    "@inlet/react-pixi": "^0.1.2",
+    "@rematch/core": "^1.0.0-beta.4",
     "axios": "^0.18.0",
     "bluebird": "^3.5.1",
     "chalk": "^2.4.1",
@@ -62,7 +65,7 @@
     "progress": "^2.0.0",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
-    "react-pixi-fiber": "^0.4.9",
+    "react-redux": "^5.0.7",
     "source-map-support": "^0.5.8",
     "styled-components": "^3.4.2"
   }
