@@ -6,7 +6,11 @@ const isDevelopment: boolean = process.env.NODE_ENV !== 'production'
 let mainWindow: BrowserWindow | null
 
 const createMainWindow = () => {
-  const window = new BrowserWindow()
+  const window = new BrowserWindow({
+    webPreferences: {
+      webSecurity: false,
+    }
+  })
 
   if (isDevelopment) {
     window.webContents.openDevTools({ mode: 'detach' })

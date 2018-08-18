@@ -1,11 +1,12 @@
 {
   "extends": [
-    "tslint:latest",
+    "tslint:recommended",
+    "tslint-react",
     "tslint-config-prettier"
   ],
   "rulesDirectory": ["tslint-plugin-prettier"],
   "rules": {
     "prettier": true,
-    "no-console": [true, "log"]
+    "no-console": [true, "log"],
   }
 }
