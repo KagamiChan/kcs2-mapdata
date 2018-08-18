@@ -50,11 +50,26 @@ class Editor extends Component<IProps, IState> {
   }
 
   public handleKeyDown = (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
-    if (e.keyCode === 13) {
+    console.log(e.keyCode)
+    // enter, arrow down or arrow right
+    if ([13, 40, 39].includes(e.keyCode)) {
       e.preventDefault()
       if (this.list.current) {
         const next: HTMLInputElement | null = this.list.current.querySelector(
           `input[itemid="${index + 1}"]`,
+        )
+        if (next) {
+          next.focus()
+        }
+      }
+      return
+    }
+    // arrow up or arrow left
+    if ([38, 37].includes(e.keyCode)) {
+      e.preventDefault()
+      if (this.list.current) {
+        const next: HTMLInputElement | null = this.list.current.querySelector(
+          `input[itemid="${index - 1}"]`,
         )
         if (next) {
           next.focus()
