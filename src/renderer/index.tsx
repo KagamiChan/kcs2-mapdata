@@ -6,6 +6,7 @@ import { Provider } from 'react-redux'
 import styled, { injectGlobal } from 'styled-components'
 
 import Editor from './editor'
+import Header from './header'
 import Preview from './preview'
 
 import store from './store'
@@ -32,6 +33,7 @@ const Container = styled.div`
 const App = () => (
   <Provider store={store}>
     <Container>
+      <Header />
       <Preview />
       <Editor />
     </Container>

@@ -1,6 +1,6 @@
 import { Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import fs from 'fs-extra'
-import { entries, get, keyBy, map } from 'lodash'
+import { entries, get, keyBy, map, padStart } from 'lodash'
 import path from 'path'
 import { TextStyle, Texture } from 'pixi.js'
 import React, { Component } from 'react'
@@ -14,11 +14,7 @@ const Wrapper = styled.div`
   grid-area: preview;
 `
 
-const mapImage = `file://${path.resolve(__dirname, '../../maps/001/01_image.png')}`
-const info = fs.readJSONSync(path.resolve(__dirname, '../../maps/001/01_info.json'))
-const spots = keyBy(info.spots, 'no')
-
-const textStyle = new PIXI.TextStyle({
+const textStyle = new TextStyle({
   fill: 'white',
   fontFamily: 'Arial, Helvetica, sans-serif',
   fontSize: 30,
@@ -29,16 +25,69 @@ const textStyle = new PIXI.TextStyle({
 interface IProps extends DispatchProp {
   mapCell: string
   notations: INotation
+  mapId: string
 }
 
-class Preview extends Component<IProps, {}> {
+interface IImageFrame {
+  x: number
+  y: number
+}
+
+interface IState {
+  imageLink: string
+  spots: object
+  frames: IImageFrame[]
+}
+
+class Preview extends Component<IProps, IState> {
+  public state: IState = {
+    frames: [],
+    imageLink: '',
+    spots: {},
+  }
+
+  public componentDidMount() {
+    this.loadMapData()
+  }
+  public componentDidUpdate(prevProps: IProps) {
+    if (prevProps.mapId !== this.props.mapId) {
+      this.loadMapData()
+    }
+  }
+
+  public loadMapData = async () => {
+    const { mapId } = this.props
+
+    const world = padStart(String(Math.floor(+mapId / 10)), 3, '0')
+    const area = padStart(String(+mapId % 10), 2, '0')
+
+    const imageLink = `file://${path.resolve(__dirname, `../../maps/${world}/${area}_image.png`)}`
+    const info = fs.readJSONSync(path.resolve(__dirname, `../../maps/${world}/${area}_info.json`))
+    const imageInfo = fs.readJSONSync(
+      path.resolve(__dirname, `../../maps/${world}/${area}_image.json`),
+    )
+    const spots = keyBy(info.spots, 'no')
+    const frames = map(info.bg, name =>
+      get(imageInfo.frames, [`map${world}${area}_${name}`, 'frame']),
+    )
+
+    console.log(frames)
+    this.setState({
+      frames,
+      imageLink,
+      spots,
+    })
+  }
+
   public render() {
+    const { imageLink, spots, frames } = this.state
     const { mapCell, notations } = this.props
     return (
       <Wrapper>
         <Stage width={1200} height={720}>
-          <Sprite texture={Texture.fromImage(mapImage)} />
-          <Sprite x={-1205} y={0} texture={Texture.fromImage(mapImage)} />
+          {map(frames, ({ x, y }) => (
+            <Sprite key={`${x}${y}`} x={-x} y={-y} texture={Texture.fromImage(imageLink)} />
+          ))}
           <Graphics
             draw={g => {
               g.clear()
@@ -64,5 +113,6 @@ class Preview extends Component<IProps, {}> {
 
 export default connect((state: RootState) => ({
   mapCell: state.mapCell,
+  mapId: state.mapId,
   notations: state.notations,
 }))(Preview)
