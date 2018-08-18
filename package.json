@@ -40,7 +40,6 @@
     "fs-extra": "^7.0.0",
     "glob": "^7.1.2",
     "lodash": "^4.17.10",
-    "progress": "^2.0.0",
-    "tesseract.js": "^1.0.10"
+    "progress": "^2.0.0"
   }
 }
