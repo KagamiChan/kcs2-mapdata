@@ -1,8 +1,8 @@
-import { get, last, map, uniq, upperCase } from 'lodash'
+import { Button } from '@blueprintjs/core'
+import { fromPairs, get, map, uniq, upperCase } from 'lodash'
 import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
-import { ISpotsEntity } from '../../types'
 
 import mapLoader from './map-loader'
 import { INotationMap } from './models'
@@ -12,6 +12,30 @@ const Wrapper = styled.div`
   grid-area: editor;
   padding-left: 1em;
 `
+
+const Control = styled.div`
+  text-align: center;
+  button {
+    margin: 1ex;
+  }
+`
+
+const codeA = 'A'.charCodeAt(0)
+
+/**
+ * converts index to alphabetic
+ * @param index
+ */
+const parseIndex = (index: number): string => {
+  // we assume the first point is a start
+  if (index === 0) {
+    return '0'
+  }
+  const num = index - 1
+  const a = Math.floor(num / 26) - 1
+  const b = (num % 26) + codeA
+  return [a === -1 ? '' : String.fromCharCode(a + codeA), String.fromCharCode(b)].join('')
+}
 
 interface IProps extends DispatchProp {
   notations: INotationMap
@@ -46,7 +70,7 @@ class Editor extends Component<IProps, IState> {
   public handleChange = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
     this.props.dispatch({
       payload: {
-        data: { ...this.props.notations, [id]: last(upperCase(e.currentTarget.value)) },
+        data: { ...this.props.notations, [id]: upperCase(e.currentTarget.value) },
         id: this.props.mapId,
       },
       type: 'notations/updateOne',
@@ -79,6 +103,17 @@ class Editor extends Component<IProps, IState> {
         }
       }
     }
+  }
+
+  public handleAutofill = () => {
+    const data = fromPairs(map(this.state.spots, (s, index) => [s, parseIndex(index)]))
+    this.props.dispatch({
+      payload: {
+        data,
+        id: this.props.mapId,
+      },
+      type: 'notations/updateOne',
+    })
   }
 
   public updateData = async () => {
@@ -118,6 +153,11 @@ class Editor extends Component<IProps, IState> {
             ))}
           </tbody>
         </table>
+        <hr />
+        <Control>
+          <Button onClick={this.handleAutofill}>Autofill</Button>
+          <Button intent="success">Save</Button>
+        </Control>
       </Wrapper>
     )
   }
