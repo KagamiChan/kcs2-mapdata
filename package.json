@@ -12,7 +12,8 @@
     "icon": "ts-node ./map-generate.ts icon",
     "dst": "ts-node ./map-generate.ts dst",
     "gen": "ts-node ./map-generate.ts genpoi",
-    "annotate": "electron-webpack dev"
+    "annotate": "electron-webpack dev",
+    "autoname": "ts-node ./map-generate.ts autoname"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.0.0",

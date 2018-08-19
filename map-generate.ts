@@ -14,7 +14,7 @@ const MAP_DIR = path.join(__dirname, 'maps')
 
 const extract = (mapData: { image: IMapImage; info: IMapInfo }) => {
   try {
-    _.each(mapData.info.spots, spot => {
+    _.each(mapData.info.spots, (spot, spotIndex) => {
       const end = [spot.x, spot.y]
       let start: number[] | null = []
       if (!spot.line) {
@@ -37,11 +37,14 @@ const extract = (mapData: { image: IMapImage; info: IMapInfo }) => {
         start = [(spriteCenterX - spot.x) * 2 + spot.x, (spriteCenterY - spot.y) * 2 + spot.y]
       }
       ROUTE[spot.no] = { start, end }
-      SPOTS[end.join()] = {
-        coord: end,
-        name: end.join('_'),
-        start: start === null,
-        tag: [],
+      if (!SPOTS[end.join()]) {
+        SPOTS[end.join()] = {
+          coord: end,
+          index: spotIndex,
+          name: [spot.no, ...end].join('_'),
+          start: start === null,
+          tag: [],
+        }
       }
     })
   } catch (err) {
@@ -124,7 +127,7 @@ const fitting = () => {
 const addSpotName = (dir: string) => {
   try {
     if (!fs.existsSync(`${dir}/spots.json`)) {
-      fs.outputFileSync(`${dir}/spots.json`, JSON.stringify({}))
+      fs.outputJsonSync(`${dir}/spots.json`, {})
     }
     const spotJsonData = fs.readJsonSync(`${dir}/spots.json`)
     const named = spotJsonData as ISpotData
@@ -138,13 +141,44 @@ const addSpotName = (dir: string) => {
       }
     })
     if (Object.keys(unamed).length > 0) {
-      fs.outputFileSync(`${dir}/spots_unamed.json`, JSON.stringify(unamed))
+      fs.outputJsonSync(`${dir}/spots_unamed.json`, unamed)
       console.warn(
         chalk.yellow(
           [`Unamed spot found! Please set their name in "spots.json"`, `  at ${dir}`].join('\n'),
         ),
       )
     }
+  } catch (err) {
+    console.error(chalk.red(err), '\n', chalk.red(`at ${dir}`))
+  }
+}
+
+/**
+ * try to auto generate spot name
+ * works well in normal circumstances, except maps as special as 1-6
+ * should check out the data after auto spotted
+ */
+const autoSpotName = (dir: string) => {
+  try {
+    if (!fs.existsSync(`${dir}/spots_unamed.json`)) {
+      return
+    }
+    const autoNamed: ISpotData = {}
+    _.forIn(SPOTS, (spot, id) => {
+      const name = String.fromCharCode(64 + spot.index)
+      const overFlowFlag = name.charCodeAt(0) > 90
+      autoNamed[id] = spot.start ? '1' : overFlowFlag ? name : spot.name
+      SPOTS[id].name = autoNamed[id]
+      if (overFlowFlag) {
+        console.warn(
+          chalk.yellow(
+            '[WARN] Spot name is out of [A-Z], check it manually\n',
+            `  at ${dir}/spot.json , ${spot.name}`,
+          ),
+        )
+      }
+    })
+    fs.outputJsonSync(`${dir}/spots.json`, autoNamed)
   } catch (err) {
     console.error(chalk.red(err), '\n', chalk.red(`at ${dir}`))
   }
@@ -265,7 +299,7 @@ const genpoi = (dir: string) => {
     const type = start ? 'start' : ''
     spots[name] = [coord[0], coord[1], type]
   })
-  fs.outputFileSync(`${dir}/poi.json`, JSON.stringify({ route, spots }))
+  fs.outputJsonSync(`${dir}/poi.json`, { route, spots })
 }
 
 const main = () => {
@@ -285,6 +319,7 @@ const main = () => {
         extract(mapData)
         const PROCEDURE: { [key: string]: Array<(...args: any[]) => void> } = {
           '': [addSpotName, fitting, drawRoute, drawSpots, drawDone],
+          autoname: [addSpotName, autoSpotName, fitting, drawRoute, drawSpots, drawDone],
           dst: [addSpotName, addSpotDistance, fitting, drawSpots, drawDone],
           genpoi: [addSpotName, fitting, genpoi],
           icon: [addSpotName, fitting, drawSpotIcons, drawDone],
@@ -293,6 +328,8 @@ const main = () => {
         const outDir = path.join(__dirname, 'out', wordldId, mapData.info.bg[0])
         for (const procedure of PROCEDURE[cmd]) {
           procedure.call(null, outDir)
+          const { image } = mapData.image.meta
+          fs.copyFileSync(path.join(MAP_DIR, wordldId, image), path.join(outDir, image))
         }
         ROUTE = {}
         SPOTS = {}

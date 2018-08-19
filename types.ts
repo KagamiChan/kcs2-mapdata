@@ -8,6 +8,7 @@ export interface IRoute {
 export interface ISpots {
   [key: string]: {
     coord: number[]
+    index: number
     start: boolean
     name: string
     tag: Array<number | string>
