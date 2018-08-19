@@ -1,4 +1,3 @@
-import { FormGroup } from '@blueprintjs/core'
 import fs from 'fs-extra'
 import { map, padStart, sortBy } from 'lodash'
 import path from 'path'
@@ -11,11 +10,6 @@ const Wrapper = styled.div`
   display: flex;
   align-items: center;
 `
-
-interface IMapInfo {
-  api_no: number
-  api_maparea_id: number
-}
 
 interface IMapItem {
   label: string

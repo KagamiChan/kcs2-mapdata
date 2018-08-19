@@ -1,16 +1,12 @@
 import fs from 'fs-extra'
 import { entries, get, keyBy, map, padStart } from 'lodash'
 import path from 'path'
-
-interface IImageFrame {
-  x: number
-  y: number
-}
+import { IFrameOrSpriteSourceSize, IMapImage, IMapInfo, ISpotsEntity } from '../../types'
 
 interface IDataEntry {
   imageLink: string
-  spots: object
-  frames: IImageFrame[]
+  spots: ISpotsEntity[]
+  frames: IFrameOrSpriteSourceSize[]
 }
 
 interface IMapLoader {
@@ -29,15 +25,17 @@ class MapLoader implements IMapLoader {
     const area = padStart(String(+mapId % 10), 2, '0')
 
     const imageLink = `file://${path.resolve(__dirname, `../../maps/${world}/${area}_image.png`)}`
-    const info = await fs.readJSON(path.resolve(__dirname, `../../maps/${world}/${area}_info.json`))
-    const imageInfo = await fs.readJSON(
+    const info: IMapInfo = await fs.readJSON(
+      path.resolve(__dirname, `../../maps/${world}/${area}_info.json`),
+    )
+    const imageInfo: IMapImage = await fs.readJSON(
       path.resolve(__dirname, `../../maps/${world}/${area}_image.json`),
     )
-    const spots = keyBy(info.spots, 'no')
-    const frames = map(info.bg, name =>
+    const { spots = [] } = info
+    const frames: IFrameOrSpriteSourceSize[] = map(info.bg, name =>
       get(imageInfo.frames, [`map${world}${area}_${name}`, 'frame']),
     )
-    const result = {
+    const result: IDataEntry = {
       frames,
       imageLink,
       spots,

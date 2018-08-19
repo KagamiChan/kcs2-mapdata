@@ -1,5 +1,5 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
-import { entries, get, map } from 'lodash'
+import { entries, get, keyBy, map } from 'lodash'
 import { TextStyle, Texture } from 'pixi.js'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
@@ -8,6 +8,8 @@ import mapLoader from './map-loader'
 
 import { INotation } from './models'
 import { RootState } from './store'
+
+import { IFrameOrSpriteSourceSize } from '../../types'
 
 const Wrapper = styled.div`
   grid-area: preview;
@@ -22,20 +24,15 @@ const textStyle = new TextStyle({
 })
 
 interface IProps extends DispatchProp {
-  mapCell: string
+  mapCell: number
   notations: INotation
   mapId: string
-}
-
-interface IImageFrame {
-  x: number
-  y: number
 }
 
 interface IState {
   imageLink: string
   spots: object
-  frames: IImageFrame[]
+  frames: IFrameOrSpriteSourceSize[]
 }
 
 class Preview extends Component<IProps, IState> {
@@ -59,7 +56,10 @@ class Preview extends Component<IProps, IState> {
 
     const data = await mapLoader.load(mapId)
 
-    this.setState(data)
+    this.setState({
+      ...data,
+      spots: keyBy(data.spots, 'no'),
+    })
   }
 
   public render() {

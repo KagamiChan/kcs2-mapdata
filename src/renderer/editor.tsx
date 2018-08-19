@@ -1,7 +1,8 @@
-import { last, map, sortBy, upperCase } from 'lodash'
+import { last, map, upperCase } from 'lodash'
 import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
+import { ISpotsEntity } from '../../types'
 
 import mapLoader from './map-loader'
 import { INotation } from './models'
@@ -18,12 +19,12 @@ interface IProps extends DispatchProp {
 }
 
 interface IState {
-  spots: object
+  spots: ISpotsEntity[]
 }
 
 class Editor extends Component<IProps, IState> {
   public state: IState = {
-    spots: {},
+    spots: [],
   }
 
   public list = createRef<HTMLTableSectionElement>()
@@ -32,17 +33,17 @@ class Editor extends Component<IProps, IState> {
     this.updateData()
   }
 
-  public componentDidUpdate(prevProps) {
+  public componentDidUpdate(prevProps: IProps) {
     if (this.props.mapId !== prevProps.mapId) {
       this.updateData()
     }
   }
 
-  public handleFocus = (id: string) => () => {
+  public handleFocus = (id: number) => () => {
     this.props.dispatch({ type: 'mapCell/change', payload: id })
   }
 
-  public handleChange = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
+  public handleChange = (id: number) => (e: ChangeEvent<HTMLInputElement>) => {
     this.props.dispatch({
       payload: { ...this.props.notations, [id]: last(upperCase(e.currentTarget.value)) },
       type: 'notations/update',
@@ -50,7 +51,6 @@ class Editor extends Component<IProps, IState> {
   }
 
   public handleKeyDown = (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
-    console.log(e.keyCode)
     // enter, arrow down or arrow right
     if ([13, 40, 39].includes(e.keyCode)) {
       e.preventDefault()
@@ -98,7 +98,7 @@ class Editor extends Component<IProps, IState> {
             <th>Reading</th>
           </thead>
           <tbody ref={this.list}>
-            {map(sortBy(spots, 'no'), (s, index: number) => (
+            {map(spots, (s, index: number) => (
               <tr key={s.no}>
                 <td>{s.no}</td>
                 <td>

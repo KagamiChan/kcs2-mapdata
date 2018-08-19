@@ -13,11 +13,11 @@ export const mapId: ModelConfig<string> = {
 /**
  * mapCell is the cell no of a certain map
  */
-export const mapCell: ModelConfig<string> = {
+export const mapCell: ModelConfig<number> = {
   reducers: {
-    change: (state, payload: string) => payload,
+    change: (state, payload: number) => payload,
   },
-  state: '',
+  state: -1,
 }
 
 export interface INotation {
