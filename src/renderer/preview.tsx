@@ -1,15 +1,17 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
-import { entries, get, keyBy, map } from 'lodash'
+import { entries, get, keyBy, map, split } from 'lodash'
 import { TextStyle, Texture } from 'pixi.js'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 import mapLoader from './map-loader'
 
-import { INotation } from './models'
+import { INotationMap } from './models'
 import { RootState } from './store'
 
 import { IFrameOrSpriteSourceSize } from '../../types'
+
+const getXY = (cell: string) => split(cell, '_').map(Number)
 
 const Wrapper = styled.div`
   grid-area: preview;
@@ -24,14 +26,13 @@ const textStyle = new TextStyle({
 })
 
 interface IProps extends DispatchProp {
-  mapCell: number
-  notations: INotation
+  mapCell: string
+  notations: INotationMap
   mapId: string
 }
 
 interface IState {
   imageLink: string
-  spots: object
   frames: IFrameOrSpriteSourceSize[]
 }
 
@@ -39,7 +40,6 @@ class Preview extends Component<IProps, IState> {
   public state: IState = {
     frames: [],
     imageLink: '',
-    spots: {},
   }
 
   public componentDidMount() {
@@ -56,15 +56,19 @@ class Preview extends Component<IProps, IState> {
 
     const data = await mapLoader.load(mapId)
 
+    const { imageLink, frames } = data
+
     this.setState({
-      ...data,
-      spots: keyBy(data.spots, 'no'),
+      frames,
+      imageLink,
     })
   }
 
   public render() {
-    const { imageLink, spots, frames } = this.state
+    const { imageLink, frames } = this.state
     const { mapCell, notations } = this.props
+
+    const [mapX = 0, mapY = 0] = getXY(mapCell)
     return (
       <Wrapper>
         <Stage width={1200} height={720}>
@@ -74,23 +78,21 @@ class Preview extends Component<IProps, IState> {
             ))}
           </Container>
           <Container>
-            <Graphics
-              draw={g => {
-                g.clear()
-                  .beginFill(0x00ff00)
-                  .drawStar(get(spots, [mapCell, 'x']), get(spots, [mapCell, 'y']), 6, 20, 10)
-                  .endFill()
-              }}
-            />
-            {map(entries(notations), ([no, note]) => (
-              <Text
-                key={no}
-                text={note}
-                style={textStyle}
-                x={get(spots, [no, 'x']) + 20}
-                y={get(spots, [no, 'y']) - 20}
-              />
-            ))}
+            {mapX > 0 &&
+              mapY > 0 && (
+                <Graphics
+                  draw={g => {
+                    g.clear()
+                      .beginFill(0x00ff00)
+                      .drawStar(mapX, mapY, 6, 20, 10)
+                      .endFill()
+                  }}
+                />
+              )}
+            {map(entries(notations), ([s, note]) => {
+              const [pX = 0, pY = 0] = getXY(s)
+              return <Text key={s} text={note} style={textStyle} x={pX + 20} y={pY - 20} />
+            })}
           </Container>
         </Stage>
       </Wrapper>
@@ -101,5 +103,5 @@ class Preview extends Component<IProps, IState> {
 export default connect((state: RootState) => ({
   mapCell: state.mapCell,
   mapId: state.mapId,
-  notations: state.notations,
+  notations: get(state.notations, state.mapId, {}),
 }))(Preview)

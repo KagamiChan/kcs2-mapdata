@@ -1,11 +1,11 @@
-import { last, map, upperCase } from 'lodash'
+import { get, last, map, uniq, upperCase } from 'lodash'
 import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 import { ISpotsEntity } from '../../types'
 
 import mapLoader from './map-loader'
-import { INotation } from './models'
+import { INotationMap } from './models'
 import { RootState } from './store'
 
 const Wrapper = styled.div`
@@ -14,12 +14,12 @@ const Wrapper = styled.div`
 `
 
 interface IProps extends DispatchProp {
-  notations: INotation
+  notations: INotationMap
   mapId: string
 }
 
 interface IState {
-  spots: ISpotsEntity[]
+  spots: string[]
 }
 
 class Editor extends Component<IProps, IState> {
@@ -39,14 +39,17 @@ class Editor extends Component<IProps, IState> {
     }
   }
 
-  public handleFocus = (id: number) => () => {
+  public handleFocus = (id: string) => () => {
     this.props.dispatch({ type: 'mapCell/change', payload: id })
   }
 
-  public handleChange = (id: number) => (e: ChangeEvent<HTMLInputElement>) => {
+  public handleChange = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
     this.props.dispatch({
-      payload: { ...this.props.notations, [id]: last(upperCase(e.currentTarget.value)) },
-      type: 'notations/update',
+      payload: {
+        data: { ...this.props.notations, [id]: last(upperCase(e.currentTarget.value)) },
+        id: this.props.mapId,
+      },
+      type: 'notations/updateOne',
     })
   }
 
@@ -83,7 +86,7 @@ class Editor extends Component<IProps, IState> {
     const data = await mapLoader.load(mapId)
 
     this.setState({
-      spots: data.spots,
+      spots: uniq(map(data.spots, s => `${s.x}_${s.y}`)),
     })
   }
 
@@ -99,15 +102,15 @@ class Editor extends Component<IProps, IState> {
           </thead>
           <tbody ref={this.list}>
             {map(spots, (s, index: number) => (
-              <tr key={s.no}>
-                <td>{s.no}</td>
+              <tr key={s}>
+                <td>{s}</td>
                 <td>
                   <input
                     itemID={String(index)}
                     type="text"
-                    value={notations[s.no] || ''}
-                    onFocus={this.handleFocus(s.no)}
-                    onChange={this.handleChange(s.no)}
+                    value={notations[s] || ''}
+                    onFocus={this.handleFocus(s)}
+                    onChange={this.handleChange(s)}
                     onKeyDown={this.handleKeyDown(index)}
                   />
                 </td>
@@ -122,5 +125,5 @@ class Editor extends Component<IProps, IState> {
 
 export default connect((state: RootState) => ({
   mapId: state.mapId,
-  notations: state.notations,
+  notations: get(state.notations, state.mapId, {}),
 }))(Editor)
