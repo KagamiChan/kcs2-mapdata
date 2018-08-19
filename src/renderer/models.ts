@@ -1,4 +1,14 @@
 import { init, ModelConfig } from '@rematch/core'
+import fs from 'fs-extra'
+import path from 'path'
+
+let notationsState = {}
+
+try {
+  notationsState = fs.readJSONSync(path.resolve(__dirname, '../../data/notation.json'))
+} catch (e) {
+  // do nothing
+}
 
 /**
  * mapId is composition of world id and map id, e.g. '23' '371'
@@ -39,5 +49,5 @@ export const notations: ModelConfig<INotation> = {
     updateMany: (state, payload) => ({ ...state, ...payload }),
     updateOne: (state, { id, data }) => ({ ...state, [id]: data }),
   },
-  state: {},
+  state: notationsState,
 }

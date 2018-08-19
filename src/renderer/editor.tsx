@@ -1,12 +1,16 @@
 import { Button } from '@blueprintjs/core'
+import fs from 'fs-extra'
 import { fromPairs, get, map, uniq, upperCase } from 'lodash'
+import path from 'path'
 import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
+import fileWriter from './file-writer'
 import mapLoader from './map-loader'
 import { INotationMap } from './models'
-import { RootState } from './store'
+import store, { RootState } from './store'
+import toaster from './toaster'
 
 const Wrapper = styled.div`
   grid-area: editor;
@@ -29,7 +33,7 @@ const codeA = 'A'.charCodeAt(0)
 const parseIndex = (index: number): string => {
   // we assume the first point is a start
   if (index === 0) {
-    return '0'
+    return '1'
   }
   const num = index - 1
   const a = Math.floor(num / 26) - 1
@@ -116,6 +120,28 @@ class Editor extends Component<IProps, IState> {
     })
   }
 
+  public handleSave = () => {
+    const data = store.getState()
+
+    fileWriter.write(
+      path.resolve(__dirname, '../../data/notation.json'),
+      JSON.stringify(data.notations, null, 2),
+      {},
+      () => {
+        toaster.show({ message: 'Saved', intent: 'success' })
+      },
+    )
+  }
+
+  public handleReload = async () => {
+    const data = await fs.readJson(path.resolve(__dirname, '../../data/notation.json'))
+    this.props.dispatch({
+      payload: data,
+      type: 'notations/updateMany',
+    })
+    toaster.show({ message: 'Reloaded', intent: 'success' })
+  }
+
   public updateData = async () => {
     const { mapId } = this.props
     const data = await mapLoader.load(mapId)
@@ -155,8 +181,13 @@ class Editor extends Component<IProps, IState> {
         </table>
         <hr />
         <Control>
+          <Button intent="danger" onClick={this.handleReload}>
+            Reload
+          </Button>
           <Button onClick={this.handleAutofill}>Autofill</Button>
-          <Button intent="success">Save</Button>
+          <Button intent="success" onClick={this.handleSave}>
+            Save
+          </Button>
         </Control>
       </Wrapper>
     )
