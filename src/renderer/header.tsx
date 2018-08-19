@@ -5,6 +5,8 @@ import React, { ChangeEvent, Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
+import { RootState } from './store'
+
 const Wrapper = styled.div`
   grid-area: header;
   display: flex;
@@ -16,15 +18,12 @@ interface IMapItem {
   value: string
 }
 
-interface IState {
+interface IProps extends DispatchProp {
   mapList: IMapItem[]
+  mapId: string
 }
 
-class Header extends Component<DispatchProp, IState> {
-  public state: IState = {
-    mapList: [],
-  }
-
+class Header extends Component<IProps> {
   public componentDidMount = () => {
     this.readMapList()
   }
@@ -47,9 +46,7 @@ class Header extends Component<DispatchProp, IState> {
       },
     )
 
-    this.setState({
-      mapList,
-    })
+    this.props.dispatch({ type: 'mapList/update', payload: mapList })
   }
 
   public handleChangeMap = (e: ChangeEvent<HTMLSelectElement>) => {
@@ -59,12 +56,12 @@ class Header extends Component<DispatchProp, IState> {
   }
 
   public render() {
-    const { mapList } = this.state
+    const { mapList, mapId } = this.props
     return (
       <Wrapper>
         <div>
           Map Selection:
-          <select onChange={this.handleChangeMap}>
+          <select onChange={this.handleChangeMap} value={mapId}>
             {map(mapList, ({ label, value }) => (
               <option key={value} value={value}>
                 {label}
@@ -77,4 +74,7 @@ class Header extends Component<DispatchProp, IState> {
   }
 }
 
-export default connect()(Header)
+export default connect((state: RootState) => ({
+  mapId: state.mapId,
+  mapList: state.mapList,
+}))(Header)

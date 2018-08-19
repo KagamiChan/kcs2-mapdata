@@ -1,5 +1,6 @@
-import { init, ModelConfig } from '@rematch/core'
+import { ModelConfig } from '@rematch/core'
 import fs from 'fs-extra'
+import { sortBy, uniqBy } from 'lodash'
 import path from 'path'
 
 let notationsState = {}
@@ -50,4 +51,17 @@ export const notations: ModelConfig<INotation> = {
     updateOne: (state, { id, data }) => ({ ...state, [id]: data }),
   },
   state: notationsState,
+}
+
+export interface IMapItem {
+  label: string
+  value: string
+}
+
+export const mapList: ModelConfig<IMapItem[]> = {
+  reducers: {
+    update: (state, payload) =>
+      sortBy(uniqBy([...state, ...payload], 'value'), item => parseInt(item.value, 10)),
+  },
+  state: [],
 }

@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core'
 import fs from 'fs-extra'
-import { fromPairs, get, map, uniq, upperCase } from 'lodash'
+import { findIndex, fromPairs, get, map, uniq, upperCase } from 'lodash'
 import path from 'path'
 import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import fileWriter from './file-writer'
 import mapLoader from './map-loader'
-import { INotationMap } from './models'
+import { IMapItem, INotationMap } from './models'
 import store, { RootState } from './store'
 import toaster from './toaster'
 
@@ -44,14 +44,33 @@ const parseIndex = (index: number): string => {
 interface IProps extends DispatchProp {
   notations: INotationMap
   mapId: string
+  mapList: IMapItem[]
 }
 
 interface IState {
   spots: string[]
+  next: string
+  prev: string
 }
 
 class Editor extends Component<IProps, IState> {
+  public static getDerivedStateFromProps(nextProps: IProps) {
+    const { mapId, mapList } = nextProps
+
+    const index = findIndex(mapList, m => m.value === mapId)
+
+    const prev = get(mapList, [index - 1, 'value'], '')
+    const next = get(mapList, [index + 1, 'value'], '')
+
+    return {
+      next,
+      prev,
+    }
+  }
+
   public state: IState = {
+    next: '',
+    prev: '',
     spots: [],
   }
 
@@ -142,6 +161,12 @@ class Editor extends Component<IProps, IState> {
     toaster.show({ message: 'Reloaded', intent: 'success' })
   }
 
+  public handleGoPrev = () =>
+    this.props.dispatch({ type: 'mapId/change', payload: this.state.prev })
+
+  public handleGoNext = () =>
+    this.props.dispatch({ type: 'mapId/change', payload: this.state.next })
+
   public updateData = async () => {
     const { mapId } = this.props
     const data = await mapLoader.load(mapId)
@@ -152,7 +177,7 @@ class Editor extends Component<IProps, IState> {
   }
 
   public render() {
-    const { spots } = this.state
+    const { spots, prev, next } = this.state
     const { notations } = this.props
     return (
       <Wrapper>
@@ -181,6 +206,7 @@ class Editor extends Component<IProps, IState> {
         </table>
         <hr />
         <Control>
+          {prev && <Button onClick={this.handleGoPrev}>Prev.</Button>}
           <Button intent="danger" onClick={this.handleReload}>
             Reload
           </Button>
@@ -188,6 +214,7 @@ class Editor extends Component<IProps, IState> {
           <Button intent="success" onClick={this.handleSave}>
             Save
           </Button>
+          {next && <Button onClick={this.handleGoNext}>Next</Button>}
         </Control>
       </Wrapper>
     )
@@ -196,5 +223,6 @@ class Editor extends Component<IProps, IState> {
 
 export default connect((state: RootState) => ({
   mapId: state.mapId,
+  mapList: state.mapList,
   notations: get(state.notations, state.mapId, {}),
 }))(Editor)
