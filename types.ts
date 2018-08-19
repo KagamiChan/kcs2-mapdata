@@ -9,7 +9,7 @@ export interface ISpots {
   [key: string]: {
     coord: number[]
     index: number
-    start: boolean
+    start: string | null
     name: string
     tag: Array<number | string>
   }

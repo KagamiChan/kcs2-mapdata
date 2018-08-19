@@ -23,13 +23,13 @@ export const mapId: ModelConfig<string> = {
 
 /**
  * mapCell is the cell coordinates of a certain map
- * mapCell format: ${x}_${y}
+ * mapCell format: ${x},${y}
  */
 export const mapCell: ModelConfig<string> = {
   reducers: {
     change: (state, payload: string) => payload,
   },
-  state: '0_0',
+  state: '0,0',
 }
 
 export interface INotationMap {

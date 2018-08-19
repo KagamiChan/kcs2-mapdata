@@ -11,7 +11,7 @@ import { RootState } from './store'
 
 import { IFrameOrSpriteSourceSize } from '../../types'
 
-const getXY = (cell: string) => split(cell, '_').map(Number)
+const getXY = (cell: string) => split(cell, ',').map(Number)
 
 const Wrapper = styled.div`
   grid-area: preview;
@@ -69,6 +69,8 @@ class Preview extends Component<IProps, IState> {
     const { mapCell, notations } = this.props
 
     const [mapX = 0, mapY = 0] = getXY(mapCell)
+    // tslint:disable-next-line
+    console.log(mapCell, mapX, mapY)
     return (
       <Wrapper>
         <Stage width={1200} height={720}>

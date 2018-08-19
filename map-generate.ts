@@ -14,6 +14,7 @@ const MAP_DIR = path.join(__dirname, 'maps')
 
 const extract = (mapData: { image: IMapImage; info: IMapInfo }) => {
   try {
+    let startPointCounter = 1
     _.each(mapData.info.spots, (spot, spotIndex) => {
       const end = [spot.x, spot.y]
       let start: number[] | null = []
@@ -42,7 +43,7 @@ const extract = (mapData: { image: IMapImage; info: IMapInfo }) => {
           coord: end,
           index: spotIndex,
           name: [spot.no, ...end].join('_'),
-          start: start === null,
+          start: start === null ? String(startPointCounter++) : null,
           tag: [],
         }
       }
@@ -160,20 +161,17 @@ const addSpotName = (dir: string) => {
  */
 const autoSpotName = (dir: string) => {
   try {
-    if (!fs.existsSync(`${dir}/spots_unamed.json`)) {
-      return
-    }
     const autoNamed: ISpotData = {}
     _.forIn(SPOTS, (spot, id) => {
       const name = String.fromCharCode(64 + spot.index)
       const overFlowFlag = name.charCodeAt(0) > 90
-      autoNamed[id] = spot.start ? '1' : overFlowFlag ? name : spot.name
+      autoNamed[id] = spot.start ? spot.start : overFlowFlag ? spot.name : name
       SPOTS[id].name = autoNamed[id]
       if (overFlowFlag) {
         console.warn(
           chalk.yellow(
             '[WARN] Spot name is out of [A-Z], check it manually\n',
-            `  at ${dir}/spot.json , ${spot.name}`,
+            `  at ${dir}/spots.json , ${spot.name}`,
           ),
         )
       }
@@ -182,6 +180,23 @@ const autoSpotName = (dir: string) => {
   } catch (err) {
     console.error(chalk.red(err), '\n', chalk.red(`at ${dir}`))
   }
+}
+
+const syncSpotNameFromAnnotaion = (dir: string) => {
+  const DATA_DIR = path.join(__dirname, 'data', 'notation.json')
+  if (!fs.existsSync(DATA_DIR)) {
+    console.error(chalk.red('[ERROR] annotation file not found!'))
+    process.exit(1)
+  }
+  const notation = fs.readJsonSync(DATA_DIR)
+  const matched = dir.match(/map\d-\d$/g)
+  if (!matched) {
+    console.error(chalk.red(`[ERROR] can't match dir to map id:\n  ${dir}`))
+    process.exit(1)
+  }
+  const [worldId, mapId] = matched![0].match(/\d/g)!
+  const spotsInfoFromAnnotaion = notation[`${worldId}${mapId}`]
+  fs.outputJsonSync(`${dir}/spots.json`, spotsInfoFromAnnotaion)
 }
 
 const addSpotDistance = (dir: string) => {
@@ -319,17 +334,16 @@ const main = () => {
         extract(mapData)
         const PROCEDURE: { [key: string]: Array<(...args: any[]) => void> } = {
           '': [addSpotName, fitting, drawRoute, drawSpots, drawDone],
-          autoname: [addSpotName, autoSpotName, fitting, drawRoute, drawSpots, drawDone],
+          autoname: [autoSpotName, fitting, drawRoute, drawSpots, drawDone],
           dst: [addSpotName, addSpotDistance, fitting, drawSpots, drawDone],
           genpoi: [addSpotName, fitting, genpoi],
           icon: [addSpotName, fitting, drawSpotIcons, drawDone],
+          sync: [syncSpotNameFromAnnotaion, addSpotName, fitting, genpoi],
         }
         const cmd = process.argv[2] || ''
         const outDir = path.join(__dirname, 'out', wordldId, mapData.info.bg[0])
         for (const procedure of PROCEDURE[cmd]) {
           procedure.call(null, outDir)
-          const { image } = mapData.image.meta
-          fs.copyFileSync(path.join(MAP_DIR, wordldId, image), path.join(outDir, image))
         }
         ROUTE = {}
         SPOTS = {}

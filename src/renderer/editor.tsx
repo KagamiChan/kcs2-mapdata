@@ -172,7 +172,7 @@ class Editor extends Component<IProps, IState> {
     const data = await mapLoader.load(mapId)
 
     this.setState({
-      spots: uniq(map(data.spots, s => `${s.x}_${s.y}`)),
+      spots: uniq(map(data.spots, s => `${s.x},${s.y}`)),
     })
   }
 
