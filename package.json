@@ -8,6 +8,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
+    "getmap": "ts-node ./index.ts",
     "draw": "ts-node ./map-generate.ts",
     "icon": "ts-node ./map-generate.ts icon",
     "dst": "ts-node ./map-generate.ts dst",

@@ -55,3 +55,5 @@ const getMap = async () => {
 
   bar.terminate()
 }
+
+getMap()

@@ -201,7 +201,8 @@ const syncSpotNameFromAnnotaion = (dir: string) => {
 
 const addSpotDistance = (dir: string) => {
   if (!fs.existsSync(`${dir}/celldata.json`)) {
-    throw new Error(`celldata.json not found!`)
+    console.warn(chalk.yellow(`[WARN] Celldata.json not found\n  at ${dir}`))
+    // throw new Error(`celldata.json not found!`)
   }
   const MSAPI = fs.readJsonSync(`${dir}/celldata.json`)
   for (const { api_no, api_distance } of MSAPI.api_cell_data) {
@@ -257,7 +258,9 @@ const drawSpots = () => {
 
 const drawSpotIcons = (dir: string) => {
   if (!fs.existsSync(`${dir}/celldata.json`)) {
-    throw new Error(`celldata.json not found!`)
+    console.warn(chalk.yellow(`[WARN] Celldata.json not found\n  at ${dir}`))
+    return
+    // throw new Error(`celldata.json not found!`)
   }
   DRAWS.push(
     `<defs>
