@@ -2,7 +2,17 @@ import chalk from 'chalk'
 import fs from 'fs-extra'
 import _ from 'lodash'
 import path from 'path'
-import { IDraws, IFrameItem, IMapImage, IMapInfo, INsmap, IRoute, ISpotData, ISpots } from './types'
+import {
+  IBGInfo,
+  IDraws,
+  IFrameItem,
+  IMapImage,
+  IMapInfo,
+  INsmap,
+  IRoute,
+  ISpotData,
+  ISpots,
+} from './types'
 
 let ROUTE: IRoute = {}
 let SPOTS: ISpots = {}
@@ -344,7 +354,10 @@ const main = () => {
           sync: [syncSpotNameFromAnnotaion, addSpotName, fitting, genpoi],
         }
         const cmd = process.argv[2] || ''
-        const outDir = path.join(__dirname, 'out', wordldId, mapData.info.bg[0])
+        const name = _.isString(mapData.info.bg[0])
+          ? (mapData.info.bg[0] as string)
+          : (mapData.info.bg[0] as IBGInfo).img
+        const outDir = path.join(__dirname, 'out', wordldId, name)
         for (const procedure of PROCEDURE[cmd]) {
           procedure.call(null, outDir)
         }

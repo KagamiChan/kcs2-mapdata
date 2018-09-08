@@ -58,8 +58,13 @@ export interface IMeta {
   scale: number
 }
 
+export interface IBGInfo {
+  name: string
+  img: string
+}
+
 export interface IMapInfo {
-  bg: string[]
+  bg: Array<string | IBGInfo>
   spots?: ISpotsEntity[]
 }
 

@@ -1,5 +1,5 @@
 import fs from 'fs-extra'
-import { entries, get, keyBy, map, padStart } from 'lodash'
+import { entries, get, isString, keyBy, map, padStart } from 'lodash'
 import path from 'path'
 import { IFrameOrSpriteSourceSize, IMapImage, IMapInfo, ISpotsEntity } from '../../types'
 
@@ -33,7 +33,7 @@ class MapLoader implements IMapLoader {
     )
     const { spots = [] } = info
     const frames: IFrameOrSpriteSourceSize[] = map(info.bg, name =>
-      get(imageInfo.frames, [`map${world}${area}_${name}`, 'frame']),
+      get(imageInfo.frames, [`map${world}${area}_${isString(name) ? name : name.img}`, 'frame']),
     )
     const result: IDataEntry = {
       frames,
