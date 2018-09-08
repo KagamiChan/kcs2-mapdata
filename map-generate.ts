@@ -199,7 +199,7 @@ const syncSpotNameFromAnnotaion = (dir: string) => {
     process.exit(1)
   }
   const notation = fs.readJsonSync(DATA_DIR)
-  const matched = dir.match(/map\d-\d$/g)
+  const matched = dir.match(/map(\d+)-\d$/g)
   if (!matched) {
     console.error(chalk.red(`[ERROR] can't match dir to map id:\n  ${dir}`))
     process.exit(1)

@@ -12,7 +12,10 @@ const main = () => {
     const WORLD_DIR = path.join(OUT_DIR, worldId)
     const mapDirs = fs.readdirSync(WORLD_DIR)
     _.each(mapDirs, mapId => {
-      const title = mapId.match(/\d-\d/g)![0]
+      const title = _.get(mapId.match(/(\d+)-\d/g), 0)
+      if (!title) {
+        return
+      }
       const poi = fs.readJsonSync(`${WORLD_DIR}/${mapId}/poi.json`)
       finalPoi[title] = poi
     })
