@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import Promise from 'bluebird'
 import chalk from 'chalk'
 import fs from 'fs-extra'
@@ -33,11 +33,24 @@ const getMap = async () => {
     async ({ api_no, api_maparea_id }) => {
       const mapArea = padStart(String(api_maparea_id), 3, '0')
       const mapId = padStart(String(api_no), 2, '0')
-      const mapImage = await axios.get<Buffer>(`${MAP_PREFIX}/${mapArea}/${mapId}_image.png`, {
-        responseType: 'arraybuffer',
-      })
-      const mapMeta = await axios.get<object>(`${MAP_PREFIX}/${mapArea}/${mapId}_image.json`)
-      const mapData = await axios.get<object>(`${MAP_PREFIX}/${mapArea}/${mapId}_info.json`)
+
+      let mapImage
+      let mapMeta
+      let mapData
+      try {
+        mapImage = await axios.get<Buffer>(`${MAP_PREFIX}/${mapArea}/${mapId}_image.png`, {
+          responseType: 'arraybuffer',
+        })
+        mapMeta = await axios.get<object>(`${MAP_PREFIX}/${mapArea}/${mapId}_image.json`)
+        mapData = await axios.get<object>(`${MAP_PREFIX}/${mapArea}/${mapId}_info.json`)
+      } catch (e) {
+        if (e.response.status === 404) {
+          console.error('404 for', mapArea, mapId)
+          bar.tick()
+          return Promise.resolve()
+        }
+        return Promise.reject(new Error('download fail'))
+      }
 
       await fs.ensureDir(path.join(DATA_FOLDER, mapArea))
 
