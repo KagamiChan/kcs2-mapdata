@@ -1,14 +1,15 @@
-import axios, { AxiosError } from 'axios'
+import axios, { AxiosResponse } from 'axios'
 import Promise from 'bluebird'
 import chalk from 'chalk'
 import fs from 'fs-extra'
-import { padStart } from 'lodash'
+import { padStart, size } from 'lodash'
 import path from 'path'
 import ProgressBar from 'progress'
+import { IMapInfo } from './types'
 
 const SERVER = '203.104.209.102'
 
-interface IMapInfo {
+interface IConstMapInfo {
   api_no: number
   api_maparea_id: number
 }
@@ -19,7 +20,7 @@ const getMap = async () => {
 
   const start2 = await fs.readJson(path.resolve(DATA_FOLDER, 'start2.json'))
 
-  const mapInfo: IMapInfo[] = start2.api_mst_mapinfo
+  const mapInfo: IConstMapInfo[] = start2.api_mst_mapinfo
 
   const bar = new ProgressBar(chalk.blue('maps [:bar] :percent :etas'), {
     complete: '=',
@@ -42,7 +43,7 @@ const getMap = async () => {
           responseType: 'arraybuffer',
         })
         mapMeta = await axios.get<object>(`${MAP_PREFIX}/${mapArea}/${mapId}_image.json`)
-        mapData = await axios.get<object>(`${MAP_PREFIX}/${mapArea}/${mapId}_info.json`)
+        mapData = await axios.get<IMapInfo>(`${MAP_PREFIX}/${mapArea}/${mapId}_info.json`)
       } catch (e) {
         if (e.response.status === 404) {
           console.error('404 for', mapArea, mapId)
@@ -50,6 +51,39 @@ const getMap = async () => {
           return Promise.resolve()
         }
         return Promise.reject(new Error('download fail'))
+      }
+
+      // secrets
+      let extraImage: AxiosResponse<any>
+      let extraMeta: AxiosResponse<any>
+      let extraData: AxiosResponse<any>
+      let hasSecret: boolean = false
+
+      if (api_maparea_id > 10) {
+        const secret = size(mapData.data.spots)
+
+        try {
+          extraImage = await axios.get<Buffer>(
+            `${MAP_PREFIX}/${mapArea}/${mapId}_image${secret}.png`,
+            {
+              responseType: 'arraybuffer',
+            },
+          )
+          extraMeta = await axios.get<object>(
+            `${MAP_PREFIX}/${mapArea}/${mapId}_image${secret}.json`,
+          )
+          extraData = await axios.get<object>(
+            `${MAP_PREFIX}/${mapArea}/${mapId}_info${secret}.json`,
+          )
+
+          hasSecret = true
+        } catch (e) {
+          if (e.response.status === 404) {
+            console.error('404 for secret', mapArea, mapId)
+            return Promise.resolve()
+          }
+          return Promise.reject(new Error('download fail'))
+        }
       }
 
       await fs.ensureDir(path.join(DATA_FOLDER, mapArea))
@@ -61,6 +95,28 @@ const getMap = async () => {
       await fs.writeJson(path.join(DATA_FOLDER, mapArea, `${mapId}_info.json`), mapData.data, {
         spaces: 2,
       })
+
+      if (hasSecret) {
+        await fs.writeFile(
+          path.join(DATA_FOLDER, mapArea, `${mapId}_image_secret.png`),
+          extraImage!.data,
+        )
+        await fs.writeJson(
+          path.join(DATA_FOLDER, mapArea, `${mapId}_image_secret.json`),
+          extraMeta!.data,
+          {
+            spaces: 2,
+          },
+        )
+        await fs.writeJson(
+          path.join(DATA_FOLDER, mapArea, `${mapId}_info_secret.json`),
+          extraData!.data,
+          {
+            spaces: 2,
+          },
+        )
+      }
+
       bar.tick()
     },
     { concurrency: 2 },

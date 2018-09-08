@@ -68,6 +68,11 @@ export interface IMapInfo {
   spots?: ISpotsEntity[]
 }
 
+export interface ISecretMapInfo {
+  labels: ILine[]
+  spots: ISpotsEntity[]
+}
+
 export interface ISpotsEntity {
   no: number
   x: number
@@ -80,6 +85,13 @@ export interface ILine {
   x: number
   y: number
   img?: string
+}
+
+export interface IEnemy {
+  no: number
+  x: number
+  y: number
+  img: string
 }
 
 export interface ISpotData {
