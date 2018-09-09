@@ -79,6 +79,9 @@ export interface ISpotsEntity {
   y: number
   line?: ILine
   direction?: string
+  route?: {
+    img: string
+  }
 }
 
 export interface ILine {
