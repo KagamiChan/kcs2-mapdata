@@ -164,34 +164,6 @@ const addSpotName = (dir: string) => {
   }
 }
 
-/**
- * try to auto generate spot name
- * works well in normal circumstances, except maps as special as 1-6
- * should check out the data after auto spotted
- */
-const autoSpotName = (dir: string) => {
-  try {
-    const autoNamed: ISpotData = {}
-    _.forIn(SPOTS, (spot, id) => {
-      const name = String.fromCharCode(64 + spot.index)
-      const overFlowFlag = name.charCodeAt(0) > 90
-      autoNamed[id] = spot.start ? spot.start : overFlowFlag ? spot.name : name
-      SPOTS[id].name = autoNamed[id]
-      if (overFlowFlag) {
-        console.warn(
-          chalk.yellow(
-            '[WARN] Spot name is out of [A-Z], check it manually\n',
-            `  at ${dir}/spots.json , ${spot.name}`,
-          ),
-        )
-      }
-    })
-    fs.outputJsonSync(`${dir}/spots.json`, autoNamed)
-  } catch (err) {
-    console.error(chalk.red(err), '\n', chalk.red(`at ${dir}`))
-  }
-}
-
 const syncSpotNameFromAnnotaion = (dir: string) => {
   const DATA_DIR = path.join(__dirname, 'data', 'notation.json')
   if (!fs.existsSync(DATA_DIR)) {
@@ -204,7 +176,7 @@ const syncSpotNameFromAnnotaion = (dir: string) => {
     console.error(chalk.red(`[ERROR] can't match dir to map id:\n  ${dir}`))
     process.exit(1)
   }
-  const [worldId, mapId] = matched![0].match(/\d/g)!
+  const [worldId, mapId] = matched![0].match(/\d+/g)!
   const spotsInfoFromAnnotaion = notation[`${worldId}${mapId}`]
   fs.outputJsonSync(`${dir}/spots.json`, spotsInfoFromAnnotaion)
 }
@@ -332,22 +304,40 @@ const genpoi = (dir: string) => {
 
 const main = () => {
   const mapdir = fs.readdirSync(MAP_DIR)
-  _.each(_.filter(mapdir, i => !Number.isNaN(parseInt(i, 10))), wordldId => {
+  _.each(_.filter(mapdir, i => !Number.isNaN(parseInt(i, 10))), worldId => {
     try {
-      const worldMapDir = fs.readdirSync(path.join(MAP_DIR, wordldId))
+      const worldMapDir = fs.readdirSync(path.join(MAP_DIR, worldId))
       const mapDataArr = _.chain(worldMapDir)
         .map(i => i.slice(0, 2))
         .uniq()
-        .map(mapId => ({
-          image: fs.readJsonSync(path.join(MAP_DIR, wordldId, `${mapId}_image.json`)) as IMapImage,
-          info: fs.readJsonSync(path.join(MAP_DIR, wordldId, `${mapId}_info.json`)) as IMapInfo,
-        }))
+        .map(mapId => {
+          let image = fs.readJsonSync(path.join(MAP_DIR, worldId, `${mapId}_image.json`))
+          const info = fs.readJsonSync(path.join(MAP_DIR, worldId, `${mapId}_info.json`))
+
+          if (fs.pathExistsSync(path.join(MAP_DIR, worldId, `${mapId}_info_secret.json`))) {
+            const secretImage = fs.readJsonSync(
+              path.join(MAP_DIR, worldId, `${mapId}_image_secret.json`),
+            )
+            const secretInfo = fs.readJsonSync(
+              path.join(MAP_DIR, worldId, `${mapId}_info_secret.json`),
+            )
+
+            image = _.merge(image, secretImage)
+            info.spots = info.spots.concat(secretInfo.spots)
+          }
+
+          console.log(_.map(info.spots, 'no'))
+
+          return {
+            image,
+            info,
+          }
+        })
         .value()
       _.each(mapDataArr, mapData => {
         extract(mapData)
         const PROCEDURE: { [key: string]: Array<(...args: any[]) => void> } = {
           '': [addSpotName, fitting, drawRoute, drawSpots, drawDone],
-          autoname: [autoSpotName, fitting, drawRoute, drawSpots, drawDone],
           dst: [addSpotName, addSpotDistance, fitting, drawSpots, drawDone],
           genpoi: [addSpotName, fitting, genpoi],
           icon: [addSpotName, fitting, drawSpotIcons, drawDone],
@@ -357,7 +347,7 @@ const main = () => {
         const name = _.isString(mapData.info.bg[0])
           ? (mapData.info.bg[0] as string)
           : (mapData.info.bg[0] as IBGInfo).img
-        const outDir = path.join(__dirname, 'out', wordldId, name)
+        const outDir = path.join(__dirname, 'out', worldId, name)
         for (const procedure of PROCEDURE[cmd]) {
           procedure.call(null, outDir)
         }
