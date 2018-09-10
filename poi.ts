@@ -20,7 +20,8 @@ const main = () => {
       finalPoi[title] = poi
     })
   })
-  fs.outputJsonSync(`${DATA_DIR}/final.json`, finalPoi)
+  fs.outputJsonSync(`${DATA_DIR}/final_compressed.json`, finalPoi)
+  fs.outputJsonSync(`${DATA_DIR}/final.json`, finalPoi, { spaces: 2 })
 }
 
 main()
