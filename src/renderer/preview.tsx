@@ -1,15 +1,59 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import { compact, entries, filter, fromPairs, get, keyBy, map, rest, split } from 'lodash'
+import path from 'path'
 import { BaseTexture, Point, Rectangle, TextStyle, Texture } from 'pixi.js'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
+
 import mapLoader from './map-loader'
+import TextureLoader from './texture-loader'
 
 import { INotationMap } from './models'
 import { RootState } from './store'
 
-import { IFrameOrSpriteSourceSize, ILine, IMapImage, ISpotsEntity } from '../../types'
+import { IFrameOrSpriteSourceSize, IImage, ILine, ISpotsEntity } from '../../types'
+
+const mapTexture = new TextureLoader(
+  path.resolve(__dirname, '../../data/map_common.png'),
+  path.resolve(__dirname, '../../data/map_common.json'),
+)
+
+const getMapTexture = (t: number) => {
+  switch (t) {
+    case -1:
+      return mapTexture.get(133)
+    case 1:
+      return mapTexture.get(126)
+    case 2:
+    case 6:
+      return mapTexture.get(129)
+    case 3:
+      return mapTexture.get(131)
+    case 4:
+      return mapTexture.get(132)
+    case 5:
+      return mapTexture.get(120)
+    case 7:
+      return mapTexture.get(100)
+    case 8:
+      return mapTexture.get(119)
+    case 9:
+      return mapTexture.get(130)
+    case 10:
+      return mapTexture.get(95)
+    case 11:
+      return mapTexture.get(134)
+    case 12:
+      return mapTexture.get(135)
+    case -2:
+      return mapTexture.get(128)
+    case -3:
+      return mapTexture.get(125)
+    default:
+      return Texture.EMPTY
+  }
+}
 
 const getXY = (cell: string) => split(cell, ',').map(Number)
 
@@ -35,7 +79,7 @@ interface IState {
   imageLink: string
   frames: IFrameOrSpriteSourceSize[]
   secretImageLink: string | undefined
-  secretImageInfo: IMapImage | null
+  secretImageInfo: IImage | null
   spots: ISpotsEntity[]
   secretLabels: ILine[]
 }
@@ -118,6 +162,21 @@ class Preview extends Component<IProps, IState> {
                   x={s.x + s.line!.x}
                   y={s.y + s.line!.y}
                   texture={new Texture(secretTexture, rect)}
+                />
+              )
+            })}
+            {map(spots, (s: ISpotsEntity) => {
+              if (!s.color) {
+                return
+              }
+              const texture = getMapTexture(s.color!)
+
+              return (
+                <Sprite
+                  key={s.no}
+                  x={s.x - texture.width / 2}
+                  y={s.y - texture.height / 2}
+                  texture={texture}
                 />
               )
             })}

@@ -3,8 +3,8 @@ import { entries, get, isString, keyBy, map, padStart } from 'lodash'
 import path from 'path'
 import {
   IFrameOrSpriteSourceSize,
+  IImage,
   ILine,
-  IMapImage,
   IMapInfo,
   ISecretMapInfo,
   ISpotsEntity,
@@ -15,7 +15,7 @@ interface IDataEntry {
   spots: ISpotsEntity[]
   frames: IFrameOrSpriteSourceSize[]
   secretImageLink: string | undefined
-  secretImageInfo: IMapImage
+  secretImageInfo: IImage
   secretLabels: ILine[]
 }
 
@@ -38,7 +38,7 @@ class MapLoader implements IMapLoader {
     const info: IMapInfo = await fs.readJSON(
       path.resolve(__dirname, `../../maps/${world}/${area}_info.json`),
     )
-    const imageInfo: IMapImage = await fs.readJSON(
+    const imageInfo: IImage = await fs.readJSON(
       path.resolve(__dirname, `../../maps/${world}/${area}_image.json`),
     )
 

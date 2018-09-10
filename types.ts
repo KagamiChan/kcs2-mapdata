@@ -21,7 +21,7 @@ export interface INsmap {
   [key: string]: string[]
 }
 
-export interface IMapImage {
+export interface IImage {
   frames: IFrames
   meta: IMeta
 }
@@ -82,6 +82,7 @@ export interface ISpotsEntity {
   route?: {
     img: string
   }
+  color?: number
 }
 
 export interface ILine {

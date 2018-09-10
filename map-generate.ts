@@ -6,7 +6,7 @@ import {
   IBGInfo,
   IDraws,
   IFrameItem,
-  IMapImage,
+  IImage,
   IMapInfo,
   INsmap,
   IRoute,
@@ -22,7 +22,7 @@ const FIT_TOLERANCE = 0.7
 
 const MAP_DIR = path.join(__dirname, 'maps')
 
-const extract = (mapData: { image: IMapImage; info: IMapInfo }) => {
+const extract = (mapData: { image: IImage; info: IMapInfo }) => {
   try {
     let startPointCounter = 1
     _.each(mapData.info.spots, (spot, spotIndex) => {
@@ -325,8 +325,6 @@ const main = () => {
             image = _.merge(image, secretImage)
             info.spots = info.spots.concat(secretInfo.spots)
           }
-
-          console.log(_.map(info.spots, 'no'))
 
           return {
             image,
