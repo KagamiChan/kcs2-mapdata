@@ -1,10 +1,10 @@
 import fs from 'fs-extra'
-import { entries, fromPairs, get, map } from 'lodash'
+import { each, entries, findIndex, fromPairs, get, map, some } from 'lodash'
 import path from 'path'
 import { BaseTexture, Rectangle, Texture } from 'pixi.js'
 import url from 'url'
 
-import { IFrames, IImage } from '../../../types'
+import { IFrameOrSpriteSourceSize, IFrames, IImage } from '../../../types'
 
 const fileUrl = (str = '') => {
   let pathName = path.resolve(str).replace(/\\/g, '/')
@@ -19,33 +19,64 @@ const fileUrl = (str = '') => {
 }
 
 class TextureLoader {
-  protected imageUri = ''
-  protected infoUri = ''
-  protected prefix = ''
+  protected imageUris: string[]
+  protected infoUris: string[]
+  protected prefixes: string[]
 
-  protected image: BaseTexture
-  protected info: IImage
-  protected frames: IFrames
+  protected images: BaseTexture[]
+  protected frames: IFrames[]
 
   constructor(imageUri: string, infoUri: string) {
-    this.imageUri = imageUri
-    this.infoUri = infoUri
+    this.imageUris = [imageUri]
+    this.infoUris = [infoUri]
 
-    this.prefix = path.basename(imageUri, path.extname(imageUri))
+    this.prefixes = [path.basename(imageUri, path.extname(imageUri))]
 
-    this.image = BaseTexture.fromImage(fileUrl(imageUri))
-    this.info = fs.readJSONSync(infoUri)
-    this.frames = this.info.frames
+    this.images = [BaseTexture.fromImage(fileUrl(imageUri))]
+    const info = fs.readJSONSync(infoUri)
+    this.frames = [info.frames]
   }
 
-  public get = (id: string | number): Texture => {
-    const frame = get(this.frames, [`${this.prefix}_${id}`, 'frame'])
+  public get = (id: string | number, prefix?: string): Texture => {
+    let frame: IFrameOrSpriteSourceSize | undefined
+    let index: number | undefined
+
+    if (prefix) {
+      index = findIndex(this.prefixes, p => p === prefix)
+      frame = get(this.frames, [`${this.prefixes[index]}_${id}`, 'frame'])
+    } else {
+      each(this.frames, (frames, i) => {
+        frame = get(this.frames, [`${this.prefixes[i]}_${id}`, 'frame'])
+        if (frame) {
+          index = i
+          return false // this stops the loop
+        }
+      })
+    }
+
     if (!frame) {
       console.warn('empty texture, check id ', id)
       return Texture.EMPTY
     }
     const rect = new Rectangle(frame.x, frame.y, frame.w, frame.h)
-    return new Texture(this.image, rect)
+    return new Texture(this.images[index!], rect)
+  }
+
+  public has = (id: string | number): boolean => {
+    return some(this.frames, (frames, i) => `${this.prefixes[i]}_${id}` in frames)
+  }
+
+  /**
+   * extend a texture by another texture with same prefix
+   * mainly use for merging secret resources
+   */
+  public extend = (extra: TextureLoader) => {
+    this.imageUris = this.imageUris.concat(extra.imageUris)
+    this.infoUris = this.infoUris.concat(extra.infoUris)
+
+    this.prefixes = this.prefixes.concat(extra.prefixes)
+    this.images = this.images.concat(extra.images)
+    this.frames = this.frames.concat(extra.frames)
   }
 }
 
