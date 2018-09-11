@@ -3,11 +3,14 @@ import path from 'path'
 
 const isDevelopment: boolean = process.env.NODE_ENV !== 'production'
 
+global.ROOT = path.resolve(__dirname, '../../')
+
 let mainWindow: BrowserWindow | null
 
 const createMainWindow = () => {
   const window = new BrowserWindow({
     webPreferences: {
+      preload: path.resolve(__dirname, './preload.js'),
       webSecurity: false,
     },
   })

@@ -143,7 +143,7 @@ class Editor extends Component<IProps, IState> {
     const data = store.getState()
 
     fileWriter.write(
-      path.resolve(__dirname, '../../data/notation.json'),
+      path.resolve(window.ROOT, './data/notation.json'),
       JSON.stringify(data.notations, null, 2),
       {},
       () => {
@@ -153,7 +153,7 @@ class Editor extends Component<IProps, IState> {
   }
 
   public handleReload = async () => {
-    const data = await fs.readJson(path.resolve(__dirname, '../../data/notation.json'))
+    const data = await fs.readJson(path.resolve(window.ROOT, './data/notation.json'))
     this.props.dispatch({
       payload: data,
       type: 'notations/updateMany',

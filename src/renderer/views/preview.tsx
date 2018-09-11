@@ -15,8 +15,8 @@ import { RootState } from '../redux/store'
 import { IFrameOrSpriteSourceSize, IImage, ILine, ISpotsEntity } from '../../../types'
 
 const mapTexture = new TextureLoader(
-  path.resolve(__dirname, '../../data/map_common.png'),
-  path.resolve(__dirname, '../../data/map_common.json'),
+  path.resolve(window.ROOT, './data/map_common.png'),
+  path.resolve(window.ROOT, './data/map_common.json'),
 )
 
 const getMapTexture = (t: number) => {

@@ -6,7 +6,7 @@ import path from 'path'
 let notationsState = {}
 
 try {
-  notationsState = fs.readJSONSync(path.resolve(__dirname, '../../data/notation.json'))
+  notationsState = fs.readJSONSync(path.resolve(window.ROOT, './data/notation.json'))
 } catch (e) {
   // do nothing
 }

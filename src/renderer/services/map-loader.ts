@@ -34,16 +34,16 @@ class MapLoader implements IMapLoader {
     const world = padStart(String(Math.floor(+mapId / 10)), 3, '0')
     const area = padStart(String(+mapId % 10), 2, '0')
 
-    const imageLink = `file://${path.resolve(__dirname, `../../maps/${world}/${area}_image.png`)}`
+    const imageLink = `file://${path.resolve(window.ROOT, `./maps/${world}/${area}_image.png`)}`
     const info: IMapInfo = await fs.readJSON(
-      path.resolve(__dirname, `../../maps/${world}/${area}_info.json`),
+      path.resolve(window.ROOT, `./maps/${world}/${area}_info.json`),
     )
     const imageInfo: IImage = await fs.readJSON(
-      path.resolve(__dirname, `../../maps/${world}/${area}_image.json`),
+      path.resolve(window.ROOT, `./maps/${world}/${area}_image.json`),
     )
 
     const hasSecret = await fs.pathExists(
-      path.resolve(__dirname, `../../maps/${world}/${area}_info_secret.json`),
+      path.resolve(window.ROOT, `./maps/${world}/${area}_info_secret.json`),
     )
 
     let secretImageLink
@@ -52,14 +52,14 @@ class MapLoader implements IMapLoader {
 
     if (hasSecret) {
       secretImageLink = `file://${path.resolve(
-        __dirname,
-        `../../maps/${world}/${area}_image_secret.png`,
+        window.ROOT,
+        `./maps/${world}/${area}_image_secret.png`,
       )}`
       secretInfo = await fs.readJSON(
-        path.resolve(__dirname, `../../maps/${world}/${area}_info_secret.json`),
+        path.resolve(window.ROOT, `./maps/${world}/${area}_info_secret.json`),
       )
       secretImageInfo = await fs.readJSON(
-        path.resolve(__dirname, `../../maps/${world}/${area}_image_secret.json`),
+        path.resolve(window.ROOT, `./maps/${world}/${area}_image_secret.json`),
       )
     }
 

@@ -29,7 +29,7 @@ class Header extends Component<IProps> {
   }
 
   public readMapList = async () => {
-    const DATA_FOLDER = path.resolve(__dirname, '../../maps')
+    const DATA_FOLDER = path.resolve(window.ROOT, './maps')
     const start2 = await fs.readJson(path.resolve(DATA_FOLDER, './start2.json'))
 
     const mapConst = start2.api_mst_mapinfo
