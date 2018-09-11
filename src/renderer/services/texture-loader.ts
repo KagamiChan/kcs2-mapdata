@@ -46,7 +46,7 @@ class TextureLoader {
       frame = get(this.frames, [`${this.prefixes[index]}_${id}`, 'frame'])
     } else {
       each(this.frames, (frames, i) => {
-        frame = get(this.frames, [`${this.prefixes[i]}_${id}`, 'frame'])
+        frame = get(frames, [`${this.prefixes[i]}_${id}`, 'frame'])
         if (frame) {
           index = i
           return false // this stops the loop
