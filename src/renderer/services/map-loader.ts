@@ -8,7 +8,7 @@ import {
   IMapInfo,
   ISecretMapInfo,
   ISpotsEntity,
-} from '../../types'
+} from '../../../types'
 
 interface IDataEntry {
   imageLink: string

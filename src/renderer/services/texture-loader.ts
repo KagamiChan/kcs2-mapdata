@@ -4,7 +4,7 @@ import path from 'path'
 import { BaseTexture, Rectangle, Texture } from 'pixi.js'
 import url from 'url'
 
-import { IFrames, IImage } from '../../types'
+import { IFrames, IImage } from '../../../types'
 
 const fileUrl = (str = '') => {
   let pathName = path.resolve(str).replace(/\\/g, '/')

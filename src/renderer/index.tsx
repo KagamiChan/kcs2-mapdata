@@ -5,11 +5,11 @@ import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import styled, { injectGlobal } from 'styled-components'
 
-import Editor from './editor'
-import Header from './header'
-import Preview from './preview'
+import Editor from './views/editor'
+import Header from './views/header'
+import Preview from './views/preview'
 
-import store from './store'
+import store from './redux/store'
 
 // tslint:disable-next-line:no-unused-expression
 injectGlobal`

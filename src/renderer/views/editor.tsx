@@ -6,11 +6,11 @@ import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
-import fileWriter from './file-writer'
-import mapLoader from './map-loader'
-import { IMapItem, INotationMap } from './models'
-import store, { RootState } from './store'
-import toaster from './toaster'
+import { IMapItem, INotationMap } from '../redux/models'
+import store, { RootState } from '../redux/store'
+import fileWriter from '../services/file-writer'
+import mapLoader from '../services/map-loader'
+import toaster from '../services/toaster'
 
 const Wrapper = styled.div`
   grid-area: editor;

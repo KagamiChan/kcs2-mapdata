@@ -5,7 +5,7 @@ import React, { ChangeEvent, Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
-import { RootState } from './store'
+import { RootState } from '../redux/store'
 
 const Wrapper = styled.div`
   grid-area: header;

@@ -6,13 +6,13 @@ import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
-import mapLoader from './map-loader'
-import TextureLoader from './texture-loader'
+import mapLoader from '../services/map-loader'
+import TextureLoader from '../services/texture-loader'
 
-import { INotationMap } from './models'
-import { RootState } from './store'
+import { INotationMap } from '../redux/models'
+import { RootState } from '../redux/store'
 
-import { IFrameOrSpriteSourceSize, IImage, ILine, ISpotsEntity } from '../../types'
+import { IFrameOrSpriteSourceSize, IImage, ILine, ISpotsEntity } from '../../../types'
 
 const mapTexture = new TextureLoader(
   path.resolve(__dirname, '../../data/map_common.png'),
