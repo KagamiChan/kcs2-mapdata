@@ -1,5 +1,5 @@
 import fs from 'fs-extra'
-import { entries, get, isString, keyBy, map, padStart } from 'lodash'
+import { padStart, size } from 'lodash'
 import path from 'path'
 import { IMapInfo } from '../../../types'
 import mergeInfo from '../utils/merge-info'
@@ -35,9 +35,7 @@ class MapLoader implements IMapLoader {
       path.resolve(window.ROOT, `./maps/${world}/${area}_info.json`),
     )
 
-    const hasSecret = await fs.pathExists(
-      path.resolve(window.ROOT, `./maps/${world}/${area}_info_secret.json`),
-    )
+    let secret = size(info.spots)
 
     try {
       const complement = await fs.readJSON(
@@ -48,18 +46,27 @@ class MapLoader implements IMapLoader {
       // do nothing
     }
 
-    if (hasSecret) {
-      const secretImage = new TextureLoader(
-        path.resolve(window.ROOT, `./maps/${world}/${area}_image_secret.png`),
-        path.resolve(window.ROOT, `./maps/${world}/${area}_image_secret.json`),
-        `map${world}${area}`,
-      )
-      image.extend(secretImage)
-      const secretInfo = await fs.readJSON(
-        path.resolve(window.ROOT, `./maps/${world}/${area}_info_secret.json`),
-      )
+    if (+mapId > 10) {
+      let drained = false
+      while (!drained) {
+        try {
+          const secretInfo = await fs.readJSON(
+            path.resolve(window.ROOT, `./maps/${world}/${area}_info${secret}.json`),
+          )
 
-      info = mergeInfo<IMapInfo>(info, secretInfo)
+          info = mergeInfo<IMapInfo>(info, secretInfo)
+          const secretImage = new TextureLoader(
+            path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.png`),
+            path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.json`),
+            `map${world}${area}`,
+          )
+          image.extend(secretImage)
+
+          secret += size(secretInfo.spots)
+        } catch (e) {
+          drained = true
+        }
+      }
     }
 
     const result: IDataEntry = {

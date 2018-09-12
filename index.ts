@@ -53,39 +53,6 @@ const getMap = async () => {
         return Promise.reject(new Error('download fail'))
       }
 
-      // secrets
-      let extraImage: AxiosResponse<any>
-      let extraMeta: AxiosResponse<any>
-      let extraData: AxiosResponse<any>
-      let hasSecret: boolean = false
-
-      if (api_maparea_id > 10) {
-        const secret = size(mapData.data.spots)
-
-        try {
-          extraImage = await axios.get<Buffer>(
-            `${MAP_PREFIX}/${mapArea}/${mapId}_image${secret}.png`,
-            {
-              responseType: 'arraybuffer',
-            },
-          )
-          extraMeta = await axios.get<object>(
-            `${MAP_PREFIX}/${mapArea}/${mapId}_image${secret}.json`,
-          )
-          extraData = await axios.get<object>(
-            `${MAP_PREFIX}/${mapArea}/${mapId}_info${secret}.json`,
-          )
-
-          hasSecret = true
-        } catch (e) {
-          if (e.response.status === 404) {
-            console.error('404 for secret', mapArea, mapId)
-            return Promise.resolve()
-          }
-          return Promise.reject(new Error('download fail'))
-        }
-      }
-
       await fs.ensureDir(path.join(DATA_FOLDER, mapArea))
 
       await fs.writeFile(path.join(DATA_FOLDER, mapArea, `${mapId}_image.png`), mapImage.data)
@@ -96,27 +63,56 @@ const getMap = async () => {
         spaces: 2,
       })
 
-      if (hasSecret) {
-        await fs.writeFile(
-          path.join(DATA_FOLDER, mapArea, `${mapId}_image_secret.png`),
-          extraImage!.data,
-        )
-        await fs.writeJson(
-          path.join(DATA_FOLDER, mapArea, `${mapId}_image_secret.json`),
-          extraMeta!.data,
-          {
-            spaces: 2,
-          },
-        )
-        await fs.writeJson(
-          path.join(DATA_FOLDER, mapArea, `${mapId}_info_secret.json`),
-          extraData!.data,
-          {
-            spaces: 2,
-          },
-        )
-      }
+      // find out the secret
+      let secret = size(mapData.data.spots)
 
+      if (api_maparea_id > 10) {
+        let drained = false
+        while (!drained) {
+          try {
+            const extraImage = await axios.get<Buffer>(
+              `${MAP_PREFIX}/${mapArea}/${mapId}_image${secret}.png`,
+              {
+                responseType: 'arraybuffer',
+              },
+            )
+            const extraMeta = await axios.get<object>(
+              `${MAP_PREFIX}/${mapArea}/${mapId}_image${secret}.json`,
+            )
+            const extraData = await axios.get<IMapInfo>(
+              `${MAP_PREFIX}/${mapArea}/${mapId}_info${secret}.json`,
+            )
+
+            await fs.writeFile(
+              path.join(DATA_FOLDER, mapArea, `${mapId}_image${secret}.png`),
+              extraImage.data,
+            )
+            await fs.writeJson(
+              path.join(DATA_FOLDER, mapArea, `${mapId}_image${secret}.json`),
+              extraMeta.data,
+              {
+                spaces: 2,
+              },
+            )
+            await fs.writeJson(
+              path.join(DATA_FOLDER, mapArea, `${mapId}_info${secret}.json`),
+              extraData.data,
+              {
+                spaces: 2,
+              },
+            )
+            secret += size(extraData.data.spots)
+          } catch (e) {
+            if (e.response.status === 404) {
+              drained = true
+              console.error('404 for secret', mapArea, mapId)
+            } else {
+              console.error(e)
+              return Promise.reject(new Error('download fail'))
+            }
+          }
+        }
+      }
       bar.tick()
     },
     { concurrency: 2 },
