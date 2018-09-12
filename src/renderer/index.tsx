@@ -1,6 +1,6 @@
 import '@blueprintjs/core/lib/css/blueprint.css'
 import 'normalize.css/normalize.css'
-import React from 'react'
+import React, { Component, createRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import styled, { injectGlobal } from 'styled-components'
@@ -33,15 +33,21 @@ const Container = styled.div`
     'footer footer';
 `
 
-const App = () => (
-  <Provider store={store}>
-    <Container>
-      <Header />
-      <Preview />
-      <Editor />
-      <Footer />
-    </Container>
-  </Provider>
-)
+class App extends Component<{}> {
+  public preview = createRef<Component>()
+
+  public render() {
+    return (
+      <Provider store={store}>
+        <Container>
+          <Header />
+          <Preview ref={this.preview} />
+          <Editor />
+          <Footer previewRef={this.preview} />
+        </Container>
+      </Provider>
+    )
+  }
+}
 
 ReactDOM.render(<App />, document.querySelector('#app'))

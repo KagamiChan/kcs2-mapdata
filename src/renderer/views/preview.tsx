@@ -82,7 +82,7 @@ interface IState {
 }
 
 class Preview extends Component<IProps, IState> {
-  public enemyLayer = createRef<Container>()
+  public enemyLayer = createRef<Component>()
 
   public textStyle = new TextStyle({
     fill: 'white',
@@ -121,6 +121,7 @@ class Preview extends Component<IProps, IState> {
   public componentDidUpdate(prevProps: IProps) {
     if (prevProps.mapId !== this.props.mapId) {
       this.loadMapData()
+      this.handleResetEnemyPositions()
     }
   }
 
@@ -162,6 +163,12 @@ class Preview extends Component<IProps, IState> {
         },
       }))
     }
+  }
+
+  public handleResetEnemyPositions = () => {
+    this.setState({
+      enemyPositions: {},
+    })
   }
 
   public render() {
@@ -259,8 +266,13 @@ class Preview extends Component<IProps, IState> {
   }
 }
 
-export default connect((state: RootState) => ({
-  mapCell: state.mapCell,
-  mapId: state.mapId,
-  notations: get(state.notations, state.mapId, {}),
-}))(Preview)
+export default connect(
+  (state: RootState) => ({
+    mapCell: state.mapCell,
+    mapId: state.mapId,
+    notations: get(state.notations, state.mapId, {}),
+  }),
+  null,
+  null,
+  { withRef: true },
+)(Preview)
