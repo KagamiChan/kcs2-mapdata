@@ -41,18 +41,13 @@ class TextureLoader {
     let frame: IFrameOrSpriteSourceSize | undefined
     let index: number | undefined
 
-    if (prefix) {
-      index = findIndex(this.prefixes, p => p === prefix)
-      frame = get(this.frames, [`${this.prefixes[index]}_${id}`, 'frame'])
-    } else {
-      each(this.frames, (frames, i) => {
-        frame = get(frames, [`${this.prefixes[i]}_${id}`, 'frame'])
-        if (frame) {
-          index = i
-          return false // this stops the loop
-        }
-      })
-    }
+    each(this.frames, (frames, i) => {
+      frame = get(frames, [`${prefix || this.prefixes[i]}_${id}`, 'frame'])
+      if (frame) {
+        index = i
+        return false // this stops the loop
+      }
+    })
 
     if (!frame) {
       console.warn('empty texture, check id ', id)
@@ -62,8 +57,8 @@ class TextureLoader {
     return new Texture(this.images[index!], rect)
   }
 
-  public has = (id: string | number): boolean => {
-    return some(this.frames, (frames, i) => `${this.prefixes[i]}_${id}` in frames)
+  public has = (id: string | number, prefix?: string): boolean => {
+    return some(this.frames, (frames, i) => `${prefix || this.prefixes[i]}_${id}` in frames)
   }
 
   /**
