@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core'
 import fs from 'fs-extra'
-import { findIndex, fromPairs, get, map, uniq, upperCase } from 'lodash'
+import { findIndex, fromPairs, get, map, toUpper, uniq } from 'lodash'
 import path from 'path'
 import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
@@ -93,7 +93,7 @@ class Editor extends Component<IProps, IState> {
   public handleChange = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
     this.props.dispatch({
       payload: {
-        data: { ...this.props.notations, [id]: upperCase(e.currentTarget.value) },
+        data: { ...this.props.notations, [id]: toUpper(e.currentTarget.value) },
         id: this.props.mapId,
       },
       type: 'notations/updateOne',
