@@ -39,6 +39,15 @@ class MapLoader implements IMapLoader {
       path.resolve(window.ROOT, `./maps/${world}/${area}_info_secret.json`),
     )
 
+    try {
+      const complement = await fs.readJSON(
+        path.resolve(window.ROOT, `./maps/${world}/${area}_info_complement.json`),
+      )
+      info = mergeInfo<IMapInfo>(info, complement)
+    } catch (e) {
+      // do nothing
+    }
+
     if (hasSecret) {
       const secretImage = new TextureLoader(
         path.resolve(window.ROOT, `./maps/${world}/${area}_image_secret.png`),
