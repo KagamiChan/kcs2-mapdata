@@ -2,8 +2,8 @@ import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import FontFaceObserver from 'fontfaceobserver'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
 import path from 'path'
-import { TextStyle, Texture } from 'pixi.js'
-import React, { Component } from 'react'
+import { interaction, TextStyle, Texture } from 'pixi.js'
+import React, { Component, createRef } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
@@ -13,7 +13,7 @@ import TextureLoader from '../services/texture-loader'
 import { INotationMap } from '../redux/models'
 import { RootState } from '../redux/store'
 
-import { IMapInfo, ISpotsEntity } from '../../../types'
+import { IEnemy, IMapInfo, ISpotsEntity } from '../../../types'
 
 const mapTexture = new TextureLoader(
   path.resolve(window.ROOT, './data/map_common.png'),
@@ -56,7 +56,11 @@ const getMapTexture = (t: number) => {
   }
 }
 
+const airbaseTexture = mapTexture.get(81)
+
 const getXY = (cell: string) => split(cell, ',').map(Number)
+
+const getEnemyName = (enemy: IEnemy): string => String(enemy.no) + enemy.img
 
 const Wrapper = styled.div`
   grid-area: preview;
@@ -71,9 +75,15 @@ interface IProps extends DispatchProp {
 interface IState {
   mapImage: TextureLoader | null
   mapInfo: IMapInfo | null
+  currentEnemy: string
+  enemyPositions: {
+    [key: string]: { x: number; y: number }
+  }
 }
 
 class Preview extends Component<IProps, IState> {
+  public enemyLayer = createRef<Container>()
+
   public textStyle = new TextStyle({
     fill: 'white',
     fontFamily: '"Lucida Console", Monaco, monospace',
@@ -83,9 +93,13 @@ class Preview extends Component<IProps, IState> {
   })
 
   public state: IState = {
+    currentEnemy: '',
+    enemyPositions: {},
     mapImage: null,
     mapInfo: null,
   }
+
+  private data: interaction.InteractionData | null = null
 
   public componentDidMount() {
     this.loadMapData()
@@ -121,8 +135,37 @@ class Preview extends Component<IProps, IState> {
     })
   }
 
+  public handleDragStart = (name: string) => (e: interaction.InteractionEvent) => {
+    this.data = e.data
+    this.setState({
+      currentEnemy: name,
+    })
+  }
+
+  public handleDragEnd = () => {
+    this.data = null
+    this.setState({
+      currentEnemy: '',
+    })
+  }
+
+  public handleDragMove = () => {
+    if (this.state.currentEnemy && this.data) {
+      const { x, y } = this.data.getLocalPosition(this.enemyLayer.current)
+      this.setState(prevState => ({
+        enemyPositions: {
+          ...prevState.enemyPositions,
+          [prevState.currentEnemy]: {
+            x,
+            y,
+          },
+        },
+      }))
+    }
+  }
+
   public render() {
-    const { mapImage, mapInfo } = this.state
+    const { mapImage, mapInfo, currentEnemy, enemyPositions } = this.state
     const { mapCell, notations } = this.props
 
     if (mapImage === null || mapInfo === null) {
@@ -167,6 +210,31 @@ class Preview extends Component<IProps, IState> {
             {map(mapInfo.labels, l => (
               <Sprite key={l.img} x={l.x} y={l.y} texture={mapImage.get(l.img!)} />
             ))}
+            {mapInfo.airbase && (
+              <Sprite
+                x={mapInfo.airbase.x - airbaseTexture.width / 2}
+                y={mapInfo.airbase.y - airbaseTexture.height / 2}
+                texture={airbaseTexture}
+              />
+            )}
+          </Container>
+          <Container ref={this.enemyLayer}>
+            {map(mapInfo.enemies, e => {
+              return (
+                <Sprite
+                  key={getEnemyName(e)}
+                  x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
+                  y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
+                  alpha={currentEnemy === getEnemyName(e) ? 0.5 : 1}
+                  texture={mapImage.get(e.img)}
+                  interactive={true}
+                  pointerdown={this.handleDragStart(getEnemyName(e))}
+                  pointerup={this.handleDragEnd}
+                  pointerupoutside={this.handleDragEnd}
+                  pointermove={this.handleDragMove}
+                />
+              )
+            })}
           </Container>
           <Container>
             {mapX > 0 &&

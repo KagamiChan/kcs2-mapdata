@@ -67,6 +67,11 @@ export interface IMapInfo {
   bg: Array<string | IBGInfo>
   spots?: ISpotsEntity[]
   labels?: ILine[]
+  enemies?: IEnemy[]
+  airbase?: {
+    x: number
+    y: number
+  }
 }
 
 export interface ISpotsEntity {
