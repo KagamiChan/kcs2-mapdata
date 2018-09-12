@@ -1,4 +1,5 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
+import FontFaceObserver from 'fontfaceobserver'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
 import path from 'path'
 import { TextStyle, Texture } from 'pixi.js'
@@ -61,14 +62,6 @@ const Wrapper = styled.div`
   grid-area: preview;
 `
 
-const textStyle = new TextStyle({
-  fill: 'white',
-  fontFamily: '"Lucida Console", Monaco, monospace',
-  fontSize: 30,
-  fontWeight: 'bold',
-  strokeThickness: 8,
-})
-
 interface IProps extends DispatchProp {
   mapCell: string
   notations: INotationMap
@@ -81,6 +74,14 @@ interface IState {
 }
 
 class Preview extends Component<IProps, IState> {
+  public textStyle = new TextStyle({
+    fill: 'white',
+    fontFamily: '"Lucida Console", Monaco, monospace',
+    fontSize: 30,
+    fontWeight: 'bold',
+    strokeThickness: 8,
+  })
+
   public state: IState = {
     mapImage: null,
     mapInfo: null,
@@ -88,7 +89,21 @@ class Preview extends Component<IProps, IState> {
 
   public componentDidMount() {
     this.loadMapData()
+
+    const font = new FontFaceObserver('IBM Plex Mono')
+    font.load().then(() => {
+      console.info('pixi.js font loaded')
+      this.textStyle = new TextStyle({
+        fill: 'white',
+        fontFamily: 'IBM Plex Mono',
+        fontSize: 30,
+        fontWeight: 'bold',
+        strokeThickness: 8,
+      })
+      this.forceUpdate()
+    })
   }
+
   public componentDidUpdate(prevProps: IProps) {
     if (prevProps.mapId !== this.props.mapId) {
       this.loadMapData()
@@ -167,7 +182,7 @@ class Preview extends Component<IProps, IState> {
               )}
             {map(entries(notations), ([s, note]) => {
               const [pX = 0, pY = 0] = getXY(s)
-              return <Text key={s} text={note} style={textStyle} x={pX + 20} y={pY - 20} />
+              return <Text key={s} text={note} style={this.textStyle} x={pX + 20} y={pY - 20} />
             })}
           </Container>
         </Stage>

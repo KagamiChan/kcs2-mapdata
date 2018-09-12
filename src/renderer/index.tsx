@@ -4,6 +4,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import styled, { injectGlobal } from 'styled-components'
+import './static/webfont.css'
 
 import Editor from './views/editor'
 import Header from './views/header'
@@ -15,6 +16,7 @@ import store from './redux/store'
 injectGlobal`
   html, body, #app {
     height: 100%;
+    font-family: 'IBM Plex Sans';
   }
 `
 
