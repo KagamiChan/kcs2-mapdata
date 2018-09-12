@@ -7,6 +7,7 @@ import styled, { injectGlobal } from 'styled-components'
 import './static/webfont.css'
 
 import Editor from './views/editor'
+import Footer from './views/footer'
 import Header from './views/header'
 import Preview from './views/preview'
 
@@ -38,6 +39,7 @@ const App = () => (
       <Header />
       <Preview />
       <Editor />
+      <Footer />
     </Container>
   </Provider>
 )
