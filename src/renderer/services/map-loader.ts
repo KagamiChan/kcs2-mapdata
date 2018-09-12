@@ -1,22 +1,13 @@
 import fs from 'fs-extra'
 import { entries, get, isString, keyBy, map, padStart } from 'lodash'
 import path from 'path'
-import {
-  IFrameOrSpriteSourceSize,
-  IImage,
-  ILine,
-  IMapInfo,
-  ISecretMapInfo,
-  ISpotsEntity,
-} from '../../../types'
+import { IMapInfo } from '../../../types'
+import mergeInfo from '../utils/merge-info'
+import TextureLoader from './texture-loader'
 
 interface IDataEntry {
-  imageLink: string
-  spots: ISpotsEntity[]
-  frames: IFrameOrSpriteSourceSize[]
-  secretImageLink: string | undefined
-  secretImageInfo: IImage
-  secretLabels: ILine[]
+  image: TextureLoader
+  info: IMapInfo
 }
 
 interface IMapLoader {
@@ -34,46 +25,37 @@ class MapLoader implements IMapLoader {
     const world = padStart(String(Math.floor(+mapId / 10)), 3, '0')
     const area = padStart(String(+mapId % 10), 2, '0')
 
-    const imageLink = `file://${path.resolve(window.ROOT, `./maps/${world}/${area}_image.png`)}`
-    const info: IMapInfo = await fs.readJSON(
-      path.resolve(window.ROOT, `./maps/${world}/${area}_info.json`),
-    )
-    const imageInfo: IImage = await fs.readJSON(
+    const image = new TextureLoader(
+      path.resolve(window.ROOT, `./maps/${world}/${area}_image.png`),
       path.resolve(window.ROOT, `./maps/${world}/${area}_image.json`),
+      `map${world}${area}`,
+    )
+
+    let info: IMapInfo = await fs.readJSON(
+      path.resolve(window.ROOT, `./maps/${world}/${area}_info.json`),
     )
 
     const hasSecret = await fs.pathExists(
       path.resolve(window.ROOT, `./maps/${world}/${area}_info_secret.json`),
     )
 
-    let secretImageLink
-    let secretInfo
-    let secretImageInfo
-
     if (hasSecret) {
-      secretImageLink = `file://${path.resolve(
-        window.ROOT,
-        `./maps/${world}/${area}_image_secret.png`,
-      )}`
-      secretInfo = await fs.readJSON(
+      const secretImage = new TextureLoader(
+        path.resolve(window.ROOT, `./maps/${world}/${area}_image_secret.png`),
+        path.resolve(window.ROOT, `./maps/${world}/${area}_image_secret.json`),
+        `map${world}${area}`,
+      )
+      image.extend(secretImage)
+      const secretInfo = await fs.readJSON(
         path.resolve(window.ROOT, `./maps/${world}/${area}_info_secret.json`),
       )
-      secretImageInfo = await fs.readJSON(
-        path.resolve(window.ROOT, `./maps/${world}/${area}_image_secret.json`),
-      )
+
+      info = mergeInfo<IMapInfo>(info, secretInfo)
     }
 
-    const { spots = [] } = info
-    const frames: IFrameOrSpriteSourceSize[] = map(info.bg, name =>
-      get(imageInfo.frames, [`map${world}${area}_${isString(name) ? name : name.img}`, 'frame']),
-    )
     const result: IDataEntry = {
-      frames,
-      imageLink,
-      secretImageInfo,
-      secretImageLink,
-      secretLabels: get(secretInfo, 'labels', []),
-      spots: spots.concat(get(secretInfo, 'spots', [])),
+      image,
+      info,
     }
     this.cache[mapId] = result
     return result

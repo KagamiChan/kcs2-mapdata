@@ -6,20 +6,20 @@ import { filter, fromPairs, isArray, keys, map } from 'lodash'
  * @param existing map info
  * @param incoming map info
  */
-const mergeInfo = (existing: object, incoming: object): object => {
-  const commonKeys = filter(keys(existing), key =>
-    isArray(
-      (existing as any)[key] && keys(incoming).includes(key) && isArray((incoming as any)[key]),
-    ),
+const mergeInfo = <T extends object>(existing: T, incoming: T): T => {
+  const commonKeys = filter(
+    keys(existing),
+    key =>
+      isArray((existing as any)[key]) &&
+      keys(incoming).includes(key) &&
+      isArray((incoming as any)[key]),
   )
 
   const common = fromPairs(
     map(commonKeys, key => [key, ((existing as any)[key] as any[]).concat((incoming as any)[key])]),
   )
 
-  return {
-    ...existing,
-    ...incoming,
-    ...common,
-  }
+  return Object.assign({}, existing, incoming, common)
 }
+
+export default mergeInfo

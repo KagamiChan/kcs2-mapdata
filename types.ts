@@ -66,11 +66,7 @@ export interface IBGInfo {
 export interface IMapInfo {
   bg: Array<string | IBGInfo>
   spots?: ISpotsEntity[]
-}
-
-export interface ISecretMapInfo {
-  labels: ILine[]
-  spots: ISpotsEntity[]
+  labels?: ILine[]
 }
 
 export interface ISpotsEntity {

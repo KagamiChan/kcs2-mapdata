@@ -1,7 +1,7 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
-import { compact, entries, filter, fromPairs, get, keyBy, map, rest, split } from 'lodash'
+import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
 import path from 'path'
-import { BaseTexture, Point, Rectangle, TextStyle, Texture } from 'pixi.js'
+import { TextStyle, Texture } from 'pixi.js'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
@@ -12,7 +12,7 @@ import TextureLoader from '../services/texture-loader'
 import { INotationMap } from '../redux/models'
 import { RootState } from '../redux/store'
 
-import { IFrameOrSpriteSourceSize, IImage, ILine, ISpotsEntity } from '../../../types'
+import { IMapInfo, ISpotsEntity } from '../../../types'
 
 const mapTexture = new TextureLoader(
   path.resolve(window.ROOT, './data/map_common.png'),
@@ -76,22 +76,14 @@ interface IProps extends DispatchProp {
 }
 
 interface IState {
-  imageLink: string
-  frames: IFrameOrSpriteSourceSize[]
-  secretImageLink: string | undefined
-  secretImageInfo: IImage | null
-  spots: ISpotsEntity[]
-  secretLabels: ILine[]
+  mapImage: TextureLoader | null
+  mapInfo: IMapInfo | null
 }
 
 class Preview extends Component<IProps, IState> {
   public state: IState = {
-    frames: [],
-    imageLink: '',
-    secretImageInfo: null,
-    secretImageLink: '',
-    secretLabels: [],
-    spots: [],
+    mapImage: null,
+    mapInfo: null,
   }
 
   public componentDidMount() {
@@ -108,38 +100,22 @@ class Preview extends Component<IProps, IState> {
 
     const data = await mapLoader.load(mapId)
 
-    const { imageLink, frames, spots, secretImageLink, secretImageInfo, secretLabels } = data
-
     this.setState({
-      frames,
-      imageLink,
-      secretImageInfo,
-      secretImageLink,
-      secretLabels,
-      spots,
+      mapImage: data.image,
+      mapInfo: data.info,
     })
   }
 
   public render() {
-    const { imageLink, frames, spots, secretImageInfo, secretImageLink, secretLabels } = this.state
+    const { mapImage, mapInfo } = this.state
     const { mapCell, notations } = this.props
 
-    const secrets = filter(spots, s => get(s, 'route.img'))
-
-    const secretFrames = fromPairs(
-      map(entries(get(secretImageInfo, 'frames', {})), ([k, v]) => [
-        k
-          .split('_')
-          .slice(1)
-          .join('_'),
-        v,
-      ]),
-    )
-
-    let secretTexture: BaseTexture
-
-    if (secretImageLink) {
-      secretTexture = BaseTexture.fromImage(secretImageLink)
+    if (mapImage === null || mapInfo === null) {
+      return (
+        <Wrapper>
+          <Stage width={1200} height={720} />
+        </Wrapper>
+      )
     }
 
     const [mapX = 0, mapY = 0] = getXY(mapCell)
@@ -147,28 +123,21 @@ class Preview extends Component<IProps, IState> {
       <Wrapper>
         <Stage width={1200} height={720}>
           <Container>
-            {map(frames, ({ x, y }) => (
-              <Sprite key={`${x}${y}`} x={-x} y={-y} texture={Texture.fromImage(imageLink)} />
-            ))}
+            {map(mapInfo.bg, back => {
+              const name = isString(back) ? back : back.img
+              return <Sprite key={name} x={0} y={0} texture={mapImage.get(name)} />
+            })}
           </Container>
           <Container>
-            {map(secrets, (s: ISpotsEntity) => {
-              const frame = secretFrames[s.route!.img].frame
-              const rect = new Rectangle(frame.x, frame.y, frame.w, frame.h)
-
-              return (
-                <Sprite
-                  key={s.no}
-                  x={s.x + s.line!.x}
-                  y={s.y + s.line!.y}
-                  texture={new Texture(secretTexture, rect)}
-                />
-              )
-            })}
-            {map(spots, (s: ISpotsEntity) => {
-              if (!s.color) {
-                return
-              }
+            {map(filter(mapInfo.spots, s => get(s, 'route.img')), (s: ISpotsEntity) => (
+              <Sprite
+                key={s.no}
+                x={s.x + s.line!.x}
+                y={s.y + s.line!.y}
+                texture={mapImage.get(s.route!.img)}
+              />
+            ))}
+            {map(filter(mapInfo.spots, s => s.color), (s: ISpotsEntity) => {
               const texture = getMapTexture(s.color!)
 
               return (
@@ -180,13 +149,9 @@ class Preview extends Component<IProps, IState> {
                 />
               )
             })}
-            {map(secretLabels, l => {
-              const frame = secretFrames[l.img!].frame
-              const rect = new Rectangle(frame.x, frame.y, frame.w, frame.h)
-              return (
-                <Sprite key={l.img} x={l.x} y={l.y} texture={new Texture(secretTexture, rect)} />
-              )
-            })}
+            {map(mapInfo.labels, l => (
+              <Sprite key={l.img} x={l.x} y={l.y} texture={mapImage.get(l.img!)} />
+            ))}
           </Container>
           <Container>
             {mapX > 0 &&

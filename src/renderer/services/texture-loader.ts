@@ -26,11 +26,11 @@ class TextureLoader {
   protected images: BaseTexture[]
   protected frames: IFrames[]
 
-  constructor(imageUri: string, infoUri: string) {
+  constructor(imageUri: string, infoUri: string, prefix?: string) {
     this.imageUris = [imageUri]
     this.infoUris = [infoUri]
 
-    this.prefixes = [path.basename(imageUri, path.extname(imageUri))]
+    this.prefixes = [prefix || path.basename(imageUri, path.extname(imageUri))]
 
     this.images = [BaseTexture.fromImage(fileUrl(imageUri))]
     const info = fs.readJSONSync(infoUri)
