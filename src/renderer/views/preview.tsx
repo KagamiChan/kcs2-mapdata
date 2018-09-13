@@ -178,15 +178,16 @@ class Preview extends Component<IProps, IState> {
     if (mapImage === null || mapInfo === null) {
       return (
         <Wrapper>
-          <Stage width={1200} height={720} />
+          <Stage key="placeholder" width={1200} height={720} options={{ transparent: true }} />
         </Wrapper>
       )
     }
 
     const [mapX = 0, mapY = 0] = getXY(mapCell)
+
     return (
       <Wrapper>
-        <Stage width={1200} height={720}>
+        <Stage key="main" width={1200} height={720} options={{ transparent: true }}>
           <Container>
             {map(mapInfo.bg, back => {
               const name = isString(back) ? back : back.img
@@ -232,7 +233,7 @@ class Preview extends Component<IProps, IState> {
                   key={getEnemyName(e)}
                   x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
                   y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
-                  alpha={currentEnemy === getEnemyName(e) ? 0.5 : 1}
+                  alpha={currentEnemy === getEnemyName(e) ? 0.75 : 1}
                   texture={mapImage.get(e.img)}
                   interactive={true}
                   pointerdown={this.handleDragStart(getEnemyName(e))}
