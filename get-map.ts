@@ -5,14 +5,9 @@ import fs from 'fs-extra'
 import { padStart, size } from 'lodash'
 import path from 'path'
 import ProgressBar from 'progress'
-import { IMapInfo } from './types'
+import { IConstMapInfo, IMapInfo } from './types'
 
 const SERVER = '203.104.209.102'
-
-interface IConstMapInfo {
-  api_no: number
-  api_maparea_id: number
-}
 
 const getMap = async () => {
   const MAP_PREFIX = `http://${SERVER}/kcs2/resources/map`

@@ -102,3 +102,26 @@ export interface IEnemy {
 export interface ISpotData {
   [key: string]: string
 }
+
+export interface IConstMapInfo {
+  api_no: number
+  api_maparea_id: number
+  api_id: number
+}
+
+export interface IMapstatItem {
+  levels: number[]
+  cells: ICellOrBoss[]
+  boss: ICellOrBoss
+}
+export interface ICellOrBoss {
+  cell_id: string
+  event_id: number
+  event_kind: number
+  icon: Icon
+}
+export interface Icon {
+  type: string
+  path: string
+  hash: string
+}
