@@ -4,6 +4,7 @@ import fs from 'fs-extra'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
+import toaster from '../services/toaster'
 
 const { dialog } = remote
 
@@ -56,6 +57,7 @@ class Footer extends Component<DispatchProp> {
 
   public handleResetEnemyPositions = () => {
     this.props.dispatch({ type: 'enemyPositions/clear' })
+    toaster.show({ message: 'Cleared', intent: 'success' })
   }
 
   public render() {
