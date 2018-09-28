@@ -23,34 +23,34 @@ const mapTexture = new TextureLoader(
 const getMapTexture = (t: number) => {
   switch (t) {
     case -1:
-      return mapTexture.get(133)
+      return mapTexture.get(133) // default white
     case 1:
-      return mapTexture.get(126)
+      return mapTexture.get(126) // blue, battle avoid
     case 2:
     case 6:
-      return mapTexture.get(129)
+      return mapTexture.get(129) // green, resource get
     case 3:
-      return mapTexture.get(131)
+      return mapTexture.get(131) // purple, resource loss
     case 4:
-      return mapTexture.get(132)
+      return mapTexture.get(132) // red, battle
     case 5:
-      return mapTexture.get(120)
+      return mapTexture.get(120) // boss
     case 7:
-      return mapTexture.get(100)
+      return mapTexture.get(100) // air battle
     case 8:
-      return mapTexture.get(119)
+      return mapTexture.get(119) // sortie end (1-6)
     case 9:
-      return mapTexture.get(130)
+      return mapTexture.get(130) // transport
     case 10:
-      return mapTexture.get(95)
+      return mapTexture.get(95) // air raid
     case 11:
-      return mapTexture.get(134)
+      return mapTexture.get(134) // purple, night battle
     case 12:
-      return mapTexture.get(135)
+      return mapTexture.get(135) // night to day
     case -2:
-      return mapTexture.get(128)
+      return mapTexture.get(128) // red, battle
     case -3:
-      return mapTexture.get(125)
+      return mapTexture.get(125) // start
     default:
       return Texture.EMPTY
   }
