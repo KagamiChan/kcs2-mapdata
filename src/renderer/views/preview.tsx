@@ -1,5 +1,6 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import FontFaceObserver from 'fontfaceobserver'
+import fs from 'fs-extra'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
 import path from 'path'
 import { Container as PixiContainer, DisplayObject, interaction, TextStyle, Texture } from 'pixi.js'
@@ -20,6 +21,7 @@ const mapTexture = new TextureLoader(
   path.resolve(window.ROOT, './data/map_common.json'),
 )
 
+// align with main.js 4.1.1.6, map_common 4.1.0.0
 const getMapTexture = (t: number) => {
   switch (t) {
     case -1:
@@ -40,9 +42,9 @@ const getMapTexture = (t: number) => {
     case 8:
       return mapTexture.get(119) // sortie end (1-6)
     case 9:
-      return mapTexture.get(130) // transport
+      return mapTexture.get(130) // air reconn
     case 10:
-      return mapTexture.get(95) // air raid
+      return mapTexture.get(95) // long distance air battle
     case 11:
       return mapTexture.get(134) // purple, night battle
     case 12:
@@ -56,6 +58,59 @@ const getMapTexture = (t: number) => {
   }
 }
 
+export const getSpotKind = (eventId: number = -100, detailId: number = -100) => {
+  if (eventId === 4) {
+    // 4=通常戦闘
+    if (detailId === 2) {
+      return 14
+    } // 2=夜戦
+    if (detailId === 4) {
+      return 8
+    } // 4=航空戦
+    if (detailId === 5) {
+      return 15
+    } // 5=敵連合艦隊戦
+    if (detailId === 6) {
+      return 11
+    } // 6=長距離空襲戦
+  }
+  if (eventId === 6) {
+    // 6=気のせいだった
+    if (detailId === 1) {
+      // 1="敵影を見ず。"
+      return 7
+    } else if (detailId === 2) {
+      // 2=能動分岐
+      return 12
+    }
+  } else if (eventId === 7) {
+    // 7=航空戦or航空偵察
+    if (detailId === 0) {
+      // 4=航空戦
+      return 13
+    }
+  }
+  return eventId + 1
+}
+
+const spotKindColorMap: { [key: number]: number } = {
+  1: -3,
+  2: 1,
+  3: 2,
+  4: 3,
+  5: 4,
+  6: 5,
+  7: 1,
+  8: 7,
+  9: 8,
+  10: 9,
+  11: 10,
+  12: 1,
+  13: 9,
+  14: 11,
+  15: 4,
+}
+
 const airbaseTexture = mapTexture.get(81)
 
 const getXY = (cell: string) => split(cell, ',').map(Number)
@@ -65,6 +120,18 @@ const getEnemyName = (enemy: IEnemy): string => String(enemy.no) + enemy.img
 const Wrapper = styled.div`
   grid-area: preview;
 `
+
+interface ICellStat {
+  cell_id: string
+  event_id: number
+  event_kind: number
+}
+
+interface ISpotStat {
+  [key: string]: {
+    [key: string]: ICellStat
+  }
+}
 
 interface IProps extends DispatchProp {
   enemyPositions: IEnemyPositions
@@ -77,6 +144,7 @@ interface IState {
   mapImage: TextureLoader | null
   mapInfo: IMapInfo | null
   currentEnemy: string
+  stat: ISpotStat
 }
 
 class Preview extends Component<IProps, IState> {
@@ -94,6 +162,7 @@ class Preview extends Component<IProps, IState> {
     currentEnemy: '',
     mapImage: null,
     mapInfo: null,
+    stat: {},
   }
 
   private data: interaction.InteractionData | null = null
@@ -127,9 +196,12 @@ class Preview extends Component<IProps, IState> {
 
     const data = await mapLoader.load(mapId)
 
+    const stat = await fs.readJSON(path.resolve(__dirname, '../../../maps/stat.json'))
+
     this.setState({
       mapImage: data.image,
       mapInfo: data.info,
+      stat,
     })
   }
 
@@ -168,8 +240,8 @@ class Preview extends Component<IProps, IState> {
   }
 
   public render() {
-    const { mapImage, mapInfo, currentEnemy } = this.state
-    const { mapCell, notations, enemyPositions } = this.props
+    const { mapImage, mapInfo, currentEnemy, stat } = this.state
+    const { mapCell, notations, enemyPositions, mapId } = this.props
 
     if (mapImage === null || mapInfo === null) {
       return (
@@ -180,6 +252,8 @@ class Preview extends Component<IProps, IState> {
     }
 
     const [mapX = 0, mapY = 0] = getXY(mapCell)
+
+    const currentStat = stat[mapId] || {}
 
     return (
       <Wrapper>
@@ -205,8 +279,25 @@ class Preview extends Component<IProps, IState> {
               return (
                 <Sprite
                   key={s.no}
-                  x={s.x - texture.width / 2}
-                  y={s.y - texture.height / 2}
+                  x={s.x - Math.round(texture.width / 2)}
+                  y={s.y - Math.round(texture.height / 2)}
+                  texture={texture}
+                />
+              )
+            })}
+            {map(entries(notations), ([s, note]) => {
+              const [x = 0, y = 0] = getXY(s)
+              const eventId = get(currentStat, [note, 'event_id'])
+              const detailId = get(currentStat, [note, 'event_kind'])
+              const color = spotKindColorMap[getSpotKind(eventId, detailId)]
+              const texture = getMapTexture(color!)
+
+              // boss cell icon is translated a little to make it cover the original spot icon
+              return (
+                <Sprite
+                  key={s}
+                  x={x - Math.round(texture.width / 2)}
+                  y={y - Math.round(texture.height / 2) - (color === 5 ? 2 : 0)}
                   texture={texture}
                 />
               )
