@@ -65,3 +65,16 @@ export const mapList: ModelConfig<IMapItem[]> = {
   },
   state: [],
 }
+
+export interface IEnemyPositions {
+  [key: string]: { x: number; y: number }
+}
+
+export const enemyPositions: ModelConfig<IEnemyPositions> = {
+  reducers: {
+    clear: () => ({}),
+    updateMany: (state, payload) => ({ ...state, ...payload }),
+    updateOne: (state, { id, data }) => ({ ...state, [id]: data }),
+  },
+  state: {},
+}

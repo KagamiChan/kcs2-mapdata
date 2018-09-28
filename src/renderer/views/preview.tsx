@@ -2,7 +2,7 @@ import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import FontFaceObserver from 'fontfaceobserver'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
 import path from 'path'
-import { interaction, TextStyle, Texture } from 'pixi.js'
+import { Container as PixiContainer, DisplayObject, interaction, TextStyle, Texture } from 'pixi.js'
 import React, { Component, createRef } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
@@ -10,7 +10,7 @@ import styled from 'styled-components'
 import mapLoader from '../services/map-loader'
 import TextureLoader from '../services/texture-loader'
 
-import { INotationMap } from '../redux/models'
+import { IEnemyPositions, INotationMap } from '../redux/models'
 import { RootState } from '../redux/store'
 
 import { IEnemy, IMapInfo, ISpotsEntity } from '../../../types'
@@ -67,6 +67,7 @@ const Wrapper = styled.div`
 `
 
 interface IProps extends DispatchProp {
+  enemyPositions: IEnemyPositions
   mapCell: string
   notations: INotationMap
   mapId: string
@@ -76,13 +77,10 @@ interface IState {
   mapImage: TextureLoader | null
   mapInfo: IMapInfo | null
   currentEnemy: string
-  enemyPositions: {
-    [key: string]: { x: number; y: number }
-  }
 }
 
 class Preview extends Component<IProps, IState> {
-  public enemyLayer = createRef<Component>()
+  public enemyLayer = createRef<any>()
 
   public textStyle = new TextStyle({
     fill: 'white',
@@ -94,7 +92,6 @@ class Preview extends Component<IProps, IState> {
 
   public state: IState = {
     currentEnemy: '',
-    enemyPositions: {},
     mapImage: null,
     mapInfo: null,
   }
@@ -151,29 +148,28 @@ class Preview extends Component<IProps, IState> {
   }
 
   public handleDragMove = () => {
-    if (this.state.currentEnemy && this.data) {
-      const { x, y } = this.data.getLocalPosition(this.enemyLayer.current)
-      this.setState(prevState => ({
-        enemyPositions: {
-          ...prevState.enemyPositions,
-          [prevState.currentEnemy]: {
+    if (this.state.currentEnemy && this.data && this.enemyLayer.current) {
+      const { x, y } = this.data.getLocalPosition(this.enemyLayer.current as DisplayObject)
+      this.props.dispatch({
+        payload: {
+          data: {
             x,
             y,
           },
+          id: this.state.currentEnemy,
         },
-      }))
+        type: 'enemyPositions/updateOne',
+      })
     }
   }
 
   public handleResetEnemyPositions = () => {
-    this.setState({
-      enemyPositions: {},
-    })
+    this.props.dispatch({ type: 'enemyPositions/clear' })
   }
 
   public render() {
-    const { mapImage, mapInfo, currentEnemy, enemyPositions } = this.state
-    const { mapCell, notations } = this.props
+    const { mapImage, mapInfo, currentEnemy } = this.state
+    const { mapCell, notations, enemyPositions } = this.props
 
     if (mapImage === null || mapInfo === null) {
       return (
@@ -269,6 +265,7 @@ class Preview extends Component<IProps, IState> {
 
 export default connect(
   (state: RootState) => ({
+    enemyPositions: state.enemyPositions,
     mapCell: state.mapCell,
     mapId: state.mapId,
     notations: get(state.notations, state.mapId, {}),

@@ -34,16 +34,14 @@ const Container = styled.div`
 `
 
 class App extends Component<{}> {
-  public preview = createRef<Component>()
-
   public render() {
     return (
       <Provider store={store}>
         <Container>
           <Header />
-          <Preview ref={this.preview} />
+          <Preview />
           <Editor />
-          <Footer previewRef={this.preview} />
+          <Footer />
         </Container>
       </Provider>
     )

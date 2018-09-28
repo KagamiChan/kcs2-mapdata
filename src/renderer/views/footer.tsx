@@ -1,8 +1,8 @@
 import { Button } from '@blueprintjs/core'
 import { remote } from 'electron'
 import fs from 'fs-extra'
-import React, { Component, RefObject } from 'react'
-import { Connect } from 'react-redux'
+import React, { Component } from 'react'
+import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
 const { dialog } = remote
@@ -18,11 +18,7 @@ const Container = styled.div`
   }
 `
 
-interface IProps {
-  previewRef: RefObject<Connect>
-}
-
-class Footer extends Component<IProps> {
+class Footer extends Component<DispatchProp> {
   public handleCapture = () => {
     const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
     if (!canvas) {
@@ -59,10 +55,7 @@ class Footer extends Component<IProps> {
   }
 
   public handleResetEnemyPositions = () => {
-    if (this.props.previewRef.current) {
-      const preview = this.props.previewRef.current.getWrappedInstance()
-      preview.handleResetEnemyPositions()
-    }
+    this.props.dispatch({ type: 'enemyPositions/clear' })
   }
 
   public render() {
@@ -77,4 +70,4 @@ class Footer extends Component<IProps> {
   }
 }
 
-export default Footer
+export default connect()(Footer)
