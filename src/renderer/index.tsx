@@ -3,7 +3,7 @@ import 'normalize.css/normalize.css'
 import React, { Component, createRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
-import styled, { injectGlobal } from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import './static/webfont.css'
 
 import Editor from './views/editor'
@@ -14,7 +14,7 @@ import Preview from './views/preview'
 import store from './redux/store'
 
 // tslint:disable-next-line:no-unused-expression
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
   html, body, #app {
     height: 100%;
     font-family: 'IBM Plex Sans';
@@ -38,6 +38,7 @@ class App extends Component<{}> {
     return (
       <Provider store={store}>
         <Container>
+          <GlobalStyle />
           <Header />
           <Preview />
           <Editor />
