@@ -61,7 +61,7 @@ const getMap = async () => {
       // find out the secret
       let secret = size(mapData.data.spots)
 
-      if (api_maparea_id > 10) {
+      if (api_maparea_id > 6) {
         let drained = false
         while (!drained) {
           try {

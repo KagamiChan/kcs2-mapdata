@@ -315,23 +315,22 @@ const main = () => {
           const info = fs.readJsonSync(path.join(MAP_DIR, worldId, `${mapId}_info.json`))
 
           let secret = _.size(info.spots)
-          if (+worldId > 10) {
-            let drained = false
-            while (!drained) {
-              try {
-                const secretImage = fs.readJsonSync(
-                  path.join(MAP_DIR, worldId, `${mapId}_image${secret}.json`),
-                )
-                const secretInfo = fs.readJsonSync(
-                  path.join(MAP_DIR, worldId, `${mapId}_info${secret}.json`),
-                )
 
-                image = _.merge(image, secretImage)
-                info.spots = info.spots.concat(secretInfo.spots)
-                secret = _.size(info.spots)
-              } catch (e) {
-                drained = true
-              }
+          let drained = false
+          while (!drained) {
+            try {
+              const secretImage = fs.readJsonSync(
+                path.join(MAP_DIR, worldId, `${mapId}_image${secret}.json`),
+              )
+              const secretInfo = fs.readJsonSync(
+                path.join(MAP_DIR, worldId, `${mapId}_info${secret}.json`),
+              )
+
+              image = _.merge(image, secretImage)
+              info.spots = info.spots.concat(secretInfo.spots)
+              secret = _.size(info.spots)
+            } catch (e) {
+              drained = true
             }
           }
 

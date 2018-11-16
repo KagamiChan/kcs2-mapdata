@@ -46,26 +46,24 @@ class MapLoader implements IMapLoader {
       // do nothing
     }
 
-    if (+mapId > 10) {
-      let drained = false
-      while (!drained) {
-        try {
-          const secretInfo = await fs.readJSON(
-            path.resolve(window.ROOT, `./maps/${world}/${area}_info${secret}.json`),
-          )
+    let drained = false
+    while (!drained) {
+      try {
+        const secretInfo = await fs.readJSON(
+          path.resolve(window.ROOT, `./maps/${world}/${area}_info${secret}.json`),
+        )
 
-          info = mergeInfo<IMapInfo>(info, secretInfo)
-          const secretImage = new TextureLoader(
-            path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.png`),
-            path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.json`),
-            `map${world}${area}`,
-          )
-          image.extend(secretImage)
+        info = mergeInfo<IMapInfo>(info, secretInfo)
+        const secretImage = new TextureLoader(
+          path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.png`),
+          path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.json`),
+          `map${world}${area}`,
+        )
+        image.extend(secretImage)
 
-          secret += size(secretInfo.spots)
-        } catch (e) {
-          drained = true
-        }
+        secret += size(secretInfo.spots)
+      } catch (e) {
+        drained = true
       }
     }
 
