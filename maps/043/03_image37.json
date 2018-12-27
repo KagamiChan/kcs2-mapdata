@@ -1,0 +1,114 @@
+{
+  "frames": {
+    "map04303_43-3_text_ZZ": {
+      "frame": {
+        "x": 111,
+        "y": 50,
+        "w": 22,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 22,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 22,
+        "h": 17
+      }
+    },
+    "map04303_route_37": {
+      "frame": {
+        "x": 111,
+        "y": 0,
+        "w": 41,
+        "h": 20
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 41,
+        "h": 20
+      },
+      "sourceSize": {
+        "w": 41,
+        "h": 20
+      }
+    },
+    "map04303_route_37_1": {
+      "frame": {
+        "x": 111,
+        "y": 25,
+        "w": 41,
+        "h": 20
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 41,
+        "h": 20
+      },
+      "sourceSize": {
+        "w": 41,
+        "h": 20
+      }
+    },
+    "map04303_route_38": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 106,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 106,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 106,
+        "h": 45
+      }
+    },
+    "map04303_route_38_1": {
+      "frame": {
+        "x": 0,
+        "y": 50,
+        "w": 106,
+        "h": 45
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 106,
+        "h": 45
+      },
+      "sourceSize": {
+        "w": 106,
+        "h": 45
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "03_image37.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 152,
+      "h": 95
+    },
+    "scale": 1
+  }
+}
