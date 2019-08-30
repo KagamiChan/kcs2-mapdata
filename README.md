@@ -13,7 +13,7 @@ yarn
 
 - get map data
 ```bash
-yarn getmap
+yarn get-map
 ```
 
 - use annotation tools to generate spot name file
