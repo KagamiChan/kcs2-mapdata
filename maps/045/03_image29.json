@@ -1,0 +1,134 @@
+{
+  "frames": {
+    "map04503_route_29": {
+      "frame": {
+        "x": 0,
+        "y": 122,
+        "w": 109,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 109,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 109,
+        "h": 58
+      }
+    },
+    "map04503_route_29_1": {
+      "frame": {
+        "x": 196,
+        "y": 0,
+        "w": 109,
+        "h": 58
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 109,
+        "h": 58
+      },
+      "sourceSize": {
+        "w": 109,
+        "h": 58
+      }
+    },
+    "map04503_route_30": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 93,
+        "h": 117
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 93,
+        "h": 117
+      },
+      "sourceSize": {
+        "w": 93,
+        "h": 117
+      }
+    },
+    "map04503_route_30_1": {
+      "frame": {
+        "x": 98,
+        "y": 0,
+        "w": 93,
+        "h": 117
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 93,
+        "h": 117
+      },
+      "sourceSize": {
+        "w": 93,
+        "h": 117
+      }
+    },
+    "map04503_route_31": {
+      "frame": {
+        "x": 196,
+        "y": 63,
+        "w": 15,
+        "h": 42
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 42
+      },
+      "sourceSize": {
+        "w": 15,
+        "h": 42
+      }
+    },
+    "map04503_route_31_1": {
+      "frame": {
+        "x": 216,
+        "y": 63,
+        "w": 15,
+        "h": 42
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 42
+      },
+      "sourceSize": {
+        "w": 15,
+        "h": 42
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "03_image29.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 305,
+      "h": 180
+    },
+    "scale": 1
+  }
+}
