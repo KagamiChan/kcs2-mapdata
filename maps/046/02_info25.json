@@ -1,0 +1,39 @@
+{
+  "labels": [
+    {
+      "x": 477,
+      "y": 343,
+      "img": "46-2_text_S"
+    }
+  ],
+  "spots": [
+    {
+      "no": 25,
+      "x": 465,
+      "y": 332,
+      "route": {
+        "img": "route_25_1"
+      },
+      "line": {
+        "x": 29,
+        "y": -30
+      },
+      "color": -1,
+      "direction": "L"
+    },
+    {
+      "no": 26,
+      "x": 272,
+      "y": 311,
+      "route": {
+        "img": "route_26_1"
+      },
+      "line": {
+        "x": 23,
+        "y": 5
+      },
+      "color": -1,
+      "direction": "L"
+    }
+  ]
+}

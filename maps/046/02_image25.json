@@ -1,0 +1,114 @@
+{
+  "frames": {
+    "map04602_46-2_text_S": {
+      "frame": {
+        "x": 0,
+        "y": 68,
+        "w": 11,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 11,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 11,
+        "h": 18
+      }
+    },
+    "map04602_route_25": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 117,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 117,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 117,
+        "h": 29
+      }
+    },
+    "map04602_route_25_1": {
+      "frame": {
+        "x": 0,
+        "y": 34,
+        "w": 117,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 117,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 117,
+        "h": 29
+      }
+    },
+    "map04602_route_26": {
+      "frame": {
+        "x": 122,
+        "y": 0,
+        "w": 143,
+        "h": 21
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 143,
+        "h": 21
+      },
+      "sourceSize": {
+        "w": 143,
+        "h": 21
+      }
+    },
+    "map04602_route_26_1": {
+      "frame": {
+        "x": 122,
+        "y": 26,
+        "w": 143,
+        "h": 21
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 143,
+        "h": 21
+      },
+      "sourceSize": {
+        "w": 143,
+        "h": 21
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "02_image25.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 265,
+      "h": 86
+    },
+    "scale": 1
+  }
+}
