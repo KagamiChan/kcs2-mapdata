@@ -1,0 +1,114 @@
+{
+  "frames": {
+    "map04606_46-6_text_X": {
+      "frame": {
+        "x": 47,
+        "y": 0,
+        "w": 15,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 15,
+        "h": 17
+      }
+    },
+    "map04606_route_33": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 42,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 42,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 42,
+        "h": 18
+      }
+    },
+    "map04606_route_33_1": {
+      "frame": {
+        "x": 0,
+        "y": 23,
+        "w": 42,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 42,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 42,
+        "h": 18
+      }
+    },
+    "map04606_route_34": {
+      "frame": {
+        "x": 0,
+        "y": 46,
+        "w": 16,
+        "h": 13
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 13
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 13
+      }
+    },
+    "map04606_route_34_1": {
+      "frame": {
+        "x": 21,
+        "y": 46,
+        "w": 16,
+        "h": 13
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 13
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 13
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "06_image33.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 62,
+      "h": 59
+    },
+    "scale": 1
+  }
+}
