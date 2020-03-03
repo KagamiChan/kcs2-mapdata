@@ -39,7 +39,3 @@ Some other scripts are used to draw a `svg` for preview, svg file will be saved 
 - run `yarn dst` to get distance for landbase aircraft (`celldata.json` is necessary)
 
 - run `yarn icon` to draw icons (`celldata.json` is necessary)
-
-
-## Git LFS
-image data are stored in LFS, install Git LFS before cloning the project
