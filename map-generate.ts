@@ -304,6 +304,7 @@ const genpoi = (dir: string) => {
 
 const main = () => {
   const mapdir = fs.readdirSync(MAP_DIR)
+  const badData = fs.readJsonSync(path.join(MAP_DIR, 'bad-data.json'))
   _.each(_.filter(mapdir, i => !Number.isNaN(parseInt(i, 10))), worldId => {
     try {
       const worldMapDir = fs.readdirSync(path.join(MAP_DIR, worldId))
@@ -333,6 +334,13 @@ const main = () => {
               drained = true
             }
           }
+
+          _.each(badData, note => {
+            const [wId, mId, nId] = note.split('-')
+            if (wId === worldId && mId === mapId) {
+              _.remove(info.spots, (n: any) => n.no === parseInt(nId, 10))
+            }
+          })
 
           return {
             image,
