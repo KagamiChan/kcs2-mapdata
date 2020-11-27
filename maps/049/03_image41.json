@@ -1,0 +1,54 @@
+{
+  "frames": {
+    "map04903_route_41": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 29,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 29,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 29,
+        "h": 29
+      }
+    },
+    "map04903_route_41_1": {
+      "frame": {
+        "x": 34,
+        "y": 0,
+        "w": 29,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 29,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 29,
+        "h": 29
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "03_image41.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 63,
+      "h": 29
+    },
+    "scale": 1
+  }
+}
