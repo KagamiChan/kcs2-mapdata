@@ -1,0 +1,86 @@
+{
+  "labels": [
+    {
+      "x": 761,
+      "y": 193,
+      "img": "49-4_text_Y6"
+    },
+    {
+      "x": 751,
+      "y": 225,
+      "img": "49-4_text_Y7"
+    }
+  ],
+  "spots": [
+    {
+      "no": 42,
+      "x": 747,
+      "y": 186,
+      "route": {
+        "img": "route_42_1"
+      },
+      "line": {
+        "x": 22,
+        "y": -17
+      },
+      "color": -1,
+      "direction": "L"
+    },
+    {
+      "no": 43,
+      "x": 735,
+      "y": 237,
+      "route": {
+        "img": "route_43_1"
+      },
+      "line": {
+        "x": 1,
+        "y": -34
+      },
+      "color": -1,
+      "direction": "L"
+    },
+    {
+      "no": 44,
+      "x": 747,
+      "y": 186,
+      "route": {
+        "img": "route_44_1"
+      },
+      "line": {
+        "x": 0,
+        "y": -34
+      },
+      "color": -1,
+      "direction": "L"
+    },
+    {
+      "no": 45,
+      "x": 657,
+      "y": 205,
+      "route": {
+        "img": "route_45_1"
+      },
+      "line": {
+        "x": 25,
+        "y": -16
+      },
+      "color": -1,
+      "direction": "L"
+    },
+    {
+      "no": 46,
+      "x": 657,
+      "y": 205,
+      "route": {
+        "img": "route_46_1"
+      },
+      "line": {
+        "x": 19,
+        "y": 8
+      },
+      "color": -1,
+      "direction": "L"
+    }
+  ]
+}

@@ -1,0 +1,534 @@
+{
+  "frames": {
+    "map04904_49-4_text_R": {
+      "frame": {
+        "x": 19,
+        "y": 189,
+        "w": 11,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 11,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 11,
+        "h": 17
+      }
+    },
+    "map04904_49-4_text_S": {
+      "frame": {
+        "x": 17,
+        "y": 211,
+        "w": 11,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 11,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 11,
+        "h": 18
+      }
+    },
+    "map04904_49-4_text_T": {
+      "frame": {
+        "x": 35,
+        "y": 189,
+        "w": 10,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 10,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 10,
+        "h": 17
+      }
+    },
+    "map04904_49-4_text_U": {
+      "frame": {
+        "x": 0,
+        "y": 211,
+        "w": 12,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 18
+      }
+    },
+    "map04904_49-4_text_V": {
+      "frame": {
+        "x": 185,
+        "y": 132,
+        "w": 16,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 16,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 16,
+        "h": 17
+      }
+    },
+    "map04904_49-4_text_W": {
+      "frame": {
+        "x": 160,
+        "y": 132,
+        "w": 20,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 20,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 20,
+        "h": 17
+      }
+    },
+    "map04904_49-4_text_X1": {
+      "frame": {
+        "x": 221,
+        "y": 97,
+        "w": 23,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 23,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 23,
+        "h": 17
+      }
+    },
+    "map04904_49-4_text_X2": {
+      "frame": {
+        "x": 128,
+        "y": 132,
+        "w": 27,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 17
+      }
+    },
+    "map04904_icon_637": {
+      "frame": {
+        "x": 153,
+        "y": 0,
+        "w": 91,
+        "h": 92
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 91,
+        "h": 92
+      },
+      "sourceSize": {
+        "w": 91,
+        "h": 92
+      }
+    },
+    "map04904_icon_945": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 148,
+        "h": 127
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 148,
+        "h": 127
+      },
+      "sourceSize": {
+        "w": 148,
+        "h": 127
+      }
+    },
+    "map04904_route_26": {
+      "frame": {
+        "x": 226,
+        "y": 132,
+        "w": 15,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 15,
+        "h": 17
+      }
+    },
+    "map04904_route_26_1": {
+      "frame": {
+        "x": 206,
+        "y": 132,
+        "w": 15,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 15,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 15,
+        "h": 17
+      }
+    },
+    "map04904_route_27": {
+      "frame": {
+        "x": 63,
+        "y": 167,
+        "w": 17,
+        "h": 13
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 13
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 13
+      }
+    },
+    "map04904_route_27_1": {
+      "frame": {
+        "x": 85,
+        "y": 167,
+        "w": 17,
+        "h": 13
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 13
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 13
+      }
+    },
+    "map04904_route_28": {
+      "frame": {
+        "x": 32,
+        "y": 132,
+        "w": 27,
+        "h": 30
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 30
+      }
+    },
+    "map04904_route_28_1": {
+      "frame": {
+        "x": 0,
+        "y": 132,
+        "w": 27,
+        "h": 30
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 30
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 30
+      }
+    },
+    "map04904_route_29": {
+      "frame": {
+        "x": 19,
+        "y": 167,
+        "w": 17,
+        "h": 14
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 14
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 14
+      }
+    },
+    "map04904_route_29_1": {
+      "frame": {
+        "x": 41,
+        "y": 167,
+        "w": 17,
+        "h": 14
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 14
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 14
+      }
+    },
+    "map04904_route_30": {
+      "frame": {
+        "x": 129,
+        "y": 167,
+        "w": 17,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 10
+      }
+    },
+    "map04904_route_30_1": {
+      "frame": {
+        "x": 107,
+        "y": 167,
+        "w": 17,
+        "h": 10
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 17,
+        "h": 10
+      },
+      "sourceSize": {
+        "w": 17,
+        "h": 10
+      }
+    },
+    "map04904_route_31": {
+      "frame": {
+        "x": 96,
+        "y": 132,
+        "w": 27,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 29
+      }
+    },
+    "map04904_route_31_1": {
+      "frame": {
+        "x": 64,
+        "y": 132,
+        "w": 27,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 29
+      }
+    },
+    "map04904_route_32": {
+      "frame": {
+        "x": 0,
+        "y": 167,
+        "w": 14,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 14,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 14,
+        "h": 17
+      }
+    },
+    "map04904_route_32_1": {
+      "frame": {
+        "x": 0,
+        "y": 189,
+        "w": 14,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 14,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 14,
+        "h": 17
+      }
+    },
+    "map04904_route_33": {
+      "frame": {
+        "x": 187,
+        "y": 97,
+        "w": 29,
+        "h": 28
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 29,
+        "h": 28
+      },
+      "sourceSize": {
+        "w": 29,
+        "h": 28
+      }
+    },
+    "map04904_route_33_1": {
+      "frame": {
+        "x": 153,
+        "y": 97,
+        "w": 29,
+        "h": 28
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 29,
+        "h": 28
+      },
+      "sourceSize": {
+        "w": 29,
+        "h": 28
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "04_image26.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 244,
+      "h": 229
+    },
+    "scale": 1
+  }
+}
