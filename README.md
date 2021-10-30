@@ -1,7 +1,7 @@
 kcs2-mapdata
 ============
 
-map data processing for Kancolle Phase ||
+map data processing for Kancolle Phase II
 
 ## Usage
 - install dependencies
