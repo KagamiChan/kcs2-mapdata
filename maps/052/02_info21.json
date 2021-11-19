@@ -1,0 +1,110 @@
+{
+  "labels": [
+    {
+      "x": 517,
+      "y": 257,
+      "img": "52-2_text_R"
+    },
+    {
+      "x": 430,
+      "y": 401,
+      "img": "52-2_text_S"
+    },
+    {
+      "x": 328,
+      "y": 361,
+      "img": "52-2_text_T"
+    },
+    {
+      "x": 422,
+      "y": 308,
+      "img": "52-2_text_U"
+    }
+  ],
+  "spots": [
+    {
+      "no": 21,
+      "x": 505,
+      "y": 242,
+      "route": {
+        "img": "route_21_1"
+      },
+      "line": {
+        "x": 24,
+        "y": -20
+      },
+      "color": -1,
+      "direction": "L",
+      "comment": {
+        "type": "RT"
+      }
+    },
+    {
+      "no": 22,
+      "x": 418,
+      "y": 386,
+      "route": {
+        "img": "route_22_1"
+      },
+      "line": {
+        "x": 12,
+        "y": -124
+      },
+      "color": -1,
+      "direction": "L",
+      "comment": {
+        "type": "RT"
+      }
+    },
+    {
+      "no": 23,
+      "x": 318,
+      "y": 344,
+      "route": {
+        "img": "route_23_1"
+      },
+      "line": {
+        "x": 22,
+        "y": 6
+      },
+      "color": -1,
+      "direction": "L"
+    },
+    {
+      "no": 24,
+      "x": 400,
+      "y": 285,
+      "route": {
+        "img": "route_24_1"
+      },
+      "line": {
+        "x": 33,
+        "y": -38
+      },
+      "color": -2,
+      "direction": "L"
+    },
+    {
+      "no": 25,
+      "x": 400,
+      "y": 285,
+      "route": {
+        "img": "route_25_1"
+      },
+      "line": {
+        "x": -6,
+        "y": 28
+      },
+      "color": -2,
+      "direction": "L"
+    }
+  ],
+  "enemies": [
+    {
+      "no": 24,
+      "x": 356,
+      "y": 151,
+      "img": "icon_512"
+    }
+  ]
+}
