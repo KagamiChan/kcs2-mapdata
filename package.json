@@ -24,7 +24,7 @@
     "axios": "^0.18.0",
     "bluebird": "^3.5.2",
     "chalk": "^2.4.1",
-    "electron": "^3.0.6",
+    "electron": "^15.5.5",
     "fontfaceobserver": "^2.0.13",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.3",
