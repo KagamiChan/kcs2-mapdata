@@ -8,7 +8,9 @@ const DATA_DIR = path.join(__dirname, 'data')
 const main = () => {
   const worldDirs = fs.readdirSync(OUT_DIR)
   const finalPoi: any = {}
-  _.each(worldDirs, worldId => {
+  const lastEvent = _.maxBy(worldDirs.map(dir => parseInt(dir, 10)))
+  const selectedWorlds = worldDirs.filter(dir => parseInt(dir, 10) === lastEvent || parseInt(dir, 10) < 10)
+  _.each(selectedWorlds, worldId => {
     const WORLD_DIR = path.join(OUT_DIR, worldId)
     const mapDirs = fs.readdirSync(WORLD_DIR)
     _.each(mapDirs, mapId => {

@@ -256,10 +256,16 @@
       "color": -2
     }
   ],
-  "airbase": {
-    "x": 1063,
-    "y": 426
-  },
+  "airbases": [
+    {
+      "phase": 0,
+      "point": {
+        "x": 1063,
+        "y": 426
+      },
+      "airbaseraids": []
+    }
+  ],
   "airraids": [
     {
       "no": 4,

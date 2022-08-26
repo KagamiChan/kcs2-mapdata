@@ -79,5 +79,6 @@
       "pre-commit": "lint-staged",
       "pre-push": "git lfs pre-push $GIT_PARAMS"
     }
-  }
+  },
+  "packageManager": "yarn@3.2.3"
 }

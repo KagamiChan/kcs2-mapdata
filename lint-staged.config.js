@@ -1,3 +1,1 @@
-module.exports = {
-  '*.{ts,tsx}': 'tslint',
-}
+module.exports = {}
