@@ -1,8 +1,8 @@
-import { Button } from '@blueprintjs/core'
+import { Button, Switch } from '@blueprintjs/core'
 import fs from 'fs-extra'
-import { findIndex, fromPairs, get, map, toUpper, uniq } from 'lodash'
+import { findIndex, fromPairs, get, map, toUpper, uniq, range, size } from 'lodash'
 import path from 'path'
-import React, { ChangeEvent, Component, createRef, KeyboardEvent } from 'react'
+import React, { ChangeEvent, Component, createRef, FormEvent, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
@@ -41,6 +41,19 @@ const parseIndex = (index: number): string => {
   return [a === -1 ? '' : String.fromCharCode(a + codeA), String.fromCharCode(b)].join('')
 }
 
+/**
+ * converts index to alphabetic, ex. parseSequentialIndex(0, 'C') => 'C', parseSequentialIndex(1, 'C') => 'D'
+ * @param index
+ * @param start the character at -1
+ */
+ const parseSequentialIndex = (index: number, start: string): string => {
+  const startCode = toUpper(start).charCodeAt(0)
+  const num = index + startCode - codeA
+  const a = Math.floor(num / 26) - 1
+  const b = (num % 26) + codeA
+  return [a === -1 ? '' : String.fromCharCode(a + codeA), String.fromCharCode(b)].join('')
+}
+
 interface IProps extends DispatchProp {
   notations: INotationMap
   mapId: string
@@ -51,6 +64,7 @@ interface IState {
   spots: string[]
   next: string
   prev: string
+  sequentialEdit: boolean
 }
 
 class Editor extends Component<IProps, IState> {
@@ -72,6 +86,7 @@ class Editor extends Component<IProps, IState> {
     next: '',
     prev: '',
     spots: [],
+    sequentialEdit: false,
   }
 
   public list = createRef<HTMLTableSectionElement>()
@@ -91,13 +106,28 @@ class Editor extends Component<IProps, IState> {
   }
 
   public handleChange = (id: string) => (e: ChangeEvent<HTMLInputElement>) => {
-    this.props.dispatch({
-      payload: {
-        data: { ...this.props.notations, [id]: toUpper(e.currentTarget.value) },
-        id: this.props.mapId,
-      },
-      type: 'notations/updateOne',
-    })
+    const currentIndex = findIndex(this.state.spots, s => s === id)
+    const currentCharacter = get(/([a-zA-Z]+)/g.exec(e.target.value), 1)
+    if (this.state.sequentialEdit && currentCharacter) {
+      const sequentialUpdates = fromPairs(range(currentIndex + 1, size(this.state.spots)).map(
+        i => [this.state.spots[i], parseSequentialIndex(i - currentIndex, currentCharacter)]
+      ))
+      this.props.dispatch({
+        payload: {
+          data: { ...this.props.notations, ...sequentialUpdates, [id]: toUpper(e.currentTarget.value) },
+          id: this.props.mapId,
+        },
+        type: 'notations/updateOne',
+      })
+    } else {
+      this.props.dispatch({
+        payload: {
+          data: { ...this.props.notations, [id]: toUpper(e.currentTarget.value) },
+          id: this.props.mapId,
+        },
+        type: 'notations/updateOne',
+      })
+    }
   }
 
   public handleKeyDown = (index: number) => (e: KeyboardEvent<HTMLInputElement>) => {
@@ -176,8 +206,14 @@ class Editor extends Component<IProps, IState> {
     })
   }
 
+  public handleEditModeChange = (e: FormEvent<HTMLInputElement>) => {
+    this.setState({
+      sequentialEdit: e.currentTarget.checked,
+    })
+  }
+
   public render() {
-    const { spots, prev, next } = this.state
+    const { spots, prev, next, sequentialEdit } = this.state
     const { notations } = this.props
     return (
       <Wrapper>
@@ -205,6 +241,9 @@ class Editor extends Component<IProps, IState> {
           </tbody>
         </table>
         <hr />
+        <Control>
+          <Switch onChange={this.handleEditModeChange} checked={sequentialEdit} label="Sequential edit" />
+        </Control>
         <Control>
           {prev && <Button onClick={this.handleGoPrev}>Prev.</Button>}
           <Button intent="danger" onClick={this.handleReload}>
