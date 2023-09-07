@@ -1,0 +1,234 @@
+{
+  "frames": {
+    "map05707_Y": {
+      "frame": {
+        "x": 241,
+        "y": 166,
+        "w": 14,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 14,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 14,
+        "h": 17
+      }
+    },
+    "map05707_Z": {
+      "frame": {
+        "x": 260,
+        "y": 166,
+        "w": 12,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 17
+      }
+    },
+    "map05707_icon_Z": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 168,
+        "h": 151
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 168,
+        "h": 151
+      },
+      "sourceSize": {
+        "w": 168,
+        "h": 151
+      }
+    },
+    "map05707_route_52": {
+      "frame": {
+        "x": 241,
+        "y": 0,
+        "w": 35,
+        "h": 78
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 35,
+        "h": 78
+      },
+      "sourceSize": {
+        "w": 35,
+        "h": 78
+      }
+    },
+    "map05707_route_52_1": {
+      "frame": {
+        "x": 241,
+        "y": 83,
+        "w": 35,
+        "h": 78
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 35,
+        "h": 78
+      },
+      "sourceSize": {
+        "w": 35,
+        "h": 78
+      }
+    },
+    "map05707_route_53": {
+      "frame": {
+        "x": 0,
+        "y": 156,
+        "w": 88,
+        "h": 43
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 43
+      },
+      "sourceSize": {
+        "w": 88,
+        "h": 43
+      }
+    },
+    "map05707_route_53_1": {
+      "frame": {
+        "x": 93,
+        "y": 156,
+        "w": 88,
+        "h": 43
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 88,
+        "h": 43
+      },
+      "sourceSize": {
+        "w": 88,
+        "h": 43
+      }
+    },
+    "map05707_route_54": {
+      "frame": {
+        "x": 186,
+        "y": 156,
+        "w": 45,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 45,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 45,
+        "h": 29
+      }
+    },
+    "map05707_route_54_1": {
+      "frame": {
+        "x": 0,
+        "y": 204,
+        "w": 45,
+        "h": 29
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 45,
+        "h": 29
+      },
+      "sourceSize": {
+        "w": 45,
+        "h": 29
+      }
+    },
+    "map05707_route_55": {
+      "frame": {
+        "x": 173,
+        "y": 0,
+        "w": 63,
+        "h": 62
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 63,
+        "h": 62
+      },
+      "sourceSize": {
+        "w": 63,
+        "h": 62
+      }
+    },
+    "map05707_route_55_1": {
+      "frame": {
+        "x": 173,
+        "y": 67,
+        "w": 63,
+        "h": 62
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 63,
+        "h": 62
+      },
+      "sourceSize": {
+        "w": 63,
+        "h": 62
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "07_image52.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 276,
+      "h": 233
+    },
+    "scale": 1
+  }
+}

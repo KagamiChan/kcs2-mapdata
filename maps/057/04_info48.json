@@ -1,0 +1,32 @@
+{
+  "spots": [
+    {
+      "no": 48,
+      "x": 830,
+      "y": 231,
+      "route": {
+        "img": "route_48_1"
+      },
+      "line": {
+        "x": 18,
+        "y": 2
+      },
+      "color": -1,
+      "direction": "L"
+    },
+    {
+      "no": 49,
+      "x": 787,
+      "y": 306,
+      "route": {
+        "img": "route_49_1"
+      },
+      "line": {
+        "x": 21,
+        "y": 0
+      },
+      "color": -1,
+      "direction": "L"
+    }
+  ]
+}
