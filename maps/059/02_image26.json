@@ -1,0 +1,227 @@
+{
+  "frames": {
+    "map05902_S": {
+      "frame": {
+        "x": 139,
+        "y": 121,
+        "w": 11,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 11,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 11,
+        "h": 18
+      }
+    },
+    "map05902_T": {
+      "frame": {
+        "x": 155,
+        "y": 121,
+        "w": 10,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 10,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 10,
+        "h": 17
+      }
+    },
+    "map05902_U": {
+      "frame": {
+        "x": 122,
+        "y": 121,
+        "w": 12,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 12,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 12,
+        "h": 18
+      }
+    },
+    "map05902_icon_1244": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 172,
+        "h": 116
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 172,
+        "h": 116
+      },
+      "sourceSize": {
+        "w": 172,
+        "h": 116
+      }
+    },
+    "map05902_route_26": {
+      "frame": {
+        "x": 0,
+        "y": 121,
+        "w": 24,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 35
+      }
+    },
+    "map05902_route_26_1": {
+      "frame": {
+        "x": 29,
+        "y": 121,
+        "w": 24,
+        "h": 35
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 35
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 35
+      }
+    },
+    "map05902_route_27": {
+      "frame": {
+        "x": 177,
+        "y": 0,
+        "w": 101,
+        "h": 54
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 101,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 101,
+        "h": 54
+      }
+    },
+    "map05902_route_27_1": {
+      "frame": {
+        "x": 177,
+        "y": 59,
+        "w": 101,
+        "h": 54
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 101,
+        "h": 54
+      },
+      "sourceSize": {
+        "w": 101,
+        "h": 54
+      }
+    },
+    "map05902_route_28": {
+      "frame": {
+        "x": 58,
+        "y": 121,
+        "w": 27,
+        "h": 21
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 21
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 21
+      }
+    },
+    "map05902_route_28_1": {
+      "frame": {
+        "x": 90,
+        "y": 121,
+        "w": 27,
+        "h": 21
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 27,
+        "h": 21
+      },
+      "sourceSize": {
+        "w": 27,
+        "h": 21
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "02_image26.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 278,
+      "h": 156
+    },
+    "scale": 1
+  },
+  "animations": {
+    "map05902_icon": [
+      "map05902_icon_12"
+    ],
+    "map05902_route": [
+      "map05902_route_26",
+      "map05902_route_26",
+      "map05902_route_27",
+      "map05902_route_27",
+      "map05902_route_28",
+      "map05902_route_28"
+    ]
+  }
+}
