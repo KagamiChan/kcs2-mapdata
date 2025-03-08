@@ -1,0 +1,122 @@
+{
+  "frames": {
+    "map06003_S3": {
+      "frame": {
+        "x": 68,
+        "y": 104,
+        "w": 24,
+        "h": 18
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 18
+      },
+      "sourceSize": {
+        "w": 24,
+        "h": 18
+      }
+    },
+    "map06003_route_66": {
+      "frame": {
+        "x": 0,
+        "y": 104,
+        "w": 29,
+        "h": 31
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 29,
+        "h": 31
+      },
+      "sourceSize": {
+        "w": 29,
+        "h": 31
+      }
+    },
+    "map06003_route_66_1": {
+      "frame": {
+        "x": 34,
+        "y": 104,
+        "w": 29,
+        "h": 31
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 29,
+        "h": 31
+      },
+      "sourceSize": {
+        "w": 29,
+        "h": 31
+      }
+    },
+    "map06003_route_67": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 152,
+        "h": 47
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 152,
+        "h": 47
+      },
+      "sourceSize": {
+        "w": 152,
+        "h": 47
+      }
+    },
+    "map06003_route_67_1": {
+      "frame": {
+        "x": 0,
+        "y": 52,
+        "w": 152,
+        "h": 47
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 152,
+        "h": 47
+      },
+      "sourceSize": {
+        "w": 152,
+        "h": 47
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "03_image66.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 152,
+      "h": 135
+    },
+    "scale": 1
+  },
+  "animations": {
+    "map06003_route": [
+      "map06003_route_66",
+      "map06003_route_66",
+      "map06003_route_67",
+      "map06003_route_67"
+    ]
+  }
+}
