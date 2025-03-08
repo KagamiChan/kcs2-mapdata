@@ -7,7 +7,7 @@ import path from 'path'
 import ProgressBar from 'progress'
 import { IConstMapInfo, IMapInfo } from './types'
 
-const SERVER = '203.104.209.102'
+const SERVER = 'w01y.kancolle-server.com'
 
 const getMap = async () => {
   const MAP_PREFIX = `http://${SERVER}/kcs2/resources/map`
