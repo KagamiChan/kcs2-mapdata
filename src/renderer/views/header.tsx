@@ -1,4 +1,4 @@
-import fs from 'fs-extra'
+import { fs } from '../services/fs'
 import { map, padStart, sortBy } from 'lodash'
 import path from 'path'
 import React, { ChangeEvent, Component } from 'react'

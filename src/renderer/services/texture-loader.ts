@@ -1,8 +1,9 @@
-import fs from 'fs-extra'
 import { each, entries, findIndex, fromPairs, get, map, some } from 'lodash'
 import path from 'path'
 import { BaseTexture, Rectangle, Texture } from 'pixi.js'
 import url from 'url'
+
+import { fs } from './fs'
 
 import { IFrameOrSpriteSourceSize, IFrames, IImage } from '../../../types'
 

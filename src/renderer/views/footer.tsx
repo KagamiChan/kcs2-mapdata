@@ -1,6 +1,6 @@
 import { Button } from '@blueprintjs/core'
-import { remote } from 'electron'
-import fs from 'fs-extra'
+import remote from '@electron/remote'
+import { fs } from '../services/fs'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'

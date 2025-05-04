@@ -50,4 +50,12 @@ class App extends Component<{}> {
   }
 }
 
-ReactDOM.render(<App />, document.querySelector('#app'))
+// ReactDOM.render is deprecated in React 18
+// Use createRoot instead
+import { createRoot } from 'react-dom/client'
+
+const container = document.querySelector('#app')
+if (container) {
+  const root = createRoot(container)
+  root.render(<App />)
+}

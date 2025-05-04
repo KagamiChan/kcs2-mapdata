@@ -1,5 +1,5 @@
 import { Button, Switch } from '@blueprintjs/core'
-import fs from 'fs-extra'
+import { fs } from '../services/fs'
 import { findIndex, fromPairs, get, map, toUpper, uniq, range, size } from 'lodash'
 import path from 'path'
 import React, { ChangeEvent, Component, createRef, FormEvent, KeyboardEvent } from 'react'
@@ -46,7 +46,7 @@ const parseIndex = (index: number): string => {
  * @param index
  * @param start the character at -1
  */
- const parseSequentialIndex = (index: number, start: string): string => {
+const parseSequentialIndex = (index: number, start: string): string => {
   const startCode = toUpper(start).charCodeAt(0)
   const num = index + startCode - codeA
   const a = Math.floor(num / 26) - 1
@@ -109,12 +109,19 @@ class Editor extends Component<IProps, IState> {
     const currentIndex = findIndex(this.state.spots, s => s === id)
     const currentCharacter = get(/([a-zA-Z]+)/g.exec(e.target.value), 1)
     if (this.state.sequentialEdit && currentCharacter) {
-      const sequentialUpdates = fromPairs(range(currentIndex + 1, size(this.state.spots)).map(
-        i => [this.state.spots[i], parseSequentialIndex(i - currentIndex, currentCharacter)]
-      ))
+      const sequentialUpdates = fromPairs(
+        range(currentIndex + 1, size(this.state.spots)).map(i => [
+          this.state.spots[i],
+          parseSequentialIndex(i - currentIndex, currentCharacter),
+        ]),
+      )
       this.props.dispatch({
         payload: {
-          data: { ...this.props.notations, ...sequentialUpdates, [id]: toUpper(e.currentTarget.value) },
+          data: {
+            ...this.props.notations,
+            ...sequentialUpdates,
+            [id]: toUpper(e.currentTarget.value),
+          },
           id: this.props.mapId,
         },
         type: 'notations/updateOne',
@@ -242,7 +249,11 @@ class Editor extends Component<IProps, IState> {
         </table>
         <hr />
         <Control>
-          <Switch onChange={this.handleEditModeChange} checked={sequentialEdit} label="Sequential edit" />
+          <Switch
+            onChange={this.handleEditModeChange}
+            checked={sequentialEdit}
+            label="Sequential edit"
+          />
         </Control>
         <Control>
           {prev && <Button onClick={this.handleGoPrev}>Prev.</Button>}

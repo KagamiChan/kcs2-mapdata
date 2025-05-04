@@ -1,7 +1,11 @@
 import { app, BrowserWindow } from 'electron'
-import path from 'path'
+import path from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { join } from 'node:path'
+
+import mainRemote from '@electron/remote/main'
+
+mainRemote.initialize()
 
 const isDevelopment: boolean = process.env.NODE_ENV !== 'production'
 
@@ -14,8 +18,12 @@ const createMainWindow = () => {
     webPreferences: {
       preload: path.resolve(__dirname, '../preload/index.js'),
       webSecurity: false,
+      nodeIntegration: true,
+      contextIsolation: false,
     },
   })
+
+  mainRemote.enable(window.webContents)
 
   // HMR for renderer base on electron-vite cli.
   // Load the remote URL for development or the local html file for production.

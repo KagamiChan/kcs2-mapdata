@@ -1,3 +1,3 @@
-const { remote } = require('electron')
+import remote from '@electron/remote'
 
 window.ROOT = remote.getGlobal('ROOT')

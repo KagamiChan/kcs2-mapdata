@@ -1,5 +1,6 @@
-import fs from 'fs-extra'
 import { dirname } from 'path'
+
+import { fs } from './fs'
 
 // A stream of async file writing. `write` queues the task which will be executed
 // after all tasks before are done.

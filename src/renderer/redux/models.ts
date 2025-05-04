@@ -1,7 +1,8 @@
 import { ModelConfig } from '@rematch/core'
-import fs from 'fs-extra'
 import { sortBy, uniqBy } from 'lodash'
 import path from 'path'
+
+import { fs } from '../services/fs'
 
 let notationsState = {}
 

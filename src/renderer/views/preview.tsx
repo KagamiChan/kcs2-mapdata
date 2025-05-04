@@ -1,6 +1,6 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import FontFaceObserver from 'fontfaceobserver'
-import fs from 'fs-extra'
+import { fs } from '../services/fs'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
 import path from 'path'
 import { Container as PixiContainer, DisplayObject, interaction, TextStyle, Texture } from 'pixi.js'

@@ -1,6 +1,7 @@
-import fs from 'fs-extra'
 import { padStart, size } from 'lodash'
 import path from 'path'
+
+import { fs } from './fs'
 import { IMapInfo } from '../../../types'
 import mergeInfo from '../utils/merge-info'
 import TextureLoader from './texture-loader'
