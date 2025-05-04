@@ -176,26 +176,29 @@ class Editor extends Component<IProps, IState> {
     })
   }
 
-  public handleSave = () => {
+  public handleSave = async () => {
     const data = store.getState()
-
-    fileWriter.write(
-      path.resolve(window.ROOT, './data/notation.json'),
-      JSON.stringify(data.notations, null, 2),
-      {},
-      () => {
-        toaster.show({ message: 'Saved', intent: 'success' })
-      },
-    )
+    try {
+      await fs.writeJson(path.resolve(window.ROOT, './data/notation.json'), data.notations)
+      toaster.show({ message: 'Saved', intent: 'success' })
+    } catch (error) {
+      console.error('Error saving notation:', error)
+      toaster.show({ message: 'Error saving notation', intent: 'danger' })
+    }
   }
 
   public handleReload = async () => {
-    const data = await fs.readJson(path.resolve(window.ROOT, './data/notation.json'))
-    this.props.dispatch({
-      payload: data,
-      type: 'notations/updateMany',
-    })
-    toaster.show({ message: 'Reloaded', intent: 'success' })
+    try {
+      const data = await fs.readJson(path.resolve(window.ROOT, './data/notation.json'))
+      this.props.dispatch({
+        payload: data,
+        type: 'notations/updateMany',
+      })
+      toaster.show({ message: 'Reloaded', intent: 'success' })
+    } catch (error) {
+      console.error('Error reloading notation:', error)
+      toaster.show({ message: 'Error reloading notation', intent: 'danger' })
+    }
   }
 
   public handleGoPrev = () =>

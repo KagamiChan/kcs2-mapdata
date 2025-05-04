@@ -31,15 +31,16 @@ class MapLoader implements IMapLoader {
       path.resolve(window.ROOT, `./maps/${world}/${area}_image.json`),
       `map${world}${area}`,
     )
+    await image.load()
 
-    let info: IMapInfo = await fs.readJSON(
+    let info: IMapInfo = await fs.readJson(
       path.resolve(window.ROOT, `./maps/${world}/${area}_info.json`),
     )
 
     let secret = size(info.spots)
 
     try {
-      const complement = await fs.readJSON(
+      const complement = await fs.readJson(
         path.resolve(window.ROOT, `./maps/${world}/${area}_info_complement.json`),
       )
       info = mergeInfo<IMapInfo>(info, complement)
@@ -50,7 +51,7 @@ class MapLoader implements IMapLoader {
     let drained = false
     while (!drained) {
       try {
-        const secretInfo = await fs.readJSON(
+        const secretInfo = await fs.readJson(
           path.resolve(window.ROOT, `./maps/${world}/${area}_info${secret}.json`),
         )
 
@@ -60,20 +61,17 @@ class MapLoader implements IMapLoader {
           path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.json`),
           `map${world}${area}`,
         )
+        await secretImage.load()
         image.extend(secretImage)
-
-        secret += size(secretInfo.spots)
+        secret++
       } catch (e) {
         drained = true
       }
     }
 
-    const result: IDataEntry = {
-      image,
-      info,
-    }
-    this.cache[mapId] = result
-    return result
+    const data = { image, info }
+    this.cache[mapId] = data
+    return data
   }
 }
 

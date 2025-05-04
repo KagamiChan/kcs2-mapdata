@@ -9,8 +9,6 @@ import { RootState } from '../redux/store'
 
 const Wrapper = styled.div`
   grid-area: header;
-  display: flex;
-  align-items: center;
 `
 
 interface IMapItem {
@@ -74,7 +72,9 @@ class Header extends Component<IProps> {
   }
 }
 
-export default connect((state: RootState) => ({
-  mapId: state.mapId,
+const mapStateToProps = (state: RootState) => ({
   mapList: state.mapList,
-}))(Header)
+  mapId: state.mapId,
+})
+
+export default connect(mapStateToProps)(Header)

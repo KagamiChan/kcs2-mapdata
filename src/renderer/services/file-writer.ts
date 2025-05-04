@@ -1,5 +1,4 @@
 import { dirname } from 'path'
-
 import { fs } from './fs'
 
 // A stream of async file writing. `write` queues the task which will be executed
@@ -16,7 +15,6 @@ interface IWriteOption {
   encoding?: string | null
   mode?: number | string
   flag?: string
-  json?: boolean
 }
 
 interface IQueueItem {
@@ -35,17 +33,20 @@ class FileWriter {
     this._continueWriting()
   }
 
-  private _continueWriting() {
+  private async _continueWriting() {
     if (this.writing) {
       return
     }
     this.writing = true
     while (this.queue.length) {
       const { path, data, options, callback } = this.queue.shift()!
-      fs.ensureDirSync(dirname(path))
-      fs.writeFileSync(path, data, options)
-      if (callback) {
-        callback()
+      try {
+        await fs.writeJson(path, data)
+        if (callback) {
+          callback()
+        }
+      } catch (error) {
+        console.error('Error writing file:', error)
       }
     }
     this.writing = false

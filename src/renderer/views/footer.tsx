@@ -20,7 +20,7 @@ const Container = styled.div`
 `
 
 class Footer extends Component<DispatchProp> {
-  public handleCapture = () => {
+  public handleCapture = async () => {
     const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
     if (!canvas) {
       return
@@ -32,25 +32,26 @@ class Footer extends Component<DispatchProp> {
         x: canvas.offsetLeft,
         y: canvas.offsetTop,
       },
-      img => {
+      async img => {
         const buf = img.toPNG()
-        dialog.showSaveDialog(
-          {
-            filters: [
-              {
-                extensions: ['png'],
-                name: 'PNG imgae file',
-              },
-            ],
-            title: 'where to svae the file',
-          },
-          filename => {
-            if (!filename) {
-              return
-            }
-            fs.outputFileSync(filename, buf)
-          },
-        )
+        const result = await dialog.showSaveDialog({
+          filters: [
+            {
+              extensions: ['png'],
+              name: 'PNG image file',
+            },
+          ],
+          title: 'Where to save the file',
+        })
+        if (!result.canceled && result.filePath) {
+          try {
+            await fs.writeJson(result.filePath, buf)
+            toaster.show({ message: 'Screenshot saved', intent: 'success' })
+          } catch (error) {
+            console.error('Error saving screenshot:', error)
+            toaster.show({ message: 'Error saving screenshot', intent: 'danger' })
+          }
+        }
       },
     )
   }
@@ -64,8 +65,8 @@ class Footer extends Component<DispatchProp> {
     return (
       <Wrapper>
         <Container>
-          <Button onClick={this.handleCapture}>Capture current canvas</Button>
-          <Button onClick={this.handleResetEnemyPositions}>Reset Enemy Position</Button>
+          <Button onClick={this.handleCapture}>Capture</Button>
+          <Button onClick={this.handleResetEnemyPositions}>Reset Enemy Positions</Button>
         </Container>
       </Wrapper>
     )

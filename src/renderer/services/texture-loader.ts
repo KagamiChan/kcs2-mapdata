@@ -15,7 +15,6 @@ const fileUrl = (str = '') => {
   return url.format({
     pathname: pathName,
     protocol: 'file',
-    slashes: true,
   })
 }
 
@@ -27,14 +26,17 @@ class TextureLoader {
   protected images: BaseTexture[]
   protected frames: IFrames[]
 
-  constructor(imageUri: string, infoUri: string, prefix?: string) {
+  constructor(imageUri: string, infoUri: string, prefix: string) {
     this.imageUris = [imageUri]
     this.infoUris = [infoUri]
+    this.prefixes = [prefix]
+    this.images = []
+    this.frames = []
+  }
 
-    this.prefixes = [prefix || path.basename(imageUri, path.extname(imageUri))]
-
-    this.images = [BaseTexture.fromImage(fileUrl(imageUri))]
-    const info = fs.readJSONSync(infoUri)
+  public async load() {
+    this.images = [BaseTexture.fromImage(fileUrl(this.imageUris[0]))]
+    const info = await fs.readJson(this.infoUris[0])
     this.frames = [info.frames]
   }
 
@@ -66,10 +68,9 @@ class TextureLoader {
    * extend a texture by another texture with same prefix
    * mainly use for merging secret resources
    */
-  public extend = (extra: TextureLoader) => {
+  public extend(extra: TextureLoader) {
     this.imageUris = this.imageUris.concat(extra.imageUris)
     this.infoUris = this.infoUris.concat(extra.infoUris)
-
     this.prefixes = this.prefixes.concat(extra.prefixes)
     this.images = this.images.concat(extra.images)
     this.frames = this.frames.concat(extra.frames)
