@@ -4,6 +4,7 @@ import React, { Component, createRef } from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
 import styled, { createGlobalStyle } from 'styled-components'
+import './index.css'
 import './static/webfont.css'
 
 import Editor from './views/editor'
