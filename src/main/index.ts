@@ -2,14 +2,17 @@ import { app, BrowserWindow } from 'electron'
 import path from 'node:path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
 import { join } from 'node:path'
-
 import mainRemote from '@electron/remote/main'
+import { setupFsApiHandlers } from './fs-api'
 
 mainRemote.initialize()
 
 const isDevelopment: boolean = process.env.NODE_ENV !== 'production'
 
 global.ROOT = path.resolve(__dirname, '../../')
+
+// Initialize FS API handlers
+setupFsApiHandlers(global.ROOT)
 
 let mainWindow: BrowserWindow | null
 
