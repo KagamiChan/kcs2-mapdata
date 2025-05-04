@@ -1,5 +1,11 @@
-import { Toaster } from '@blueprintjs/core'
+import { OverlayToaster, Toaster } from '@blueprintjs/core'
 
-const toaster = Toaster.create()
+let toaster: Toaster | null = null
 
-export default toaster
+export const ensureToaster = async () => {
+  if (toaster) {
+    return toaster
+  }
+  toaster = await OverlayToaster.createAsync()
+  return toaster
+}

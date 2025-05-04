@@ -1,7 +1,7 @@
 import '@blueprintjs/core/lib/css/blueprint.css'
 import 'normalize.css/normalize.css'
 import React, { Component, createRef } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { Provider } from 'react-redux'
 import styled, { createGlobalStyle } from 'styled-components'
 import './index.css'
@@ -52,9 +52,9 @@ class App extends Component<{}> {
 
 // ReactDOM.render is deprecated in React 18
 // Use createRoot instead
-import { createRoot } from 'react-dom/client'
 
-const container = document.querySelector('#app')
+
+const container = document.querySelector('#root')
 if (container) {
   const root = createRoot(container)
   root.render(<App />)

@@ -9,7 +9,7 @@ import { IMapItem, INotationMap } from '../redux/models'
 import store, { RootState } from '../redux/store'
 import fileWriter from '../services/file-writer'
 import mapLoader from '../services/map-loader'
-import toaster from '../services/toaster'
+import { ensureToaster } from '../services/toaster'
 
 const Wrapper = styled.div`
   grid-area: editor;
@@ -179,9 +179,11 @@ class Editor extends Component<IProps, IState> {
     const data = store.getState()
     try {
       await window.fs.writeJson(path.resolve(window.ROOT, './data/notation.json'), data.notations)
+      const toaster = await ensureToaster()
       toaster.show({ message: 'Saved', intent: 'success' })
     } catch (error) {
       console.error('Error saving notation:', error)
+      const toaster = await ensureToaster()
       toaster.show({ message: 'Error saving notation', intent: 'danger' })
     }
   }
@@ -193,9 +195,11 @@ class Editor extends Component<IProps, IState> {
         payload: data,
         type: 'notations/updateMany',
       })
+      const toaster = await ensureToaster()
       toaster.show({ message: 'Reloaded', intent: 'success' })
     } catch (error) {
       console.error('Error reloading notation:', error)
+      const toaster = await ensureToaster()
       toaster.show({ message: 'Error reloading notation', intent: 'danger' })
     }
   }

@@ -1,7 +1,7 @@
-import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
+import { Application, extend } from '@pixi/react'
 import FontFaceObserver from 'fontfaceobserver'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
-import { Container as PixiContainer, DisplayObject, interaction, TextStyle, Texture } from 'pixi.js'
+import { Container, Graphics, Sprite, Text, TextStyle, Texture } from 'pixi.js'
 import React, { Component, createRef } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
@@ -14,6 +14,13 @@ import { RootState } from '../redux/store'
 
 import { IEnemy, IMapInfo, ISpotsEntity } from '../../../types'
 
+extend({
+  Container,
+  Graphics,
+  Sprite,
+  Text,
+})
+
 const mapTexture = new TextureLoader(
   './data/map_common.png',
   './data/map_common.json',
@@ -24,34 +31,34 @@ const mapTexture = new TextureLoader(
 const getMapTexture = (t: number) => {
   switch (t) {
     case -1:
-      return mapTexture.get(133) // default white
+      return mapTexture.get('133') // default white
     case 1:
-      return mapTexture.get(126) // blue, battle avoid
+      return mapTexture.get('126') // blue, battle avoid
     case 2:
     case 6:
-      return mapTexture.get(129) // green, resource get
+      return mapTexture.get('129') // green, resource get
     case 3:
-      return mapTexture.get(131) // purple, resource loss
+      return mapTexture.get('131') // purple, resource loss
     case 4:
-      return mapTexture.get(132) // red, battle
+      return mapTexture.get('132') // red, battle
     case 5:
-      return mapTexture.get(120) // boss
+      return mapTexture.get('120') // boss
     case 7:
-      return mapTexture.get(100) // air battle
+      return mapTexture.get('100') // air battle
     case 8:
-      return mapTexture.get(119) // sortie end (1-6)
+      return mapTexture.get('119') // sortie end (1-6)
     case 9:
-      return mapTexture.get(130) // air reconn
+      return mapTexture.get('130') // air reconn
     case 10:
-      return mapTexture.get(95) // long distance air battle
+      return mapTexture.get('95') // long distance air battle
     case 11:
-      return mapTexture.get(134) // purple, night battle
+      return mapTexture.get('134') // purple, night battle
     case 12:
-      return mapTexture.get(135) // night to day
+      return mapTexture.get('135') // night to day
     case -2:
-      return mapTexture.get(128) // red, battle
+      return mapTexture.get('128') // red, battle
     case -3:
-      return mapTexture.get(125) // start
+      return mapTexture.get('125') // start
     default:
       return Texture.EMPTY
   }
@@ -110,7 +117,7 @@ const spotKindColorMap: { [key: number]: number } = {
   15: 4,
 }
 
-const airbaseTexture = mapTexture.get(81)
+const airbaseTexture = mapTexture.get('81')
 
 const getXY = (cell: string) => split(cell, ',').map(Number)
 
@@ -154,7 +161,7 @@ class Preview extends Component<IProps, IState> {
     fontFamily: '"Lucida Console", Monaco, monospace',
     fontSize: 30,
     fontWeight: 'bold',
-    strokeThickness: 8,
+    stroke: { color: 'black', width: 4 }
   })
 
   public state: IState = {
@@ -164,7 +171,7 @@ class Preview extends Component<IProps, IState> {
     stat: {},
   }
 
-  private data: interaction.InteractionData | null = null
+  private data: any = null
 
   public componentDidMount() {
     this.loadMapData()
@@ -177,7 +184,7 @@ class Preview extends Component<IProps, IState> {
         fontFamily: 'IBM Plex Mono',
         fontSize: 30,
         fontWeight: 'bold',
-        strokeThickness: 8,
+        stroke: { color: 'black', width: 4 }
       })
       this.forceUpdate()
     })
@@ -204,7 +211,7 @@ class Preview extends Component<IProps, IState> {
     })
   }
 
-  public handleDragStart = (name: string) => (e: interaction.InteractionEvent) => {
+  public handleDragStart = (name: string) => (e: any) => {
     this.data = e.data
     this.setState({
       currentEnemy: name,
@@ -220,7 +227,7 @@ class Preview extends Component<IProps, IState> {
 
   public handleDragMove = () => {
     if (this.state.currentEnemy && this.data && this.enemyLayer.current) {
-      const { x, y } = this.data.getLocalPosition(this.enemyLayer.current as DisplayObject)
+      const { x, y } = this.data.getLocalPosition(this.enemyLayer.current)
       this.props.dispatch({
         payload: {
           data: {
@@ -245,7 +252,7 @@ class Preview extends Component<IProps, IState> {
     if (mapImage === null || mapInfo === null) {
       return (
         <PreviewWrapper>
-          <Stage key="placeholder" width={1200} height={720} options={{ backgroundColor: 0x00000000 } as any} />
+          <Application key="placeholder" width={1200} height={720} backgroundAlpha={0} />
         </PreviewWrapper>
       )
     }
@@ -256,51 +263,55 @@ class Preview extends Component<IProps, IState> {
 
     return (
       <PreviewWrapper>
-        <Stage key="main" width={1200} height={720} options={{ transparent: true } as any}>
-          <Container {...{ children: map(mapInfo.bg, back => {
-            const name = isString(back) ? back : back.img
-            return <Sprite key={name} x={0} y={0} texture={mapImage.get(name)} />
-          })} as any} />
-          <Container {...{ children: [
-            ...map(filter(mapInfo.spots, s => get(s, 'route.img')), (s: ISpotsEntity) => (
-              <Sprite
+        <Application key="main" width={1200} height={720} backgroundAlpha={0}>
+          <pixiContainer>
+            {map(mapInfo.bg, back => {
+              const name = isString(back) ? back : back.img
+              return <pixiSprite key={name} x={0} y={0} texture={mapImage.get(name)} />
+            })}
+          </pixiContainer>
+          <pixiContainer>
+            {map(filter(mapInfo.spots, s => get(s, 'route.img')), (s: ISpotsEntity) => (
+              <pixiSprite
                 key={s.no}
                 x={s.x + s.line!.x}
                 y={s.y + s.line!.y}
                 texture={mapImage.get(s.route!.img)}
               />
-            )),
-            ...map(filter(mapInfo.spots, s => s.color), (s: ISpotsEntity) => {
+            ))}
+            {map(filter(mapInfo.spots, s => s.color), (s: ISpotsEntity) => {
               const texture = getMapTexture(s.color!)
               return (
-                <Sprite
+                <pixiSprite
                   key={s.no}
                   x={s.x - Math.round(texture.width / 2)}
                   y={s.y - Math.round(texture.height / 2)}
                   texture={texture}
                 />
               )
-            })
-          ]} as any} />
-          <Container ref={this.enemyLayer} {...{ children: map(mapInfo.enemies, e => {
-            return (
-              <Sprite
-                key={getEnemyName(e)}
-                x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
-                y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
-                alpha={currentEnemy === getEnemyName(e) ? 0.75 : 1}
-                texture={mapImage.get(e.img)}
-                interactive={true}
-                pointerdown={this.handleDragStart(getEnemyName(e))}
-                pointerup={this.handleDragEnd}
-                pointerupoutside={this.handleDragEnd}
-                pointermove={this.handleDragMove}
-              />
-            )
-          })} as any} />
-          <Container {...{ children: [
-            mapX > 0 && mapY > 0 && (
-              <Graphics
+            })}
+          </pixiContainer>
+          <pixiContainer ref={this.enemyLayer}>
+            {map(mapInfo.enemies, e => {
+              return (
+                <pixiSprite
+                  key={getEnemyName(e)}
+                  x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
+                  y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
+                  alpha={currentEnemy === getEnemyName(e) ? 0.75 : 1}
+                  texture={mapImage.get(e.img)}
+                  interactive={true}
+                  onPointerDown={this.handleDragStart(getEnemyName(e))}
+                  onPointerUp={this.handleDragEnd}
+                  onPointerUpOutside={this.handleDragEnd}
+                  onPointerMove={this.handleDragMove}
+                />
+              )
+            })}
+          </pixiContainer>
+          <pixiContainer>
+            {mapX > 0 && mapY > 0 && (
+              <pixiGraphics
                 draw={g => {
                   g.clear()
                     .beginFill(0x00ff00)
@@ -308,13 +319,13 @@ class Preview extends Component<IProps, IState> {
                     .endFill()
                 }}
               />
-            ),
-            ...map(entries(notations), ([s, note]) => {
+            )}
+            {map(entries(notations), ([s, note]) => {
               const [pX = 0, pY = 0] = getXY(s)
-              return <Text key={s} text={note} style={this.textStyle} x={pX + 20} y={pY - 20} />
-            })
-          ]} as any} />
-        </Stage>
+              return <pixiText key={s} text={note} style={this.textStyle} x={pX + 20} y={pY - 20} />
+            })}
+          </pixiContainer>
+        </Application>
       </PreviewWrapper>
     )
   }

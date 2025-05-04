@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import { IEnemyPositions } from '../redux/models'
 import { RootState } from '../redux/store'
-import toaster from '../services/toaster'
+import { ensureToaster } from '../services/toaster'
 
 interface IProps extends DispatchProp {
   enemyPositions: IEnemyPositions
@@ -34,8 +34,9 @@ const FooterButton = styled.button`
 ` as any
 
 class Footer extends Component<IProps> {
-  public handleResetEnemyPositions = () => {
+  public handleResetEnemyPositions = async () => {
     this.props.dispatch({ type: 'enemyPositions/clear' })
+    const toaster = await ensureToaster()
     toaster.show({ message: 'Enemy positions reset', intent: 'success' })
   }
 
