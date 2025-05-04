@@ -1,79 +1,51 @@
-import { each, entries, findIndex, fromPairs, get, map, some } from 'lodash'
-import path from 'path'
-import { BaseTexture, Rectangle, Texture } from 'pixi.js'
-import url from 'url'
-
-import { fs } from './fs'
-
-import { IFrameOrSpriteSourceSize, IFrames, IImage } from '../../../types'
-
-const fileUrl = (str = '') => {
-  let pathName = path.resolve(str).replace(/\\/g, '/')
-  if (pathName[0] !== '/') {
-    pathName = '/' + pathName
-  }
-  return url.format({
-    pathname: pathName,
-    protocol: 'file',
-  })
-}
+import { entries, filter, fromPairs, get, isString, map } from 'lodash'
+import { Texture } from 'pixi.js'
 
 class TextureLoader {
-  protected imageUris: string[]
-  protected infoUris: string[]
-  protected prefixes: string[]
+  private textures: { [key: string]: Texture } = {}
+  private loaded = false
 
-  protected images: BaseTexture[]
-  protected frames: IFrames[]
-
-  constructor(imageUri: string, infoUri: string, prefix: string) {
-    this.imageUris = [imageUri]
-    this.infoUris = [infoUri]
-    this.prefixes = [prefix]
-    this.images = []
-    this.frames = []
-  }
+  constructor(
+    private readonly imagePath: string,
+    private readonly jsonPath: string,
+    private readonly prefix: string
+  ) {}
 
   public async load() {
-    this.images = [BaseTexture.fromImage(fileUrl(this.imageUris[0]))]
-    const info = await fs.readJson(this.infoUris[0])
-    this.frames = [info.frames]
-  }
-
-  public get = (id: string | number, prefix?: string): Texture => {
-    let frame: IFrameOrSpriteSourceSize | undefined
-    let index: number | undefined
-
-    each(this.frames, (frames, i) => {
-      frame = get(frames, [`${prefix || this.prefixes[i]}_${id}`, 'frame'])
-      if (frame) {
-        index = i
-        return false // this stops the loop
-      }
-    })
-
-    if (!frame) {
-      console.warn('empty texture, check id ', id)
-      return Texture.EMPTY
+    if (this.loaded) {
+      return
     }
-    const rect = new Rectangle(frame.x, frame.y, frame.w, frame.h)
-    return new Texture(this.images[index!], rect)
+
+    const json = await window.fs.readJson(this.jsonPath)
+    const image = await window.fs.readImage(this.imagePath)
+
+    // Convert Buffer to data URL
+    const dataUrl = `data:image/png;base64,${image.toString('base64')}`
+    const texture = Texture.from(dataUrl)
+
+    this.textures = fromPairs(
+      map(entries(json.frames), ([name, frame]: [string, any]) => [
+        name,
+        new Texture(
+          texture.baseTexture,
+          frame.frame,
+          frame.rotated,
+          frame.trimmed,
+          frame.spriteSourceSize,
+          frame.sourceSize
+        ),
+      ])
+    )
+
+    this.loaded = true
   }
 
-  public has = (id: string | number, prefix?: string): boolean => {
-    return some(this.frames, (frames, i) => `${prefix || this.prefixes[i]}_${id}` in frames)
+  public get(name: string): Texture {
+    return this.textures[`${this.prefix}_${name}`] || Texture.EMPTY
   }
 
-  /**
-   * extend a texture by another texture with same prefix
-   * mainly use for merging secret resources
-   */
-  public extend(extra: TextureLoader) {
-    this.imageUris = this.imageUris.concat(extra.imageUris)
-    this.infoUris = this.infoUris.concat(extra.infoUris)
-    this.prefixes = this.prefixes.concat(extra.prefixes)
-    this.images = this.images.concat(extra.images)
-    this.frames = this.frames.concat(extra.frames)
+  public extend(other: TextureLoader) {
+    this.textures = { ...this.textures, ...other.textures }
   }
 }
 

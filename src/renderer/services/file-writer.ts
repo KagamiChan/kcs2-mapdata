@@ -1,5 +1,4 @@
 import { dirname } from 'path'
-import { fs } from './fs'
 
 // A stream of async file writing. `write` queues the task which will be executed
 // after all tasks before are done.
@@ -41,7 +40,7 @@ class FileWriter {
     while (this.queue.length) {
       const { path, data, options, callback } = this.queue.shift()!
       try {
-        await fs.writeJson(path, data)
+        await window.fs.writeJson(path, data)
         if (callback) {
           callback()
         }

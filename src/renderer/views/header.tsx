@@ -1,4 +1,3 @@
-import { fs } from '../services/fs'
 import { map, padStart, sortBy } from 'lodash'
 import path from 'path'
 import React, { ChangeEvent, Component } from 'react'
@@ -28,7 +27,7 @@ class Header extends Component<IProps> {
 
   public readMapList = async () => {
     const DATA_FOLDER = path.resolve(window.ROOT, './maps')
-    const start2 = await fs.readJson(path.resolve(DATA_FOLDER, './start2.json'))
+    const start2 = await window.fs.readJson(path.resolve(DATA_FOLDER, './start2.json'))
 
     const mapConst = start2.api_mst_mapinfo
 

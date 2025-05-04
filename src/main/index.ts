@@ -9,7 +9,7 @@ mainRemote.initialize()
 
 const isDevelopment: boolean = process.env.NODE_ENV !== 'production'
 
-global.ROOT = path.resolve(__dirname, '../../')
+global.ROOT = path.resolve(import.meta.dirname, '../../')
 
 // Initialize FS API handlers
 setupFsApiHandlers(global.ROOT)
@@ -19,10 +19,9 @@ let mainWindow: BrowserWindow | null
 const createMainWindow = () => {
   const window = new BrowserWindow({
     webPreferences: {
-      preload: path.resolve(__dirname, '../preload/index.js'),
-      webSecurity: false,
+      preload: path.resolve(import.meta.dirname, '../preload/index.js'),
       nodeIntegration: true,
-      contextIsolation: false,
+      contextIsolation: true,
     },
   })
 
@@ -33,7 +32,7 @@ const createMainWindow = () => {
   if (is.dev && process.env['ELECTRON_RENDERER_URL']) {
     window.loadURL(process.env['ELECTRON_RENDERER_URL'])
   } else {
-    window.loadFile(join(__dirname, '../renderer/index.html'))
+    window.loadFile(join(import.meta.dirname, '../renderer/index.html'))
   }
 
   window.on('closed', () => {

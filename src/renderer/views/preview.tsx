@@ -1,8 +1,6 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import FontFaceObserver from 'fontfaceobserver'
-import { fs } from '../services/fs'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
-import path from 'path'
 import { Container as PixiContainer, DisplayObject, interaction, TextStyle, Texture } from 'pixi.js'
 import React, { Component, createRef } from 'react'
 import { connect, DispatchProp } from 'react-redux'
@@ -17,8 +15,9 @@ import { RootState } from '../redux/store'
 import { IEnemy, IMapInfo, ISpotsEntity } from '../../../types'
 
 const mapTexture = new TextureLoader(
-  path.resolve(window.ROOT, './data/map_common.png'),
-  path.resolve(window.ROOT, './data/map_common.json'),
+  './data/map_common.png',
+  './data/map_common.json',
+  'map_common'
 )
 
 // align with main.js 4.1.1.6, map_common 4.1.0.0
@@ -117,9 +116,9 @@ const getXY = (cell: string) => split(cell, ',').map(Number)
 
 const getEnemyName = (enemy: IEnemy): string => String(enemy.no) + enemy.img
 
-const Wrapper = styled.div`
+const PreviewWrapper = styled.div`
   grid-area: preview;
-`
+` as any
 
 interface ICellStat {
   cell_id: string
@@ -196,7 +195,7 @@ class Preview extends Component<IProps, IState> {
 
     const data = await mapLoader.load(mapId)
 
-    const stat = await fs.readJSON(path.resolve(__dirname, '../../../maps/stat.json'))
+    const stat = await window.fs.readJson('./maps/stat.json')
 
     this.setState({
       mapImage: data.image,
@@ -245,9 +244,9 @@ class Preview extends Component<IProps, IState> {
 
     if (mapImage === null || mapInfo === null) {
       return (
-        <Wrapper>
-          <Stage key="placeholder" width={1200} height={720} options={{ transparent: true }} />
-        </Wrapper>
+        <PreviewWrapper>
+          <Stage key="placeholder" width={1200} height={720} options={{ backgroundColor: 0x00000000 } as any} />
+        </PreviewWrapper>
       )
     }
 
@@ -256,26 +255,23 @@ class Preview extends Component<IProps, IState> {
     const currentStat = stat[mapId] || {}
 
     return (
-      <Wrapper>
-        <Stage key="main" width={1200} height={720} options={{ transparent: true }}>
-          <Container>
-            {map(mapInfo.bg, back => {
-              const name = isString(back) ? back : back.img
-              return <Sprite key={name} x={0} y={0} texture={mapImage.get(name)} />
-            })}
-          </Container>
-          <Container>
-            {map(filter(mapInfo.spots, s => get(s, 'route.img')), (s: ISpotsEntity) => (
+      <PreviewWrapper>
+        <Stage key="main" width={1200} height={720} options={{ transparent: true } as any}>
+          <Container {...{ children: map(mapInfo.bg, back => {
+            const name = isString(back) ? back : back.img
+            return <Sprite key={name} x={0} y={0} texture={mapImage.get(name)} />
+          })} as any} />
+          <Container {...{ children: [
+            ...map(filter(mapInfo.spots, s => get(s, 'route.img')), (s: ISpotsEntity) => (
               <Sprite
                 key={s.no}
                 x={s.x + s.line!.x}
                 y={s.y + s.line!.y}
                 texture={mapImage.get(s.route!.img)}
               />
-            ))}
-            {map(filter(mapInfo.spots, s => s.color), (s: ISpotsEntity) => {
+            )),
+            ...map(filter(mapInfo.spots, s => s.color), (s: ISpotsEntity) => {
               const texture = getMapTexture(s.color!)
-
               return (
                 <Sprite
                   key={s.no}
@@ -284,72 +280,42 @@ class Preview extends Component<IProps, IState> {
                   texture={texture}
                 />
               )
-            })}
-            {map(entries(notations), ([s, note]) => {
-              const [x = 0, y = 0] = getXY(s)
-              const eventId = get(currentStat, [note, 'event_id'])
-              const detailId = get(currentStat, [note, 'event_kind'])
-              const color = spotKindColorMap[getSpotKind(eventId, detailId)]
-              const texture = getMapTexture(color!)
-
-              // boss cell icon is translated a little to make it cover the original spot icon
-              return (
-                <Sprite
-                  key={s}
-                  x={x - Math.round(texture.width / 2)}
-                  y={y - Math.round(texture.height / 2) - (color === 5 ? 2 : 0)}
-                  texture={texture}
-                />
-              )
-            })}
-            {map(mapInfo.labels, l => (
-              <Sprite key={l.img} x={l.x} y={l.y} texture={mapImage.get(l.img!)} />
-            ))}
-            {mapInfo.airbase && (
+            })
+          ]} as any} />
+          <Container ref={this.enemyLayer} {...{ children: map(mapInfo.enemies, e => {
+            return (
               <Sprite
-                x={mapInfo.airbase.x - airbaseTexture.width / 2}
-                y={mapInfo.airbase.y - airbaseTexture.height / 2}
-                texture={airbaseTexture}
+                key={getEnemyName(e)}
+                x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
+                y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
+                alpha={currentEnemy === getEnemyName(e) ? 0.75 : 1}
+                texture={mapImage.get(e.img)}
+                interactive={true}
+                pointerdown={this.handleDragStart(getEnemyName(e))}
+                pointerup={this.handleDragEnd}
+                pointerupoutside={this.handleDragEnd}
+                pointermove={this.handleDragMove}
               />
-            )}
-          </Container>
-          <Container ref={this.enemyLayer}>
-            {map(mapInfo.enemies, e => {
-              return (
-                <Sprite
-                  key={getEnemyName(e)}
-                  x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
-                  y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
-                  alpha={currentEnemy === getEnemyName(e) ? 0.75 : 1}
-                  texture={mapImage.get(e.img)}
-                  interactive={true}
-                  pointerdown={this.handleDragStart(getEnemyName(e))}
-                  pointerup={this.handleDragEnd}
-                  pointerupoutside={this.handleDragEnd}
-                  pointermove={this.handleDragMove}
-                />
-              )
-            })}
-          </Container>
-          <Container>
-            {mapX > 0 &&
-              mapY > 0 && (
-                <Graphics
-                  draw={g => {
-                    g.clear()
-                      .beginFill(0x00ff00)
-                      .drawStar(mapX, mapY, 6, 20, 10)
-                      .endFill()
-                  }}
-                />
-              )}
-            {map(entries(notations), ([s, note]) => {
+            )
+          })} as any} />
+          <Container {...{ children: [
+            mapX > 0 && mapY > 0 && (
+              <Graphics
+                draw={g => {
+                  g.clear()
+                    .beginFill(0x00ff00)
+                    .drawStar(mapX, mapY, 6, 20, 10)
+                    .endFill()
+                }}
+              />
+            ),
+            ...map(entries(notations), ([s, note]) => {
               const [pX = 0, pY = 0] = getXY(s)
               return <Text key={s} text={note} style={this.textStyle} x={pX + 20} y={pY - 20} />
-            })}
-          </Container>
+            })
+          ]} as any} />
         </Stage>
-      </Wrapper>
+      </PreviewWrapper>
     )
   }
 }
@@ -360,8 +326,5 @@ export default connect(
     mapCell: state.mapCell,
     mapId: state.mapId,
     notations: get(state.notations, state.mapId, {}),
-  }),
-  null,
-  null,
-  { withRef: true },
+  })
 )(Preview)

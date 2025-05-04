@@ -1,5 +1,4 @@
 import { Button, Switch } from '@blueprintjs/core'
-import { fs } from '../services/fs'
 import { findIndex, fromPairs, get, map, toUpper, uniq, range, size } from 'lodash'
 import path from 'path'
 import React, { ChangeEvent, Component, createRef, FormEvent, KeyboardEvent } from 'react'
@@ -179,7 +178,7 @@ class Editor extends Component<IProps, IState> {
   public handleSave = async () => {
     const data = store.getState()
     try {
-      await fs.writeJson(path.resolve(window.ROOT, './data/notation.json'), data.notations)
+      await window.fs.writeJson(path.resolve(window.ROOT, './data/notation.json'), data.notations)
       toaster.show({ message: 'Saved', intent: 'success' })
     } catch (error) {
       console.error('Error saving notation:', error)
@@ -189,7 +188,7 @@ class Editor extends Component<IProps, IState> {
 
   public handleReload = async () => {
     try {
-      const data = await fs.readJson(path.resolve(window.ROOT, './data/notation.json'))
+      const data = await window.fs.readJson(path.resolve(window.ROOT, './data/notation.json'))
       this.props.dispatch({
         payload: data,
         type: 'notations/updateMany',
