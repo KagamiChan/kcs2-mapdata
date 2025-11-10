@@ -16,6 +16,8 @@ import { RootState } from '../redux/store'
 
 import { IEnemy, IMapInfo, ISpotsEntity } from '../../../types'
 
+const showEnemies = false
+
 const mapTexture = new TextureLoader(
   path.resolve(window.ROOT, './data/map_common.png'),
   path.resolve(window.ROOT, './data/map_common.json'),
@@ -313,24 +315,28 @@ class Preview extends Component<IProps, IState> {
               />
             )}
           </Container>
-          <Container ref={this.enemyLayer}>
-            {map(mapInfo.enemies, e => {
-              return (
-                <Sprite
-                  key={getEnemyName(e)}
-                  x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
-                  y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
-                  alpha={currentEnemy === getEnemyName(e) ? 0.75 : 1}
-                  texture={mapImage.get(e.img)}
-                  interactive={true}
-                  pointerdown={this.handleDragStart(getEnemyName(e))}
-                  pointerup={this.handleDragEnd}
-                  pointerupoutside={this.handleDragEnd}
-                  pointermove={this.handleDragMove}
-                />
-              )
-            })}
-          </Container>
+          {
+            showEnemies && (
+              <Container ref={this.enemyLayer}>
+                {map(mapInfo.enemies, e => {
+                  return (
+                    <Sprite
+                      key={getEnemyName(e)}
+                      x={get(enemyPositions, [getEnemyName(e), 'x'], e.x)}
+                      y={get(enemyPositions, [getEnemyName(e), 'y'], e.y)}
+                      alpha={currentEnemy === getEnemyName(e) ? 0.75 : 1}
+                      texture={mapImage.get(e.img)}
+                      interactive={true}
+                      pointerdown={this.handleDragStart(getEnemyName(e))}
+                      pointerup={this.handleDragEnd}
+                      pointerupoutside={this.handleDragEnd}
+                      pointermove={this.handleDragMove}
+                    />
+                  )
+                })}
+              </Container>
+            )
+          }
           <Container>
             {mapX > 0 &&
               mapY > 0 && (
