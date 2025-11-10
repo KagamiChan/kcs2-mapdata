@@ -1,6 +1,7 @@
 import { app, BrowserWindow } from 'electron'
 import path from 'path'
 
+// TODO: something keep setting this to `development`, overriding outside export.
 const isDevelopment: boolean = process.env.NODE_ENV !== 'production'
 
 global.ROOT = path.resolve(__dirname, '../../')
@@ -16,7 +17,7 @@ const createMainWindow = () => {
   })
 
   if (isDevelopment) {
-    window.webContents.openDevTools({ mode: 'detach' })
+    // window.webContents.openDevTools({ mode: 'detach' })
     window.loadURL(`http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`)
   } else {
     window.loadFile(path.join(__dirname, 'index.html'))
