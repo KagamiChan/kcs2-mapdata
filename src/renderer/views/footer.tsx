@@ -1,12 +1,8 @@
 import { Button } from '@blueprintjs/core'
-import { remote } from 'electron'
-import fs from 'fs-extra'
 import React, { Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 import toaster from '../services/toaster'
-
-const { dialog } = remote
 
 const Wrapper = styled.div`
   grid-area: footer;
@@ -20,39 +16,34 @@ const Container = styled.div`
 `
 
 class Footer extends Component<DispatchProp> {
-  public handleCapture = () => {
+  public handleCapture = async () => {
     const canvas: HTMLCanvasElement | null = document.querySelector('canvas')
     if (!canvas) {
       return
     }
-    remote.getCurrentWebContents().capturePage(
-      {
-        height: canvas.clientHeight,
-        width: canvas.clientWidth,
-        x: canvas.offsetLeft,
-        y: canvas.offsetTop,
-      },
-      img => {
-        const buf = img.toPNG()
-        dialog.showSaveDialog(
-          {
-            filters: [
-              {
-                extensions: ['png'],
-                name: 'PNG imgae file',
-              },
-            ],
-            title: 'where to svae the file',
-          },
-          filename => {
-            if (!filename) {
-              return
-            }
-            fs.outputFileSync(filename, buf)
-          },
-        )
-      },
-    )
+    const { electronAPI } = window
+    const buf = await electronAPI.capturePage({
+      height: canvas.clientHeight,
+      width: canvas.clientWidth,
+      x: canvas.offsetLeft,
+      y: canvas.offsetTop,
+    })
+    if (!buf) return
+
+    const result = await electronAPI.showSaveDialog({
+      filters: [
+        {
+          extensions: ['png'],
+          name: 'PNG image file',
+        },
+      ],
+      title: 'Where to save the file',
+    })
+    if (!result || result.canceled || !result.filePath) {
+      return
+    }
+    await electronAPI.writeFile(result.filePath, buf)
+    toaster.show({ message: 'Captured', intent: 'success' })
   }
 
   public handleResetEnemyPositions = () => {

@@ -1,6 +1,4 @@
-import fs from 'fs-extra'
 import { map, padStart, sortBy } from 'lodash'
-import path from 'path'
 import React, { ChangeEvent, Component } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
@@ -29,8 +27,10 @@ class Header extends Component<IProps> {
   }
 
   public readMapList = async () => {
-    const DATA_FOLDER = path.resolve(window.ROOT, './maps')
-    const start2 = await fs.readJson(path.resolve(DATA_FOLDER, './start2.json'))
+    const { electronAPI } = window
+    const root = await electronAPI.getRoot()
+    const start2Path = await electronAPI.pathResolve(root, './maps/start2.json')
+    const start2 = await electronAPI.readJson(start2Path)
 
     const mapConst = start2.api_mst_mapinfo
 
@@ -47,6 +47,14 @@ class Header extends Component<IProps> {
     )
 
     this.props.dispatch({ type: 'mapList/update', payload: mapList })
+
+    try {
+      const notationPath = await electronAPI.pathResolve(root, './data/notation.json')
+      const notationData = await electronAPI.readJson(notationPath)
+      this.props.dispatch({ type: 'notations/updateMany', payload: notationData })
+    } catch (e) {
+      // notation.json may not exist yet
+    }
   }
 
   public handleChangeMap = (e: ChangeEvent<HTMLSelectElement>) => {

@@ -1,8 +1,6 @@
 import { Container, Graphics, Sprite, Stage, Text } from '@inlet/react-pixi'
 import FontFaceObserver from 'fontfaceobserver'
-import fs from 'fs-extra'
 import { entries, filter, fromPairs, get, isString, map, split } from 'lodash'
-import path from 'path'
 import { Container as PixiContainer, DisplayObject, interaction, TextStyle, Texture } from 'pixi.js'
 import React, { Component, createRef } from 'react'
 import { connect, DispatchProp } from 'react-redux'
@@ -18,43 +16,41 @@ import { IEnemy, IMapInfo, ISpotsEntity } from '../../../types'
 
 const showEnemies = false
 
-const mapTexture = new TextureLoader(
-  path.resolve(window.ROOT, './data/map_common.png'),
-  path.resolve(window.ROOT, './data/map_common.json'),
-)
+let commonTexture: TextureLoader | null = null
 
 // align with main.js 4.1.1.6, map_common 4.1.0.0
 const getMapTexture = (t: number) => {
+  if (!commonTexture) return Texture.EMPTY
   switch (t) {
     case -1:
-      return mapTexture.get(133) // default white
+      return commonTexture.get(133) // default white
     case 1:
-      return mapTexture.get(126) // blue, battle avoid
+      return commonTexture.get(126) // blue, battle avoid
     case 2:
     case 6:
-      return mapTexture.get(129) // green, resource get
+      return commonTexture.get(129) // green, resource get
     case 3:
-      return mapTexture.get(131) // purple, resource loss
+      return commonTexture.get(131) // purple, resource loss
     case 4:
-      return mapTexture.get(132) // red, battle
+      return commonTexture.get(132) // red, battle
     case 5:
-      return mapTexture.get(120) // boss
+      return commonTexture.get(120) // boss
     case 7:
-      return mapTexture.get(100) // air battle
+      return commonTexture.get(100) // air battle
     case 8:
-      return mapTexture.get(119) // sortie end (1-6)
+      return commonTexture.get(119) // sortie end (1-6)
     case 9:
-      return mapTexture.get(130) // air reconn
+      return commonTexture.get(130) // air reconn
     case 10:
-      return mapTexture.get(95) // long distance air battle
+      return commonTexture.get(95)  // long distance air battle
     case 11:
-      return mapTexture.get(134) // purple, night battle
+      return commonTexture.get(134) // purple, night battle
     case 12:
-      return mapTexture.get(135) // night to day
+      return commonTexture.get(135) // night to day
     case -2:
-      return mapTexture.get(128) // red, battle
+      return commonTexture.get(128) // red, battle
     case -3:
-      return mapTexture.get(125) // start
+      return commonTexture.get(125) // start
     default:
       return Texture.EMPTY
   }
@@ -112,8 +108,6 @@ const spotKindColorMap: { [key: number]: number } = {
   14: 11,
   15: 4,
 }
-
-const airbaseTexture = mapTexture.get(81)
 
 const getXY = (cell: string) => split(cell, ',').map(Number)
 
@@ -195,10 +189,20 @@ class Preview extends Component<IProps, IState> {
 
   public loadMapData = async () => {
     const { mapId } = this.props
+    const { electronAPI } = window
+
+    if (!commonTexture) {
+      const root = await electronAPI.getRoot()
+      const png = await electronAPI.pathResolve(root, './data/map_common.png')
+      const json = await electronAPI.pathResolve(root, './data/map_common.json')
+      commonTexture = await TextureLoader.create(png, json)
+    }
 
     const data = await mapLoader.load(mapId)
 
-    const stat = await fs.readJSON(path.resolve(__dirname, '../../../maps/stat.json'))
+    const root = await electronAPI.getRoot()
+    const statPath = await electronAPI.pathResolve(root, './maps/stat.json')
+    const stat = await electronAPI.readJson(statPath)
 
     this.setState({
       mapImage: data.image,
@@ -252,6 +256,8 @@ class Preview extends Component<IProps, IState> {
         </Wrapper>
       )
     }
+
+    const airbaseTexture = commonTexture ? commonTexture.get(81) : Texture.EMPTY
 
     const [mapX = 0, mapY = 0] = getXY(mapCell)
 

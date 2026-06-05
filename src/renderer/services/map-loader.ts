@@ -1,6 +1,4 @@
-import fs from 'fs-extra'
 import { padStart, size } from 'lodash'
-import path from 'path'
 import { IMapInfo } from '../../../types'
 import mergeInfo from '../utils/merge-info'
 import TextureLoader from './texture-loader'
@@ -22,25 +20,23 @@ class MapLoader implements IMapLoader {
     if (mapId in this.cache) {
       return this.cache[mapId]
     }
+    const { electronAPI } = window
+    const root = await electronAPI.getRoot()
     const world = padStart(String(Math.floor(+mapId / 10)), 3, '0')
     const area = padStart(String(+mapId % 10), 2, '0')
 
-    const image = new TextureLoader(
-      path.resolve(window.ROOT, `./maps/${world}/${area}_image.png`),
-      path.resolve(window.ROOT, `./maps/${world}/${area}_image.json`),
-      `map${world}${area}`,
-    )
+    const imagePng = await electronAPI.pathResolve(root, `./maps/${world}/${area}_image.png`)
+    const imageJson = await electronAPI.pathResolve(root, `./maps/${world}/${area}_image.json`)
+    const image = await TextureLoader.create(imagePng, imageJson, `map${world}${area}`)
 
-    let info: IMapInfo = await fs.readJSON(
-      path.resolve(window.ROOT, `./maps/${world}/${area}_info.json`),
-    )
+    const infoPath = await electronAPI.pathResolve(root, `./maps/${world}/${area}_info.json`)
+    let info: IMapInfo = await electronAPI.readJson(infoPath)
 
     let secret = size(info.spots)
 
     try {
-      const complement = await fs.readJSON(
-        path.resolve(window.ROOT, `./maps/${world}/${area}_info_complement.json`),
-      )
+      const complementPath = await electronAPI.pathResolve(root, `./maps/${world}/${area}_info_complement.json`)
+      const complement = await electronAPI.readJson(complementPath)
       info = mergeInfo<IMapInfo>(info, complement)
     } catch (e) {
       // do nothing
@@ -49,16 +45,13 @@ class MapLoader implements IMapLoader {
     let drained = false
     while (!drained) {
       try {
-        const secretInfo = await fs.readJSON(
-          path.resolve(window.ROOT, `./maps/${world}/${area}_info${secret}.json`),
-        )
+        const secretInfoPath = await electronAPI.pathResolve(root, `./maps/${world}/${area}_info${secret}.json`)
+        const secretInfo = await electronAPI.readJson(secretInfoPath)
 
         info = mergeInfo<IMapInfo>(info, secretInfo)
-        const secretImage = new TextureLoader(
-          path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.png`),
-          path.resolve(window.ROOT, `./maps/${world}/${area}_image${secret}.json`),
-          `map${world}${area}`,
-        )
+        const secretPng = await electronAPI.pathResolve(root, `./maps/${world}/${area}_image${secret}.png`)
+        const secretJson = await electronAPI.pathResolve(root, `./maps/${world}/${area}_image${secret}.json`)
+        const secretImage = await TextureLoader.create(secretPng, secretJson, `map${world}${area}`)
         image.extend(secretImage)
 
         secret += size(secretInfo.spots)

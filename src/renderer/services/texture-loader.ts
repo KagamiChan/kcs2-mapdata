@@ -1,22 +1,7 @@
-import fs from 'fs-extra'
-import { each, entries, findIndex, fromPairs, get, map, some } from 'lodash'
-import path from 'path'
+import { each, get, some } from 'lodash'
 import { BaseTexture, Rectangle, Texture } from 'pixi.js'
-import url from 'url'
 
-import { IFrameOrSpriteSourceSize, IFrames, IImage } from '../../../types'
-
-const fileUrl = (str = '') => {
-  let pathName = path.resolve(str).replace(/\\/g, '/')
-  if (pathName[0] !== '/') {
-    pathName = '/' + pathName
-  }
-  return url.format({
-    pathname: pathName,
-    protocol: 'file',
-    slashes: true,
-  })
-}
+import { IFrameOrSpriteSourceSize, IFrames } from '../../../types'
 
 class TextureLoader {
   protected imageUris: string[]
@@ -26,15 +11,23 @@ class TextureLoader {
   protected images: BaseTexture[]
   protected frames: IFrames[]
 
-  constructor(imageUri: string, infoUri: string, prefix?: string) {
-    this.imageUris = [imageUri]
-    this.infoUris = [infoUri]
+  private constructor(imageUris: string[], infoUris: string[], prefixes: string[], images: BaseTexture[], frames: IFrames[]) {
+    this.imageUris = imageUris
+    this.infoUris = infoUris
+    this.prefixes = prefixes
+    this.images = images
+    this.frames = frames
+  }
 
-    this.prefixes = [prefix || path.basename(imageUri, path.extname(imageUri))]
-
-    this.images = [BaseTexture.fromImage(fileUrl(imageUri))]
-    const info = fs.readJSONSync(infoUri)
-    this.frames = [info.frames]
+  static async create(imageUri: string, infoUri: string, prefix?: string): Promise<TextureLoader> {
+    const { electronAPI } = window
+    const fileUrl = await electronAPI.fileUrl(imageUri)
+    const ext = await electronAPI.pathExtname(imageUri)
+    const prefix2 = prefix || await electronAPI.pathBasename(imageUri, ext)
+    const images = [BaseTexture.fromImage(fileUrl)]
+    const info = await electronAPI.readJson(infoUri)
+    const frames = [info.frames]
+    return new TextureLoader([imageUri], [infoUri], [prefix2], images, frames)
   }
 
   public get = (id: string | number, prefix?: string): Texture => {

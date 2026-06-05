@@ -1,7 +1,5 @@
 import { Button, Switch } from '@blueprintjs/core'
-import fs from 'fs-extra'
 import { findIndex, fromPairs, get, map, toUpper, uniq, range, size } from 'lodash'
-import path from 'path'
 import React, { ChangeEvent, Component, createRef, FormEvent, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
@@ -31,10 +29,10 @@ const codeA = 'A'.charCodeAt(0)
  * @param index
  */
 const parseIndex = (index: number): string => {
-  // we assume the first point is a start
   if (index === 0) {
     return '1'
   }
+  // we assume the first point is a start
   const num = index - 1
   const a = Math.floor(num / 26) - 1
   const b = (num % 26) + codeA
@@ -46,7 +44,7 @@ const parseIndex = (index: number): string => {
  * @param index
  * @param start the character at -1
  */
- const parseSequentialIndex = (index: number, start: string): string => {
+const parseSequentialIndex = (index: number, start: string): string => {
   const startCode = toUpper(start).charCodeAt(0)
   const num = index + startCode - codeA
   const a = Math.floor(num / 26) - 1
@@ -169,21 +167,19 @@ class Editor extends Component<IProps, IState> {
     })
   }
 
-  public handleSave = () => {
+  public handleSave = async () => {
     const data = store.getState()
-
-    fileWriter.write(
-      path.resolve(window.ROOT, './data/notation.json'),
-      JSON.stringify(data.notations, null, 2),
-      {},
-      () => {
-        toaster.show({ message: 'Saved', intent: 'success' })
-      },
-    )
+    const root = await window.electronAPI.getRoot()
+    const notationPath = await window.electronAPI.pathResolve(root, './data/notation.json')
+    fileWriter.write(notationPath, JSON.stringify(data.notations, null, 2), {}, () => {
+      toaster.show({ message: 'Saved', intent: 'success' })
+    })
   }
 
   public handleReload = async () => {
-    const data = await fs.readJson(path.resolve(window.ROOT, './data/notation.json'))
+    const root = await window.electronAPI.getRoot()
+    const notationPath = await window.electronAPI.pathResolve(root, './data/notation.json')
+    const data = await window.electronAPI.readJson(notationPath)
     this.props.dispatch({
       payload: data,
       type: 'notations/updateMany',
