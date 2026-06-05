@@ -6,13 +6,14 @@ import styled from 'styled-components'
 
 import { IMapItem, INotationMap } from '../redux/models'
 import store, { RootState } from '../redux/store'
-import fileWriter from '../services/file-writer'
 import mapLoader from '../services/map-loader'
 import toaster from '../services/toaster'
 
 const Wrapper = styled.div`
   grid-area: editor;
   padding-left: 1em;
+  overflow-y: auto;
+  position: relative;
 `
 
 const Control = styled.div`
@@ -171,9 +172,12 @@ class Editor extends Component<IProps, IState> {
     const data = store.getState()
     const root = await window.electronAPI.getRoot()
     const notationPath = await window.electronAPI.pathResolve(root, './data/notation.json')
-    fileWriter.write(notationPath, JSON.stringify(data.notations, null, 2), {}, () => {
+    try {
+      await window.electronAPI.writeJson(notationPath, data.notations)
       toaster.show({ message: 'Saved', intent: 'success' })
-    })
+    } catch (e) {
+      console.error('save failed:', e)
+    }
   }
 
   public handleReload = async () => {

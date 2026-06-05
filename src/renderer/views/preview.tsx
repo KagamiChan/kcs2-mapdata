@@ -115,6 +115,7 @@ const getEnemyName = (enemy: IEnemy): string => String(enemy.no) + enemy.img
 
 const Wrapper = styled.div`
   grid-area: preview;
+  overflow: hidden;
 `
 
 interface ICellStat {

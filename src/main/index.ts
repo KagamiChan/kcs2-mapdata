@@ -13,7 +13,7 @@ ipcMain.handle('read-json', async (_e, filePath: string) => fs.readJson(filePath
 ipcMain.handle('read-json-sync', (_e, filePath: string) => fs.readJsonSync(filePath))
 ipcMain.handle('write-json', async (_e, filePath: string, data: unknown) => {
   fs.ensureDirSync(path.dirname(filePath))
-  return fs.writeJson(filePath, data)
+  return fs.writeJson(filePath, data, { spaces: 2 })
 })
 ipcMain.handle('write-file', async (_e, filePath: string, data: unknown) => {
   fs.ensureDirSync(path.dirname(filePath))
