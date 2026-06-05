@@ -6,7 +6,7 @@ import url from 'url'
 // TODO: something keep setting this to `development`, overriding outside export.
 const isDevelopment: boolean = process.env.NODE_ENV !== 'production'
 
-;(global as any).ROOT = path.resolve(__dirname, '../..')
+  ; (global as any).ROOT = path.resolve(__dirname, '../..')
 
 ipcMain.handle('get-root', () => path.resolve(__dirname, '../..'))
 ipcMain.handle('read-json', async (_e, filePath: string) => fs.readJson(filePath))
@@ -66,7 +66,7 @@ const createMainWindow = () => {
     // credits goes to https://github.com/onivim/oni/pull/2390
     if (process.platform === 'darwin') {
       window.webContents.devToolsWebContents &&
-      window.webContents.devToolsWebContents.executeJavaScript(`
+        window.webContents.devToolsWebContents.executeJavaScript(`
         window.addEventListener('keydown', function (e) {
           if (e.keyCode === 65 && e.metaKey) {
               document.execCommand('Select All');
@@ -95,8 +95,9 @@ app.on('window-all-closed', () => {
   app.quit()
 })
 
-// on macOS it is common to re-create a window even after all windows have been closed
+
 app.on('activate', () => {
+  // on macOS it is common to re-create a window even after all windows have been closed
   if (mainWindow === null) {
     mainWindow = createMainWindow()
   }

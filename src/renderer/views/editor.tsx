@@ -30,10 +30,11 @@ const codeA = 'A'.charCodeAt(0)
  * @param index
  */
 const parseIndex = (index: number): string => {
+  // we assume the first point is a start
   if (index === 0) {
     return '1'
   }
-  // we assume the first point is a start
+
   const num = index - 1
   const a = Math.floor(num / 26) - 1
   const b = (num % 26) + codeA
