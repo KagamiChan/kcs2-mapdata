@@ -12,8 +12,15 @@ import toaster from '../services/toaster'
 const Wrapper = styled.div`
   grid-area: editor;
   padding-left: 1em;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`
+
+const TableWrapper = styled.div`
   overflow-y: auto;
-  position: relative;
+  flex: 1;
+  min-height: 0;
 `
 
 const Control = styled.div`
@@ -218,6 +225,7 @@ class Editor extends Component<IProps, IState> {
     const { notations } = this.props
     return (
       <Wrapper>
+        <TableWrapper>
         <table>
           <thead>
             <th>Point</th>
@@ -241,6 +249,7 @@ class Editor extends Component<IProps, IState> {
             ))}
           </tbody>
         </table>
+        </TableWrapper>
         <hr />
         <Control>
           <Switch onChange={this.handleEditModeChange} checked={sequentialEdit} label="Sequential edit" />

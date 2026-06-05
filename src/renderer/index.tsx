@@ -28,7 +28,7 @@ const Container = styled.div`
   grid-template-columns: 1200px auto;
   grid-template-rows: 40px 720px auto;
   grid-template-areas:
-    'header haeder'
+    'header header'
     'preview editor'
     'footer footer';
 `
