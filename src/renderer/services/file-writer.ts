@@ -1,5 +1,4 @@
-import fs from 'fs-extra'
-import { dirname } from 'path'
+const { electronAPI } = window
 
 // A stream of async file writing. `write` queues the task which will be executed
 // after all tasks before are done.
@@ -41,8 +40,7 @@ class FileWriter {
     this.writing = true
     while (this.queue.length) {
       const { path, data, options, callback } = this.queue.shift()!
-      fs.ensureDirSync(dirname(path))
-      fs.writeFileSync(path, data, options)
+      electronAPI.writeFile(path, data)
       if (callback) {
         callback()
       }

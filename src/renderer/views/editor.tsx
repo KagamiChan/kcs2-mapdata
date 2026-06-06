@@ -1,20 +1,26 @@
 import { Button, Switch } from '@blueprintjs/core'
-import fs from 'fs-extra'
 import { findIndex, fromPairs, get, map, toUpper, uniq, range, size } from 'lodash'
-import path from 'path'
 import React, { ChangeEvent, Component, createRef, FormEvent, KeyboardEvent } from 'react'
 import { connect, DispatchProp } from 'react-redux'
 import styled from 'styled-components'
 
 import { IMapItem, INotationMap } from '../redux/models'
 import store, { RootState } from '../redux/store'
-import fileWriter from '../services/file-writer'
 import mapLoader from '../services/map-loader'
 import toaster from '../services/toaster'
 
 const Wrapper = styled.div`
   grid-area: editor;
   padding-left: 1em;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+`
+
+const TableWrapper = styled.div`
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
 `
 
 const Control = styled.div`
@@ -35,6 +41,7 @@ const parseIndex = (index: number): string => {
   if (index === 0) {
     return '1'
   }
+
   const num = index - 1
   const a = Math.floor(num / 26) - 1
   const b = (num % 26) + codeA
@@ -46,7 +53,7 @@ const parseIndex = (index: number): string => {
  * @param index
  * @param start the character at -1
  */
- const parseSequentialIndex = (index: number, start: string): string => {
+const parseSequentialIndex = (index: number, start: string): string => {
   const startCode = toUpper(start).charCodeAt(0)
   const num = index + startCode - codeA
   const a = Math.floor(num / 26) - 1
@@ -169,21 +176,22 @@ class Editor extends Component<IProps, IState> {
     })
   }
 
-  public handleSave = () => {
+  public handleSave = async () => {
     const data = store.getState()
-
-    fileWriter.write(
-      path.resolve(window.ROOT, './data/notation.json'),
-      JSON.stringify(data.notations, null, 2),
-      {},
-      () => {
-        toaster.show({ message: 'Saved', intent: 'success' })
-      },
-    )
+    const root = await window.electronAPI.getRoot()
+    const notationPath = await window.electronAPI.pathResolve(root, './data/notation.json')
+    try {
+      await window.electronAPI.writeJson(notationPath, data.notations)
+      toaster.show({ message: 'Saved', intent: 'success' })
+    } catch (e) {
+      console.error('save failed:', e)
+    }
   }
 
   public handleReload = async () => {
-    const data = await fs.readJson(path.resolve(window.ROOT, './data/notation.json'))
+    const root = await window.electronAPI.getRoot()
+    const notationPath = await window.electronAPI.pathResolve(root, './data/notation.json')
+    const data = await window.electronAPI.readJson(notationPath)
     this.props.dispatch({
       payload: data,
       type: 'notations/updateMany',
@@ -217,6 +225,7 @@ class Editor extends Component<IProps, IState> {
     const { notations } = this.props
     return (
       <Wrapper>
+        <TableWrapper>
         <table>
           <thead>
             <th>Point</th>
@@ -240,6 +249,7 @@ class Editor extends Component<IProps, IState> {
             ))}
           </tbody>
         </table>
+        </TableWrapper>
         <hr />
         <Control>
           <Switch onChange={this.handleEditModeChange} checked={sequentialEdit} label="Sequential edit" />

@@ -2,7 +2,7 @@
   "name": "kcs2-mapdata",
   "version": "1.0.0",
   "description": "map data processing for Kancolle Phase ||",
-  "main": "index.ts",
+  "main": "./out/main/index.js",
   "repository": "git@github.com:KagamiChan/kcs2-mapdata.git",
   "author": "Kagami <moe.pascal@gmail.com>",
   "license": "MIT",
@@ -13,18 +13,23 @@
     "icon": "ts-node ./map-generate.ts icon",
     "dst": "ts-node ./map-generate.ts dst",
     "gen": "ts-node ./map-generate.ts genpoi",
-    "annotate": "electron-webpack dev",
+    "dev": "electron-vite dev",
+    "build": "electron-vite build",
+    "preview": "electron-vite preview",
+    "annotate": "yarn dev",
     "sync": "ts-node ./map-generate.ts sync",
     "poi": "ts-node ./poi.ts"
   },
   "dependencies": {
     "@blueprintjs/core": "^3.7.0",
+    "@electron-toolkit/preload": "^3.0.2",
+    "@electron-toolkit/utils": "^4.0.0",
     "@inlet/react-pixi": "^0.3.0",
     "@rematch/core": "^1.0.6",
     "axios": "^0.18.0",
     "bluebird": "^3.5.2",
     "chalk": "^2.4.1",
-    "electron": "^3.0.6",
+    "electron": "^33.0.0",
     "fontfaceobserver": "^2.0.13",
     "fs-extra": "^7.0.0",
     "glob": "^7.1.3",
@@ -39,7 +44,8 @@
     "react-dom": "^16.6.0",
     "react-redux": "^5.1.0",
     "source-map-support": "^0.5.9",
-    "styled-components": "^4.0.2"
+    "styled-components": "^4.0.2",
+    "url": "^0.11.4"
   },
   "devDependencies": {
     "@commitlint/cli": "^7.2.1",
@@ -49,7 +55,7 @@
     "@types/fs-extra": "^5.0.4",
     "@types/glob": "^7.1.1",
     "@types/lodash": "^4.14.117",
-    "@types/node": "^10.12.0",
+    "@types/node": "^22.10.0",
     "@types/node-fetch": "^2.1.2",
     "@types/pixi.js": "^4.8.2",
     "@types/progress": "^2.0.1",
@@ -58,27 +64,14 @@
     "@types/react-redux": "^6.0.9",
     "@types/styled-components": "^4.0.3",
     "@types/tesseract.js": "^0.0.2",
+    "@vitejs/plugin-react": "^5.0.0",
     "electron-builder": "^20.29.0",
-    "electron-webpack": "^2.3.1",
-    "electron-webpack-ts": "^2.1.1",
-    "http-proxy-agent": "^2.1.0",
-    "husky": "^1.1.2",
-    "lint-staged": "^8.0.0",
-    "prettier": "^1.14.3",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "tslint-plugin-prettier": "^2.0.1",
-    "tslint-react": "^3.6.0",
-    "typescript": "^3.1.3",
-    "webpack": "^4.23.1"
-  },
-  "husky": {
-    "hooks": {
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
-      "pre-commit": "lint-staged",
-      "pre-push": "git lfs pre-push $GIT_PARAMS"
-    }
+    "electron-vite": "^5.0.0",
+    "lint-staged": "^8.1.5",
+    "prettier": "^1.15.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.3",
+    "vite": "^7.0.0"
   },
   "packageManager": "yarn@3.2.3"
 }

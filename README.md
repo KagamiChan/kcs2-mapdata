@@ -22,14 +22,11 @@ yarn annotate
 ```
 the spots name file will be output to `./data/notation.json`
 
-
-Note: if you have trouble running this, try `export NODE_OPTIONS=--openssl-legacy-provider` beforehand.
-
 - run
 ```bash
 yarn sync
 ```
-to sync spots name to `./out/WROLD_ID/MAP_ID/spots.json`
+to sync spots name to `./out/WORLD_ID/MAP_ID/spots.json`
 
 - run
 ```bash

@@ -59,7 +59,7 @@ const extract = (mapData: { image: IImage; info: IMapInfo }) => {
       }
     })
   } catch (err) {
-    console.error(chalk.red(err))
+    console.error(chalk.red(String(err)))
     process.exitCode = 1
   }
 }
@@ -160,7 +160,7 @@ const addSpotName = (dir: string) => {
       )
     }
   } catch (err) {
-    console.error(chalk.red(err), '\n', chalk.red(`at ${dir}`))
+    console.error(chalk.red(String(err)), '\n', chalk.red(`at ${dir}`))
   }
 }
 
@@ -370,7 +370,8 @@ const main = () => {
         DRAWS = []
       })
     } catch (err) {
-      console.error(chalk.red(err), err.stack)
+      const error = err as Error
+      console.error(chalk.red(String(error)), error.stack)
       process.exitCode = 1
     }
   })

@@ -40,7 +40,7 @@ const getMap = async () => {
         mapMeta = await axios.get<object>(`${MAP_PREFIX}/${mapArea}/${mapId}_image.json`)
         mapData = await axios.get<IMapInfo>(`${MAP_PREFIX}/${mapArea}/${mapId}_info.json`)
       } catch (e) {
-        if (e.response.status === 404) {
+        if ((e as any).response.status === 404) {
           console.error('404 for', mapArea, mapId)
           bar.tick()
           return Promise.resolve()
@@ -97,7 +97,7 @@ const getMap = async () => {
           )
           secret += size(extraData.data.spots)
         } catch (e) {
-          if (e.response.status === 404) {
+          if ((e as any).response.status === 404) {
             drained = true
             console.error('404 for secret', mapArea, mapId)
           } else {
