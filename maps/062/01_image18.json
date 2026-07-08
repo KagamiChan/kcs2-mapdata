@@ -1,0 +1,103 @@
+{
+  "frames": {
+    "map06201_I": {
+      "frame": {
+        "x": 97,
+        "y": 88,
+        "w": 5,
+        "h": 17
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 5,
+        "h": 17
+      },
+      "sourceSize": {
+        "w": 5,
+        "h": 17
+      }
+    },
+    "map06201_icon_510": {
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "w": 92,
+        "h": 130
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 92,
+        "h": 130
+      },
+      "sourceSize": {
+        "w": 92,
+        "h": 130
+      }
+    },
+    "map06201_route_18": {
+      "frame": {
+        "x": 97,
+        "y": 0,
+        "w": 26,
+        "h": 39
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 26,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 26,
+        "h": 39
+      }
+    },
+    "map06201_route_18_1": {
+      "frame": {
+        "x": 97,
+        "y": 44,
+        "w": 26,
+        "h": 39
+      },
+      "rotated": false,
+      "trimmed": false,
+      "spriteSourceSize": {
+        "x": 0,
+        "y": 0,
+        "w": 26,
+        "h": 39
+      },
+      "sourceSize": {
+        "w": 26,
+        "h": 39
+      }
+    }
+  },
+  "meta": {
+    "app": "https://github.com/Ensighten/spritesmith",
+    "image": "01_image18.png",
+    "format": "RGBA8888",
+    "size": {
+      "w": 123,
+      "h": 130
+    },
+    "scale": 1
+  },
+  "animations": {
+    "map06201_icon": [
+      "map06201_icon_51"
+    ],
+    "map06201_route": [
+      "map06201_route_18",
+      "map06201_route_18"
+    ]
+  }
+}
